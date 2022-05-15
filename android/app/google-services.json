@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1042284550792",
+    "project_id": "eimunisasi-nakes",
+    "storage_bucket": "eimunisasi-nakes.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1042284550792:android:7c8fcbc1eb891c31d4dd3d",
+        "android_client_info": {
+          "package_name": "com.peltops.eimunisasi_nakes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1042284550792-dva3v9j5keu9q73ehrgsg2n6if3o1s2q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.peltops.eimunisasi_nakes",
+            "certificate_hash": "545dd5e51e57cd289650fe31697d4cd2ec59e5eb"
+          }
+        },
+        {
+          "client_id": "1042284550792-p45j9flr0cj2lrqs090k5eqj7kigb1hh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGq_CWF00koxW3qHGQlxfDZw_cktvX970"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1042284550792-p45j9flr0cj2lrqs090k5eqj7kigb1hh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
