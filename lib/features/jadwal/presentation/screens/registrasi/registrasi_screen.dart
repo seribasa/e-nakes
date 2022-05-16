@@ -17,14 +17,14 @@ class RegistrasiScreen extends StatelessWidget {
           children: [
             QRScanButton(
               onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => QRViewExample()));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const QRViewExample()));
               },
             ),
             const SizedBox(height: 10),
             const _Header(),
             Expanded(
-              child: _ListYears(onTap: (index) => print(index)),
+              child: _ListYears(onTap: (index) => debugPrint(index.toString())),
             ),
           ],
         ),

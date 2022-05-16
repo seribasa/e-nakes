@@ -16,7 +16,7 @@ class RiwayatJanjiTahunScreen extends StatelessWidget {
           children: [
             const _Header(),
             Expanded(
-              child: _ListDate(onTap: (index) => print(index)),
+              child: _ListDate(onTap: (index) => debugPrint(index.toString())),
             ),
           ],
         ),

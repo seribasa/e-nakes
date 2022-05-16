@@ -65,14 +65,14 @@ class BottomNavbarWrapper extends StatelessWidget {
                 items: const [
                   BottomNavigationBarItem(
                     icon: FaIcon(
-                      FontAwesomeIcons.clinicMedical,
+                      FontAwesomeIcons.houseChimneyMedical,
                       size: 20,
                     ),
                     label: 'Home',
                   ),
                   BottomNavigationBarItem(
                     icon: FaIcon(
-                      FontAwesomeIcons.userMd,
+                      FontAwesomeIcons.userDoctor,
                       size: 20,
                     ),
                     label: 'Profile',
@@ -86,7 +86,7 @@ class BottomNavbarWrapper extends StatelessWidget {
                   ),
                   BottomNavigationBarItem(
                     icon: FaIcon(
-                      FontAwesomeIcons.cog,
+                      FontAwesomeIcons.gear,
                       size: 20,
                     ),
                     label: 'Setting',

@@ -1,9 +1,6 @@
-import 'package:eimunisasi_nakes/features/authentication/presentation/screens/auth/register_screen.dart';
 import 'package:eimunisasi_nakes/features/jadwal/presentation/screens/registrasi/registrasi_screen.dart';
 import 'package:eimunisasi_nakes/features/jadwal/presentation/screens/riwayat%20janji/riwayat_janji_screen.dart';
 import 'package:eimunisasi_nakes/features/klinik/logic/bloc/klinik_bloc/klinik_bloc.dart';
-import 'package:eimunisasi_nakes/features/klinik/presentation/screens/keanggotaan_screen.dart';
-import 'package:eimunisasi_nakes/features/klinik/presentation/screens/profile_klinik_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -52,7 +49,8 @@ class _RiwayatJanjiButton extends StatelessWidget {
             ),
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => RiwayatJanjiScreen()),
+                MaterialPageRoute(
+                    builder: (context) => const RiwayatJanjiScreen()),
               );
             },
             child: Row(
@@ -87,7 +85,7 @@ class _RegistrasiButton extends StatelessWidget {
         ),
         onPressed: () {
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => RegistrasiScreen()),
+            MaterialPageRoute(builder: (context) => const RegistrasiScreen()),
           );
         },
         child: Row(

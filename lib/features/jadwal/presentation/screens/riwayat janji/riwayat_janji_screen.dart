@@ -19,7 +19,7 @@ class RiwayatJanjiScreen extends StatelessWidget {
             Expanded(
               child: _ListYears(
                   onTap: (i) => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => RiwayatJanjiTahunScreen()))),
+                      builder: (context) => const RiwayatJanjiTahunScreen()))),
             ),
           ],
         ),

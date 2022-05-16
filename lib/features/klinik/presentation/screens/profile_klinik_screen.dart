@@ -124,7 +124,7 @@ class _KontakCardKlinik extends StatelessWidget {
                 color: Theme.of(context).primaryColor,
               ),
               FaIcon(
-                FontAwesomeIcons.mailBulk,
+                FontAwesomeIcons.envelopesBulk,
                 color: Theme.of(context).primaryColor,
               ),
               FaIcon(

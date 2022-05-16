@@ -60,7 +60,7 @@ class _KlinikProfileButton extends StatelessWidget {
             },
             child: Row(
               children: const [
-                FaIcon(FontAwesomeIcons.hospitalAlt),
+                FaIcon(FontAwesomeIcons.envelopesBulk),
                 SizedBox(width: 10),
                 Text(
                   'Profil Klinik',

@@ -43,11 +43,16 @@ class LoginPhoneCubit extends Cubit<LoginPhoneState> {
   }
 
   Future<void> sendOTPCode() async {
+    String phoneNumber = state.phone.value;
     if (!state.phone.valid) return;
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
+    if (phoneNumber.startsWith('0')) {
+      // remove the first character
+      phoneNumber = phoneNumber.substring(1);
+    }
     try {
       await _userRepository.verifyPhoneNumber(
-        phone: state.countryCode.value + state.phone.value,
+        phone: state.countryCode.value + phoneNumber,
         codeSent: (String verId, int? token) {
           emit(state.copyWith(status: FormzStatus.pure, verId: verId));
         },

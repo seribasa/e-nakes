@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +62,11 @@ class LocalAuthCubit extends Cubit<LocalAuthState> {
   }
 
   void checkPasscode(String passcode) async {
+    if (passcode.isEmpty) {
+      return emit(state.copyWith(
+          errorMessage: 'Silahkan isi PIN',
+          status: FormzStatus.submissionFailure));
+    }
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     try {
@@ -73,8 +80,10 @@ class LocalAuthCubit extends Cubit<LocalAuthState> {
             status: FormzStatus.submissionFailure));
       }
     } catch (e) {
+      log('Error Passcode: $e');
       emit(state.copyWith(
-          errorMessage: e.toString(), status: FormzStatus.submissionFailure));
+          errorMessage: 'Terjadi Kesalahan',
+          status: FormzStatus.submissionFailure));
     }
   }
 

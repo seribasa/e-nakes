@@ -114,7 +114,6 @@ class _NextButton extends StatelessWidget {
       },
       child: BlocBuilder<LocalAuthCubit, LocalAuthState>(
         builder: (context, state) {
-          print(state.status.isSubmissionInProgress);
           return state.status.isSubmissionInProgress
               ? const CircularProgressIndicator()
               : SizedBox(

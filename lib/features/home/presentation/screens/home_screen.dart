@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:eimunisasi_nakes/features/jadwal/presentation/screens/wrapper_jadwal.dart';
 import 'package:eimunisasi_nakes/features/klinik/presentation/screens/wrapper_klinik.dart';
+import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/rekam_medis_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -67,7 +68,7 @@ class _HelloHeader extends StatelessWidget {
           const CircleAvatar(
             radius: 30,
             backgroundImage: CachedNetworkImageProvider(
-                "https://media-exp1.licdn.com/dms/image/C5603AQFwx-JKVf3-7w/profile-displayphoto-shrink_200_200/0/1644805226281?e=1651104000&v=beta&t=hv6jsj8yTAek9dNgU8yWLJUwJrIOQeLlObvmIohJ3VA"),
+                "https://avatars.githubusercontent.com/u/56538058?v=4"),
           ),
         ],
       ),
@@ -99,11 +100,9 @@ class _MenuList extends StatelessWidget {
         'route': const WrapperJadwal(),
       },
       {
-        'title': 'Kontak',
-        'icon': FontAwesomeIcons.addressCard,
-        // 'route': Navigator.of(context).push(MaterialPageRoute(
-        //   builder: (context) => WrapperKlinik(),
-        // )),
+        'title': 'Rekam Medis',
+        'icon': FontAwesomeIcons.bookMedical,
+        'route': const RekamMedisScreen(),
       }
     ];
     return Padding(
@@ -207,7 +206,7 @@ class _AppoinmentToday extends StatelessWidget {
                         CircleAvatar(
                           radius: 20,
                           backgroundImage: CachedNetworkImageProvider(
-                              "https://media-exp1.licdn.com/dms/image/C5603AQFwx-JKVf3-7w/profile-displayphoto-shrink_200_200/0/1644805226281?e=1651104000&v=beta&t=hv6jsj8yTAek9dNgU8yWLJUwJrIOQeLlObvmIohJ3VA"),
+                              'https://avatars.githubusercontent.com/u/56538058?v=4'),
                         ),
                         SizedBox(
                           width: 20,
@@ -231,7 +230,7 @@ class _AppoinmentToday extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: const [
                           FaIcon(
-                            FontAwesomeIcons.calendarAlt,
+                            FontAwesomeIcons.calendarDays,
                             color: Colors.white,
                             size: 18,
                           ),
