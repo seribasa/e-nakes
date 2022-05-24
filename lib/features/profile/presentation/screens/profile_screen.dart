@@ -107,7 +107,7 @@ class _ProfileCard extends StatelessWidget {
             leading: const CircleAvatar(
               radius: 25,
               backgroundImage: CachedNetworkImageProvider(
-                  "https://media-exp1.licdn.com/dms/image/C5603AQFwx-JKVf3-7w/profile-displayphoto-shrink_200_200/0/1644805226281?e=1651104000&v=beta&t=hv6jsj8yTAek9dNgU8yWLJUwJrIOQeLlObvmIohJ3VA"),
+                  "https://picsum.photos/250?image=9"),
             ),
             title: const Text(
               'Rizky Faturriza',
