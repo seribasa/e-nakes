@@ -93,7 +93,7 @@ class LocalAuthCubit extends Cubit<LocalAuthState> {
       final String passcode = state.passcode.value;
       final String confirmPasscode = state.confirmPasscode;
       if (passcode == confirmPasscode) {
-        emit(state.copyWith(status: FormzStatus.submissionSuccess));
+        setPasscode(int.parse(passcode));
       } else {
         emit(state.copyWith(
             errorMessage: "Passcode Salah",

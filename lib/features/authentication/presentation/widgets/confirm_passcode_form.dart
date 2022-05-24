@@ -70,9 +70,6 @@ class _NextButton extends StatelessWidget {
     return BlocListener<LocalAuthCubit, LocalAuthState>(
       listener: (context, state) {
         if (state.status.isSubmissionSuccess) {
-          context
-              .read<LocalAuthCubit>()
-              .setPasscode(int.parse(state.passcode.value));
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
               builder: (_) => const BottomNavbarWrapper(),
