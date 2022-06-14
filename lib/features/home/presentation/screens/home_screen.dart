@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:eimunisasi_nakes/features/jadwal/presentation/screens/wrapper_jadwal.dart';
 import 'package:eimunisasi_nakes/features/klinik/presentation/screens/wrapper_klinik.dart';
-import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/rekam_medis_screen.dart';
+import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/wrapper_rekam_medis.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -102,7 +102,7 @@ class _MenuList extends StatelessWidget {
       {
         'title': 'Rekam Medis',
         'icon': FontAwesomeIcons.bookMedical,
-        'route': const RekamMedisScreen(),
+        'route': const WrapperRekamMedis(),
       }
     ];
     return Padding(

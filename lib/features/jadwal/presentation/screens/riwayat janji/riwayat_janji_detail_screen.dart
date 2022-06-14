@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class RiwayatJanjiScreen extends StatelessWidget {
-  const RiwayatJanjiScreen({Key? key}) : super(key: key);
+class RiwayatJanjiDetailScreen extends StatelessWidget {
+  const RiwayatJanjiDetailScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class RiwayatJanjiScreen extends StatelessWidget {
         child: Column(
           children: const [
             _Header(),
-            Expanded(child: _ListYears(onTap: null)),
+            Expanded(child: _DetailJanjiCard(onTap: null)),
           ],
         ),
       ),
@@ -33,28 +33,59 @@ class _Header extends StatelessWidget {
       width: double.infinity,
       color: Colors.blue,
       child: const Text(
-        'Daftar Janji',
+        'Detail Janji',
         style: TextStyle(color: Colors.white),
       ),
     );
   }
 }
 
-class _ListYears extends StatelessWidget {
+class _DetailJanjiCard extends StatelessWidget {
   final void Function(int)? onTap;
-  const _ListYears({Key? key, required this.onTap}) : super(key: key);
+  const _DetailJanjiCard({Key? key, required this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: 20,
-        itemBuilder: (context, index) {
-          return ListTile(
-            trailing: const FaIcon(FontAwesomeIcons.arrowRight),
-            onTap: () => onTap!(index),
-            title: const Text('2020'),
-            subtitle: const Text('2020'),
-          );
-        });
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [
+                Text('Tanggal Kunjung'),
+                SizedBox(width: 10),
+                Text('12/12/2020'),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [
+                Text('Nama Orangtua'),
+                SizedBox(width: 10),
+                Text('Aisyah'),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [
+                Text('Nama Anak'),
+                SizedBox(width: 10),
+                Text('Rahmat Kurniawan'),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [
+                Text('Umur Anak'),
+                SizedBox(width: 10),
+                Text('20'),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

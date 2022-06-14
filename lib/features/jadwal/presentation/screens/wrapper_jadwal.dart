@@ -21,8 +21,6 @@ class WrapperJadwal extends StatelessWidget {
           child: Column(
             children: const <Widget>[
               _RiwayatJanjiButton(),
-              SizedBox(height: 20),
-              _RegistrasiButton(),
             ],
           ),
         ),

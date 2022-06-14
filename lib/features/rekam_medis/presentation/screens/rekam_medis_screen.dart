@@ -40,26 +40,36 @@ class _LineChart extends StatelessWidget {
       );
 
   LineTouchData get lineTouchData2 => LineTouchData(
+        touchCallback: (event, res) {
+          if (event is FlTapDownEvent) {
+            //show modal flutter
+
+            res?.lineBarSpots?.forEach((spot) {
+              print('x: ${spot.x} y: ${spot.y}');
+              print(spot.bar.color);
+            });
+          }
+        },
         handleBuiltInTouches: true,
         touchTooltipData: LineTouchTooltipData(
+          tooltipBgColor: Colors.white,
           getTooltipItems: (List<LineBarSpot> touchedSpots) {
             return touchedSpots.map((LineBarSpot touchedSpot) {
-              return LineTooltipItem(
-                '(${touchedSpot.x}, ${touchedSpot.y})',
-                TextStyle(
-                  color: touchedSpot.bar.gradient?.colors.first ??
-                      touchedSpot.bar.color ??
-                      Colors.blueGrey,
-                  fontWeight: FontWeight.bold,
-                ),
-              );
+              if (touchedSpot.bar.color ==
+                  const Color.fromARGB(108, 136, 32, 255)) {
+                return LineTooltipItem(
+                  '(${touchedSpot.x.toInt()} : ${touchedSpot.y})',
+                  TextStyle(
+                    color: touchedSpot.bar.gradient?.colors.first ??
+                        touchedSpot.bar.color ??
+                        Colors.blueGrey,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                  ),
+                );
+              }
             }).toList();
           },
-          tooltipRoundedRadius: 5,
-          maxContentWidth: 500,
-          fitInsideVertically: false,
-          fitInsideHorizontally: true,
-          tooltipBgColor: Color.fromARGB(255, 0, 0, 0),
         ),
       );
 
@@ -134,7 +144,7 @@ class _LineChart extends StatelessWidget {
 
   SideTitles get bottomTitles => SideTitles(
         showTitles: true,
-        // interval: 1,
+        interval: 1,
         getTitlesWidget: bottomTitleWidgets,
       );
 
@@ -154,7 +164,7 @@ class _LineChart extends StatelessWidget {
         isCurved: true,
         curveSmoothness: 0,
         color: const Color.fromARGB(108, 136, 32, 255),
-        barWidth: 2,
+        barWidth: 1,
         isStrokeCapRound: true,
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
@@ -165,7 +175,7 @@ class _LineChart extends StatelessWidget {
         isCurved: true,
         curveSmoothness: 0,
         color: const Color.fromARGB(199, 25, 0, 255),
-        barWidth: 2,
+        barWidth: 1,
         isStrokeCapRound: true,
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
@@ -176,7 +186,7 @@ class _LineChart extends StatelessWidget {
         isCurved: true,
         curveSmoothness: 0,
         color: const Color.fromARGB(68, 0, 170, 255),
-        barWidth: 2,
+        barWidth: 1,
         isStrokeCapRound: true,
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
@@ -187,7 +197,7 @@ class _LineChart extends StatelessWidget {
         isCurved: true,
         curveSmoothness: 0,
         color: const Color.fromARGB(68, 0, 255, 98),
-        barWidth: 2,
+        barWidth: 1,
         isStrokeCapRound: true,
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
@@ -198,7 +208,7 @@ class _LineChart extends StatelessWidget {
         isCurved: true,
         curveSmoothness: 0,
         color: const Color.fromARGB(68, 255, 251, 0),
-        barWidth: 2,
+        barWidth: 1,
         isStrokeCapRound: true,
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
@@ -209,7 +219,7 @@ class _LineChart extends StatelessWidget {
         isCurved: true,
         curveSmoothness: 0,
         color: const Color.fromARGB(68, 255, 174, 0),
-        barWidth: 2,
+        barWidth: 1,
         isStrokeCapRound: true,
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
@@ -220,7 +230,7 @@ class _LineChart extends StatelessWidget {
         isCurved: true,
         curveSmoothness: 0,
         color: const Color.fromARGB(68, 255, 39, 23),
-        barWidth: 2,
+        barWidth: 1,
         isStrokeCapRound: true,
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
@@ -247,7 +257,7 @@ class LineChartSample1State extends State<LineChartSample1> {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 1.23,
+      aspectRatio: 16.0 / 9.0,
       child: Container(
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(18)),

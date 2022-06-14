@@ -1,3 +1,4 @@
+import 'package:eimunisasi_nakes/features/jadwal/presentation/screens/riwayat%20janji/riwayat_janji_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -56,7 +57,8 @@ class _ListDate extends StatelessWidget {
               children: <Widget>[
                 ListTile(
                   trailing: const FaIcon(FontAwesomeIcons.arrowRight),
-                  onTap: () => onTap!(index),
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const RiwayatJanjiDetailScreen())),
                   title: const Text('08.00 - 09.00'),
                   subtitle: const Text('Imunisasi TT'),
                 ),
