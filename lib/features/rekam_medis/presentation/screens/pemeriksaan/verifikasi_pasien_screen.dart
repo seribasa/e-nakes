@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/pemeriksaan/form_pemeriksaan_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -126,7 +127,11 @@ class _NextButton extends StatelessWidget {
             shape:
                 const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
         child: const Text("Lanjut"),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return FormPemeriksaanScreen();
+          }));
+        },
       ),
     );
   }
