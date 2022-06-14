@@ -18,7 +18,7 @@ class RegistrasiScreen extends StatelessWidget {
             QRScanButton(
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const QRViewExample()));
+                    builder: (context) => const QrRegistrasiPemeriksaan()));
               },
             ),
             const SizedBox(height: 10),

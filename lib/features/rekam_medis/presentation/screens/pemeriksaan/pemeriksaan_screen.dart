@@ -1,5 +1,6 @@
 import 'package:eimunisasi_nakes/core/widgets/search_bar_widget.dart';
 import 'package:eimunisasi_nakes/features/jadwal/presentation/screens/registrasi/qrcode_screen.dart';
+import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/pemeriksaan/verifikasi_pasien_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -19,7 +20,7 @@ class PemeriksaanScreen extends StatelessWidget {
             QRScanButton(
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const QRViewExample()));
+                    builder: (context) => const QrRegistrasiPemeriksaan()));
               },
             ),
             const SizedBox(height: 10),
@@ -52,7 +53,10 @@ class _ListPasien extends StatelessWidget {
               subtitle: Text(
                   'NIK $index${index + 1}${index + 2}${index + 3}${index + 4}'),
               onTap: () {
-                Navigator.of(context).pop();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const VerifikasiPasienScreen()));
               },
             );
           }),

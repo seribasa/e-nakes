@@ -1,18 +1,19 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/pemeriksaan/verifikasi_pasien_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-class QRViewExample extends StatefulWidget {
-  const QRViewExample({Key? key}) : super(key: key);
+class QrRegistrasiPemeriksaan extends StatefulWidget {
+  const QrRegistrasiPemeriksaan({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _QRViewExampleState();
+  State<StatefulWidget> createState() => _QrRegistrasiPemeriksaanState();
 }
 
-class _QRViewExampleState extends State<QRViewExample> {
+class _QrRegistrasiPemeriksaanState extends State<QrRegistrasiPemeriksaan> {
   Barcode? result;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
@@ -140,6 +141,13 @@ class _QRViewExampleState extends State<QRViewExample> {
       setState(() {
         result = scanData;
       });
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => VerifikasiPasienScreen(
+                    result: scanData,
+                  )));
+      controller.dispose();
     });
   }
 
