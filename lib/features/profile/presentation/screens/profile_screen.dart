@@ -1,5 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eimunisasi_nakes/core/widgets/profile_card.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
+import 'package:eimunisasi_nakes/features/profile/presentation/screens/detail_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -15,13 +16,13 @@ class ProfileScreen extends StatelessWidget {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: const <Widget>[
-            _ProfileCard(),
+            ProfileCard(
+              urlGambar: 'https://avatars.githubusercontent.com/u/56538058?v=4',
+              nama: 'Rizky',
+              pekerjaan: 'dokter anak',
+            ),
             SizedBox(height: 20),
             _MyProfileButton(),
-            Expanded(
-                child: Center(
-              child: Text('Profile Screen'),
-            )),
           ],
         ),
       )),
@@ -47,14 +48,19 @@ class _LogoutButton extends StatelessWidget {
               key: const Key('logout_continue_raisedButton'),
               style: ElevatedButton.styleFrom(
                 elevation: 0,
-                primary: Colors.red[300],
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
+                primary: Colors.red[700],
               ),
               onPressed: () =>
                   context.read<AuthenticationBloc>().add(LoggedOut()),
-              child: const Text('Keluar'),
+              child: Row(
+                children: const [
+                  FaIcon(FontAwesomeIcons.arrowRightFromBracket),
+                  SizedBox(width: 10),
+                  Text(
+                    'Keluar',
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -71,13 +77,15 @@ class _MyProfileButton extends StatelessWidget {
       height: 50,
       width: double.infinity,
       child: ElevatedButton(
+        key: const Key('my_profile_raisedButton'),
         style: ElevatedButton.styleFrom(
           alignment: Alignment.centerLeft,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
         ),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return const DetailProfileScreen();
+          }));
+        },
         child: Row(
           children: const [
             FaIcon(FontAwesomeIcons.userNurse),
@@ -88,47 +96,6 @@ class _MyProfileButton extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _ProfileCard extends StatelessWidget {
-  const _ProfileCard({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-      builder: (context, state) {
-        if (state is Authenticated) {
-          return ListTile(
-            leading: const CircleAvatar(
-              radius: 25,
-              backgroundImage: CachedNetworkImageProvider(
-                  "https://picsum.photos/250?image=9"),
-            ),
-            title: const Text(
-              'Rizky Faturriza',
-              style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-            ),
-            subtitle: Text(
-              state.data.email ?? '',
-              style: const TextStyle(color: Colors.black),
-            ),
-          );
-        }
-        return Container(
-          color: Colors.blue,
-          child: const ListTile(
-            leading: CircleAvatar(
-              backgroundColor: Colors.white,
-              child: Icon(Icons.person),
-            ),
-            title: Text('Nama'),
-            subtitle: Text('Nakes'),
-          ),
-        );
-      },
     );
   }
 }

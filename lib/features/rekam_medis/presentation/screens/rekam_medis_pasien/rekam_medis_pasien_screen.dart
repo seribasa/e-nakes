@@ -1,3 +1,4 @@
+import 'package:eimunisasi_nakes/core/widgets/pasien_card.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/rekam_medis_pasien/tabbar_diagnosa/tabbar_diagnosa_screen.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/rekam_medis_pasien/tabbar_grafik/tabbar_grafik_screen.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/rekam_medis_pasien/tabbar_tabel/tabbar_tabel_screen.dart';
@@ -16,12 +17,12 @@ class RekamMedisPasienScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          const ListTile(
-            title: Text(
-              'Rizky Faturriza',
-              style: TextStyle(fontWeight: FontWeight.w600),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: PasienCard(
+              nama: 'Rizky Faturriza',
+              umur: '1 bulan',
             ),
-            subtitle: Text('Umur 10 bulan'),
           ),
           Expanded(
             child: DefaultTabController(

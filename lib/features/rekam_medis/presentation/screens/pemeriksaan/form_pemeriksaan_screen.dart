@@ -1,4 +1,5 @@
 import 'package:eimunisasi_nakes/core/widgets/pasien_card.dart';
+import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/pemeriksaan/grafik_pemeriksaan_screen.dart';
 import 'package:flutter/material.dart';
 
 class FormPemeriksaanScreen extends StatelessWidget {
@@ -28,7 +29,7 @@ class FormPemeriksaanScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: _NextButton(),
+      bottomNavigationBar: const _NextButton(),
     );
   }
 }
@@ -191,7 +192,11 @@ class _NextButton extends StatelessWidget {
             shape:
                 const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
         child: const Text("Simpan dan Lanjutkan"),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return const GrafikPemeriksaanScreen();
+          }));
+        },
       ),
     );
   }

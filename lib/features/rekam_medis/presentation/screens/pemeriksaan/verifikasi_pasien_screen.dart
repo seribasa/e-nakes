@@ -37,7 +37,7 @@ class VerifikasiPasienScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: _NextButton(),
+      bottomNavigationBar: const _NextButton(),
     );
   }
 }
@@ -129,7 +129,7 @@ class _NextButton extends StatelessWidget {
         child: const Text("Lanjut"),
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return FormPemeriksaanScreen();
+            return const FormPemeriksaanScreen();
           }));
         },
       ),

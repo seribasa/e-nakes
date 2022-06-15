@@ -44,10 +44,10 @@ class _LineChart extends StatelessWidget {
           if (event is FlTapDownEvent) {
             //show modal flutter
 
-            res?.lineBarSpots?.forEach((spot) {
-              print('x: ${spot.x} y: ${spot.y}');
-              print(spot.bar.color);
-            });
+            // res?.lineBarSpots?.forEach((spot) {
+            //   print('x: ${spot.x} y: ${spot.y}');
+            //   print(spot.bar.color);
+            // });
           }
         },
         handleBuiltInTouches: true,
