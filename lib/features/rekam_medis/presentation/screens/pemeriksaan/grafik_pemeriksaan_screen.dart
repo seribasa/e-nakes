@@ -37,7 +37,7 @@ class GrafikPemeriksaanScreen extends StatelessWidget {
                             text: 'Tinggi badan',
                           ),
                           Tab(
-                            text: 'Lingkar badan',
+                            text: 'Lingkar kepala',
                           ),
                         ],
                       ),

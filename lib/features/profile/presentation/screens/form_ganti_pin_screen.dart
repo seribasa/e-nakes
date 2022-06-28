@@ -1,12 +1,10 @@
 import 'package:eimunisasi_nakes/core/widgets/custom_text_field.dart';
-import 'package:eimunisasi_nakes/core/widgets/profile_card.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
-import 'package:eimunisasi_nakes/features/profile/presentation/screens/form_ganti_pin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class DetailProfileScreen extends StatelessWidget {
-  const DetailProfileScreen({Key? key}) : super(key: key);
+class GantiPINScreen extends StatelessWidget {
+  const GantiPINScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,32 +13,17 @@ class DetailProfileScreen extends StatelessWidget {
         if (state is Authenticated) {
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Profile saya'),
+              title: const Text('Ganti PIN'),
             ),
             body: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const ProfileCard(
-                    urlGambar:
-                        'https://avatars.githubusercontent.com/u/56538058?v=4',
-                    nama: 'Rizky',
-                    pekerjaan: 'dokter anak',
-                  ),
-                  const SizedBox(height: 10),
-                  state.data.email != null && state.data.email != ''
-                      ? _EmailForm(
-                          initialValue: '${state.data.email}',
-                        )
-                      : Container(),
-                  state.data.phone != null && state.data.phone != ''
-                      ? _NomorHPForm(
-                          initialValue: '${state.data.phone}',
-                        )
-                      : Container(),
-                  const SizedBox(height: 10),
-                  const _GantiPasscodeButton(),
+                children: const [
+                  _PinLamaForm(),
+                  _PinBaruForm(),
+                  SizedBox(height: 10),
+                  _SaveButton(),
                 ],
               ),
             ),
@@ -52,9 +35,9 @@ class DetailProfileScreen extends StatelessWidget {
   }
 }
 
-class _EmailForm extends StatelessWidget {
+class _PinLamaForm extends StatelessWidget {
   final String? initialValue;
-  const _EmailForm({Key? key, this.initialValue}) : super(key: key);
+  const _PinLamaForm({Key? key, this.initialValue}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +45,7 @@ class _EmailForm extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Email',
+          'PIN Lama',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         const SizedBox(width: 5),
@@ -75,9 +58,9 @@ class _EmailForm extends StatelessWidget {
   }
 }
 
-class _NomorHPForm extends StatelessWidget {
+class _PinBaruForm extends StatelessWidget {
   final String? initialValue;
-  const _NomorHPForm({Key? key, this.initialValue}) : super(key: key);
+  const _PinBaruForm({Key? key, this.initialValue}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +68,7 @@ class _NomorHPForm extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Nomor HP',
+          'PIN Baru',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         const SizedBox(width: 5),
@@ -94,29 +77,6 @@ class _NomorHPForm extends StatelessWidget {
           keyboardType: TextInputType.number,
         ),
       ],
-    );
-  }
-}
-
-class _GantiPasscodeButton extends StatelessWidget {
-  const _GantiPasscodeButton({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 50,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            shape:
-                const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
-        child: const Text("Ganti PIN"),
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return const GantiPINScreen();
-          }));
-        },
-      ),
     );
   }
 }

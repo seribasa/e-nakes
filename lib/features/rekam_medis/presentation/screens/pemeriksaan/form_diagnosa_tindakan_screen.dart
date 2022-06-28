@@ -110,7 +110,7 @@ class _NextButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
             shape:
                 const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
-        child: const Text("Simpan dan Lanjutkan"),
+        child: const Text("Selesai"),
         onPressed: () {
           Navigator.pushAndRemoveUntil(
             context,

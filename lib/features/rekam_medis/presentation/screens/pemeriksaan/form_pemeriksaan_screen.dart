@@ -1,3 +1,4 @@
+import 'package:eimunisasi_nakes/core/widgets/custom_text_field.dart';
 import 'package:eimunisasi_nakes/core/widgets/pasien_card.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/pemeriksaan/grafik_pemeriksaan_screen.dart';
 import 'package:flutter/material.dart';
@@ -34,28 +35,6 @@ class FormPemeriksaanScreen extends StatelessWidget {
   }
 }
 
-class _FormField extends StatelessWidget {
-  const _FormField({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.grey[200],
-      ),
-      child: const TextField(
-        keyboardType: TextInputType.number,
-        decoration: InputDecoration(
-          border: InputBorder.none,
-        ),
-      ),
-    );
-  }
-}
-
 class _BeratBadanForm extends StatelessWidget {
   const _BeratBadanForm({Key? key}) : super(key: key);
 
@@ -65,7 +44,7 @@ class _BeratBadanForm extends StatelessWidget {
       children: const [
         Expanded(flex: 3, child: Text('Berat Badan')),
         SizedBox(width: 5),
-        Expanded(flex: 2, child: _FormField()),
+        Expanded(flex: 2, child: MyTextFormField()),
         SizedBox(width: 5),
         Expanded(flex: 1, child: Text('kg')),
       ],
@@ -82,7 +61,7 @@ class TinggiBadanForm extends StatelessWidget {
       children: const [
         Expanded(flex: 3, child: Text('Tinggi Badan')),
         SizedBox(width: 5),
-        Expanded(flex: 2, child: _FormField()),
+        Expanded(flex: 2, child: MyTextFormField()),
         SizedBox(width: 5),
         Expanded(flex: 1, child: Text('cm')),
       ],
@@ -99,7 +78,7 @@ class LingkarKepalaForm extends StatelessWidget {
       children: const [
         Expanded(flex: 3, child: Text('Lingkar Kepala')),
         SizedBox(width: 5),
-        Expanded(flex: 2, child: _FormField()),
+        Expanded(flex: 2, child: MyTextFormField()),
         SizedBox(width: 5),
         Expanded(flex: 1, child: Text('cm')),
       ],
@@ -116,7 +95,7 @@ class SuhuForm extends StatelessWidget {
       children: const [
         Text('Suhu'),
         SizedBox(width: 5),
-        Expanded(child: _FormField()),
+        Expanded(child: MyTextFormField()),
         SizedBox(width: 5),
         Text('°C'),
       ],

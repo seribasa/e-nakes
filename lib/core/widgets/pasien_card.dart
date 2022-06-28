@@ -21,7 +21,7 @@ class PasienCard extends StatelessWidget {
             const TextStyle(fontWeight: FontWeight.w600, color: Colors.white),
       ),
       subtitle: Text(
-        '$umur',
+        '$umur\nLaki-laki',
         style: const TextStyle(color: Colors.white),
       ),
     );
