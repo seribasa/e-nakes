@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:eimunisasi_nakes/features/jadwal/presentation/screens/wrapper_jadwal.dart';
+import 'package:eimunisasi_nakes/features/kalender/presentation/screens/kalender_screen.dart';
 import 'package:eimunisasi_nakes/features/klinik/presentation/screens/wrapper_klinik.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/wrapper_rekam_medis.dart';
 import 'package:flutter/material.dart';
@@ -85,9 +86,7 @@ class _MenuList extends StatelessWidget {
       {
         'title': 'Kalender',
         'icon': FontAwesomeIcons.calendar,
-        // 'route': Navigator.of(context).push(MaterialPageRoute(
-        //   builder: (context) => WrapperKlinik(),
-        // )),
+        'route': const KalenderScreen(),
       },
       {
         'title': 'Klinik',

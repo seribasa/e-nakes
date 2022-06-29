@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+import 'package:eimunisasi_nakes/firebase_options.dart';
 
 import 'app.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,7 +9,10 @@ import 'features/authentication/data/repositories/user_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    name: "E-Imunisasi-Nakes",
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   BlocOverrides.runZoned(
     () => runApp(App(userRepository: UserRepository())),
     blocObserver: AppBlocObserver(),

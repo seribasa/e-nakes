@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 class MyTextFormField extends StatelessWidget {
   final String? initialValue;
   final TextInputType? keyboardType;
-  const MyTextFormField({Key? key, this.keyboardType, this.initialValue})
-      : super(key: key);
+  final bool? readOnly;
+  const MyTextFormField({
+    Key? key,
+    this.keyboardType,
+    this.initialValue,
+    this.readOnly,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +23,7 @@ class MyTextFormField extends StatelessWidget {
       child: TextFormField(
         initialValue: initialValue,
         keyboardType: keyboardType,
+        readOnly: readOnly ?? false,
         decoration: const InputDecoration(
           border: InputBorder.none,
         ),
