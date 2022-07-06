@@ -1,5 +1,6 @@
 import 'package:eimunisasi_nakes/features/bottom_navbar/logic/buttom_navbar/bottom_navbar_cubit.dart';
 import 'package:eimunisasi_nakes/features/home/presentation/screens/home_screen.dart';
+import 'package:eimunisasi_nakes/features/notifications/presentation/screens/notification_screen.dart';
 import 'package:eimunisasi_nakes/features/profile/presentation/screens/profile_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -32,13 +33,7 @@ class BottomNavbarWrapper extends StatelessWidget {
                     } else if (stateNavbar is BottomNavbarProfile) {
                       return const ProfileScreen();
                     } else if (stateNavbar is BottomNavbarMessage) {
-                      return Center(
-                        child: Text('Notification ${state.data.id}'),
-                      );
-                    } else if (stateNavbar is BottomNavbarSetting) {
-                      return Center(
-                        child: Text('Setting ${state.data.id}'),
-                      );
+                      return const NotificationScreen();
                     } else {
                       return Center(
                         child: Text('Unknown ${state.data.id}'),
@@ -79,17 +74,10 @@ class BottomNavbarWrapper extends StatelessWidget {
                   ),
                   BottomNavigationBarItem(
                     icon: FaIcon(
-                      FontAwesomeIcons.solidEnvelope,
+                      FontAwesomeIcons.solidBell,
                       size: 20,
                     ),
                     label: 'Message',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: FaIcon(
-                      FontAwesomeIcons.gear,
-                      size: 20,
-                    ),
-                    label: 'Setting',
                   ),
                 ],
               );

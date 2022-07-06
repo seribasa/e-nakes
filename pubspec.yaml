@@ -53,7 +53,7 @@ dependencies:
   fl_chart: ^0.50.5
   math_expressions: ^2.3.0
   table_calendar: ^3.0.6
-
+  date_time_picker: ^2.1.0
 
 dev_dependencies:
   flutter_test:
