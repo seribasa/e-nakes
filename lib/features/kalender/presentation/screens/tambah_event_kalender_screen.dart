@@ -59,13 +59,13 @@ class TambahEventKalenderScreen extends StatelessWidget {
                 onChanged: (val) {
                   DateTime value = DateTime.parse(val);
                   formBloc.dateChange(value);
-                  print(val);
+                  debugPrint(val);
                 },
                 onSaved: (val) {
                   DateTime value =
                       DateTime.parse(val ?? DateTime.now().toString());
                   formBloc.dateChange(value);
-                  print(val);
+                  debugPrint(val);
                 },
               ),
               const SizedBox(height: 10.0),
