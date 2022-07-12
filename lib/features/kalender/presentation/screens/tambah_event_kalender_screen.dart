@@ -1,36 +1,85 @@
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:eimunisasi_nakes/core/widgets/custom_text_field.dart';
+import 'package:eimunisasi_nakes/features/kalender/logic/form_calendar_activity/form_calendar_activity_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:formz/formz.dart';
 
 class TambahEventKalenderScreen extends StatelessWidget {
   const TambahEventKalenderScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final formBloc = BlocProvider.of<FormCalendarActivityCubit>(context);
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
         title: const Text('Tambah Kegiatan'),
-        elevation: 0.0,
       ),
       resizeToAvoidBottomInset: false,
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: SingleChildScrollView(
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                SizedBox(height: 5.0),
-                _TanggalForm(
-                  initialValue: 'yyyy-MM-dd',
-                ),
-                SizedBox(height: 10.0),
-                _ActivityForm(
-                  initialValue: 'Periksa bayi dan imunisasi',
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-              ]),
+      body: BlocListener<FormCalendarActivityCubit, FormCalendarActivityState>(
+        listener: (context, state) {
+          if (state.status == FormzStatus.submissionSuccess) {
+            Navigator.pop(context);
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Kegiatan berhasil ditambahkan'),
+              ),
+            );
+          } else if (state.status == FormzStatus.submissionFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Kegiatan gagal ditambahkan'),
+              ),
+            );
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: SingleChildScrollView(
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const SizedBox(height: 5.0),
+              DateTimePicker(
+                type: DateTimePickerType.dateTimeSeparate,
+                dateMask: 'd MMM, yyyy',
+                initialValue: DateTime.now().toString(),
+                firstDate: DateTime.now().add(const Duration(days: -365)),
+                lastDate: DateTime.now().add(const Duration(days: 365)),
+                icon: const Icon(FontAwesomeIcons.calendarXmark),
+                dateLabelText: 'Date',
+                timeLabelText: "Hour",
+                selectableDayPredicate: (date) {
+                  // Disable weekend days to select from the calendar
+                  if (date.weekday == 6 || date.weekday == 7) {
+                    return false;
+                  }
+                  return true;
+                },
+                onChanged: (val) {
+                  DateTime value = DateTime.parse(val);
+                  formBloc.dateChange(value);
+                  print(val);
+                },
+                onSaved: (val) {
+                  DateTime value =
+                      DateTime.parse(val ?? DateTime.now().toString());
+                  formBloc.dateChange(value);
+                  print(val);
+                },
+              ),
+              const SizedBox(height: 10.0),
+              _ActivityForm(
+                hintText: 'Periksa bayi dan imunisasi',
+                onChanged: (val) {
+                  formBloc.activityChange(val);
+                },
+              ),
+              const SizedBox(
+                height: 20.0,
+              ),
+            ]),
+          ),
         ),
       ),
       bottomNavigationBar: const _SaveButton(),
@@ -38,50 +87,17 @@ class TambahEventKalenderScreen extends StatelessWidget {
   }
 }
 
-class _TanggalForm extends StatelessWidget {
-  final String? initialValue;
-  const _TanggalForm({Key? key, this.initialValue}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Pilih Tanggal',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(width: 5),
-        MyTextFormField(
-          // onTap: () {
-          //   DatePicker.showDatePicker(context,
-          //       theme: DatePickerTheme(
-          //         doneStyle: TextStyle(
-          //             color: Theme.of(context).accentColor),
-          //       ),
-          //       showTitleActions: true,
-          //       minTime: kFirstDay,
-          //       maxTime: kLastDay, onConfirm: (val) {
-          //     String formattedDate =
-          //         DateFormat('yyyy-MM-dd').format(val);
-          //     setState(() {
-          //       _dateTimeCtrl.text = formattedDate.toString();
-          //     });
-          //   },
-          //       currentTime: DateTime.now(),
-          //       locale: LocaleType.id);
-          // },
-          readOnly: true,
-          initialValue: initialValue,
-        ),
-      ],
-    );
-  }
-}
-
 class _ActivityForm extends StatelessWidget {
   final String? initialValue;
-  const _ActivityForm({Key? key, this.initialValue}) : super(key: key);
+  final String? hintText;
+
+  final void Function(String)? onChanged;
+  const _ActivityForm({
+    Key? key,
+    this.initialValue,
+    this.hintText,
+    this.onChanged,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +110,8 @@ class _ActivityForm extends StatelessWidget {
         ),
         const SizedBox(width: 5),
         MyTextFormField(
-          initialValue: initialValue,
+          onChanged: onChanged,
+          hintText: hintText,
         ),
       ],
     );
@@ -106,20 +123,33 @@ class _SaveButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 50,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            shape:
-                const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
-        child: const Text("Simpan"),
-        onPressed: () {
-          // Navigator.push(context, MaterialPageRoute(builder: (context) {
-          //   return GrafikPemeriksaanScreen();
-          // }));
-        },
-      ),
+    final formBloc = context.read<FormCalendarActivityCubit>();
+    return BlocBuilder<FormCalendarActivityCubit, FormCalendarActivityState>(
+      builder: (context, state) {
+        if (state.status == FormzStatus.submissionInProgress) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Text('Menyimpan...'),
+              SizedBox(width: 10),
+              CircularProgressIndicator(),
+            ],
+          );
+        }
+        return SizedBox(
+          width: double.infinity,
+          height: 50,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero)),
+            child: const Text("Simpan"),
+            onPressed: () {
+              formBloc.addCalendarActivity();
+            },
+          ),
+        );
+      },
     );
   }
 }

@@ -1,6 +1,10 @@
+import 'package:eimunisasi_nakes/features/authentication/data/models/user.dart';
+import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:eimunisasi_nakes/features/kalender/data/models/calendar_model.dart';
+import 'package:eimunisasi_nakes/features/kalender/logic/form_calendar_activity/form_calendar_activity_cubit.dart';
 import 'package:eimunisasi_nakes/features/kalender/presentation/screens/tambah_event_kalender_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
@@ -16,18 +20,18 @@ class _KalenderScreenState extends State<KalenderScreen> {
   confirmDeleteDialog(BuildContext context, dynamic event) {
     // set up the buttons
     Widget cancelButton = TextButton(
-      child: Text("No"),
+      child: const Text("No"),
       onPressed: () {
         Navigator.pop(context);
       },
     );
     Widget continueButton = TextButton(
-      child: Text("Yes"),
+      child: const Text("Yes"),
       onPressed: () async {},
     );
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Konfirmasi"),
+      title: const Text("Konfirmasi"),
       content: Text("Apakah anda yakin akan menghapus ${event.title}?"),
       actions: [
         cancelButton,
@@ -93,15 +97,15 @@ class _KalenderScreenState extends State<KalenderScreen> {
         return Positioned(
           bottom: 1,
           child: Container(
-            padding: EdgeInsets.all(1.0),
+            padding: const EdgeInsets.all(1.0),
             decoration: BoxDecoration(
                 color: Theme.of(context).accentColor, shape: BoxShape.circle),
-            constraints: BoxConstraints(minWidth: 15.0, minHeight: 15.0),
+            constraints: const BoxConstraints(minWidth: 15.0, minHeight: 15.0),
             child: Center(
               child: Text(
                 "${events.length}",
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                     color: Colors.white,
                     fontSize: 10.0,
                     fontWeight: FontWeight.bold),
@@ -116,16 +120,29 @@ class _KalenderScreenState extends State<KalenderScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final _authBloc = BlocProvider.of<AuthenticationBloc>(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Kalender"),
+        title: const Text("Kalender"),
         actions: [
-          IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => TambahEventKalenderScreen())))
+          BlocBuilder(
+            bloc: _authBloc,
+            builder: (context, state) {
+              return IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => BlocProvider(
+                                create: (context) => FormCalendarActivityCubit(
+                                    userData: (state is Authenticated)
+                                        ? (state.data)
+                                        : null),
+                                child: const TambahEventKalenderScreen(),
+                              ))));
+            },
+          )
         ],
       ),
       body: Padding(
@@ -135,7 +152,7 @@ class _KalenderScreenState extends State<KalenderScreen> {
               stream: null,
               builder: (context, AsyncSnapshot<List<CalendarModel>> snapshot) {
                 if (snapshot.hasError) {
-                  return Center(child: Text('Error'));
+                  return const Center(child: Text('Error'));
                 }
                 allEvents = snapshot.data;
                 _groupEvents(allEvents);
@@ -149,7 +166,7 @@ class _KalenderScreenState extends State<KalenderScreen> {
                     TableCalendar(
                       calendarBuilders: calendarBuilder(),
                       eventLoader: _getEventsfromDay,
-                      headerStyle: HeaderStyle(
+                      headerStyle: const HeaderStyle(
                           formatButtonVisible: false, titleCentered: true),
                       calendarStyle: CalendarStyle(
                           todayDecoration: BoxDecoration(
@@ -187,7 +204,7 @@ class _KalenderScreenState extends State<KalenderScreen> {
                         });
                       },
                     ),
-                    SizedBox(height: 30.0),
+                    const SizedBox(height: 30.0),
                     (_selectedDay != null
                         ? Column(
                             children: [
@@ -200,7 +217,7 @@ class _KalenderScreenState extends State<KalenderScreen> {
                                         DateFormat('dd MMMM yyyy')
                                             .format(selectedDate)
                                             .toString(),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.w700,
                                       fontSize: 15,
                                     ),
@@ -215,11 +232,11 @@ class _KalenderScreenState extends State<KalenderScreen> {
                                           //   _selectedDay = null;
                                           // });
                                         },
-                                        icon: Icon(Icons.close_rounded)),
+                                        icon: const Icon(Icons.close_rounded)),
                                   )
                                 ],
                               ),
-                              SizedBox(height: 5.0),
+                              const SizedBox(height: 5.0),
                               // ..._selectedEvents.map((event) => ListTile(
                               //       title: Text(event.activity),
                               //       subtitle: Text(DateFormat('dd-MM-yyyy')
@@ -235,24 +252,24 @@ class _KalenderScreenState extends State<KalenderScreen> {
                             ? DataTable(
                                 headingRowHeight: 40,
                                 // dataRowHeight: DataRowHeight.flexible(),
-                                headingTextStyle: TextStyle(
+                                headingTextStyle: const TextStyle(
                                     fontFamily: 'Nunito',
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold),
-                                dataTextStyle: TextStyle(
+                                dataTextStyle: const TextStyle(
                                   fontFamily: 'Nunito',
                                   color: Colors.black,
                                 ),
                                 headingRowColor: MaterialStateColor.resolveWith(
                                     (states) => Theme.of(context).primaryColor),
                                 columns: <DataColumn>[
-                                  DataColumn(
-                                    label: Text(
+                                  const DataColumn(
+                                    label: const Text(
                                       'Tanggal',
                                     ),
                                   ),
-                                  DataColumn(
-                                    label: Text(
+                                  const DataColumn(
+                                    label: const Text(
                                       'Aktivitas',
                                     ),
                                   ),
@@ -294,11 +311,13 @@ class _KalenderScreenState extends State<KalenderScreen> {
                                                       ),
                                                       itemBuilder: (context) =>
                                                           [
-                                                        PopupMenuItem<int>(
+                                                        const PopupMenuItem<
+                                                                int>(
                                                             value: 0,
-                                                            child:
-                                                                Text("Ubah")),
-                                                        PopupMenuItem<int>(
+                                                            child: const Text(
+                                                                "Ubah")),
+                                                        const PopupMenuItem<
+                                                                int>(
                                                             value: 1,
                                                             child:
                                                                 Text("Hapus")),

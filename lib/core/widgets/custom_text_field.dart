@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 
 class MyTextFormField extends StatelessWidget {
   final String? initialValue;
+  final String? hintText;
   final TextInputType? keyboardType;
   final bool? readOnly;
+  final void Function(String)? onChanged;
   const MyTextFormField({
     Key? key,
     this.keyboardType,
     this.initialValue,
     this.readOnly,
+    this.hintText,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -21,10 +25,14 @@ class MyTextFormField extends StatelessWidget {
         color: Colors.grey[200],
       ),
       child: TextFormField(
+        minLines: 1,
+        maxLines: 10,
+        onChanged: onChanged,
         initialValue: initialValue,
         keyboardType: keyboardType,
         readOnly: readOnly ?? false,
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
+          hintText: hintText,
           border: InputBorder.none,
         ),
       ),

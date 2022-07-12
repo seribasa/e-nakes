@@ -92,7 +92,7 @@ class _GambarKlinik extends StatelessWidget {
       child: SizedBox(
         width: double.infinity,
         child: CachedNetworkImage(
-            imageUrl: gambarKlinikUrl?.first ??
+            imageUrl: gambarKlinikUrl?.last ??
                 'https://cdn0-production-images-kly.akamaized.net/WzN7WyLJIUKB0rcUbnpm1MlKKzI=/640x360/smart/filters:quality(75):strip_icc():format(jpeg)/kly-media-production/medias/2368558/original/008993600_1538023053-Klinik_Mediska_CIkampek.jpg'),
       ),
     );
