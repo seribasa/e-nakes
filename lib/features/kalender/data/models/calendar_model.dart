@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class CalendarModel extends Equatable {
@@ -14,13 +15,13 @@ class CalendarModel extends Equatable {
       this.documentID,
       this.readOnly = false});
 
-  factory CalendarModel.fromMap(Map data, val) {
+  factory CalendarModel.fromMap(Map data, docID) {
     return CalendarModel(
       uid: data['uid'] ?? '',
       activity: data['activity'] ?? '',
-      date: data['date'].toDate(),
+      date: (data['date'] as Timestamp).toDate(),
       readOnly: data['readOnly'],
-      documentID: val.id,
+      documentID: docID,
     );
   }
   Map<String, dynamic> toMap() {

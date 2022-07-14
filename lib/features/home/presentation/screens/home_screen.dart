@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:eimunisasi_nakes/features/jadwal/presentation/screens/wrapper_jadwal.dart';
+import 'package:eimunisasi_nakes/features/kalender/logic/calendar/calendar_cubit.dart';
+import 'package:eimunisasi_nakes/features/kalender/logic/form_calendar_activity/form_calendar_activity_cubit.dart';
 import 'package:eimunisasi_nakes/features/kalender/presentation/screens/kalender_screen.dart';
 import 'package:eimunisasi_nakes/features/klinik/presentation/screens/wrapper_klinik.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/wrapper_rekam_medis.dart';
@@ -124,33 +126,56 @@ class _MenuList extends StatelessWidget {
                   mainAxisSpacing: 5,
                 ),
                 itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => data[index]['route'],
-                    )),
-                    child: Column(
-                      children: [
-                        Container(
-                          alignment: Alignment.center,
-                          child: Padding(
-                            padding: const EdgeInsets.all(30.0),
-                            child: FaIcon(
-                              data[index]['icon'],
-                              size: 30,
-                              color: Colors.blue[100],
-                            ),
+                  return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                    builder: (context, state) {
+                      return GestureDetector(
+                        onTap: () =>
+                            Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => MultiBlocProvider(
+                            providers: [
+                              BlocProvider(
+                                create: (context) => CalendarCubit(
+                                    userData: (state is Authenticated)
+                                        ? state.data
+                                        : null)
+                                  ..getAllCalendar(),
+                              ),
+                              BlocProvider(
+                                create: (context) => FormCalendarActivityCubit(
+                                    userData: (state is Authenticated)
+                                        ? (state.data)
+                                        : null),
+                              ),
+                            ],
+                            child: data[index]['route'],
                           ),
-                          decoration: BoxDecoration(
-                              color: Colors.blue[300],
-                              borderRadius: BorderRadius.circular(20)),
+                        )),
+                        child: Column(
+                          children: [
+                            Container(
+                              alignment: Alignment.center,
+                              child: Padding(
+                                padding: const EdgeInsets.all(30.0),
+                                child: FaIcon(
+                                  data[index]['icon'],
+                                  size: 30,
+                                  color: Colors.blue[100],
+                                ),
+                              ),
+                              decoration: BoxDecoration(
+                                  color: Colors.blue[300],
+                                  borderRadius: BorderRadius.circular(20)),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              data[index]['title'],
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 10),
-                        Text(
-                          data[index]['title'],
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   );
                 }),
           ),

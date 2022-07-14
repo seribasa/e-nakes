@@ -8,15 +8,30 @@ class CalendarRepository {
       : _firestore = firestore ?? FirebaseFirestore.instance;
 
   Future<List<CalendarModel>?> getCalendarActivity(
-      {required String uid}) async {
+      {required String? uid}) async {
+    List<CalendarModel> result = [];
     final calendar = await _firestore
-        .collection('calendar')
+        .collection('calendars')
         .where('uid', isEqualTo: uid)
         .get();
-    calendar.docs.forEach((element) {
-      print(element.data());
-    });
-    // return CalendarModel.fromMap(doc.docs. ?? {}, id);
+    for (var element in calendar.docs) {
+      result.add(CalendarModel.fromMap(element.data(), element.id));
+    }
+    return result;
+  }
+
+  Future<List<CalendarModel>?> getSpecificCalendarActivity(
+      {required String? uid, DateTime? date}) async {
+    List<CalendarModel>? result;
+    final calendar = await _firestore
+        .collection('calendars')
+        .where('uid', isEqualTo: uid)
+        .where('date', isEqualTo: date)
+        .get();
+    for (var element in calendar.docs) {
+      result?.add(CalendarModel.fromMap(element.data(), element.id));
+    }
+    return result;
   }
 
   Future<void> addCalendarActivity({
@@ -28,16 +43,15 @@ class CalendarRepository {
   }
 
   Future<void> updateCalendarActivity(
-      {required CalendarModel calendarModel}) async {
+      {required CalendarModel calendarModel, required String? docId}) async {
     final DocumentReference reference =
-        _firestore.collection('calendars').doc();
+        _firestore.collection('calendars').doc(docId);
     await reference.update(calendarModel.toMap());
   }
 
-  Future<void> deleteCalendarActivity(
-      {required CalendarModel calendarModel}) async {
+  Future<void> deleteCalendarActivity({required String docId}) async {
     final DocumentReference reference =
-        _firestore.collection('calendars').doc();
+        _firestore.collection('calendars').doc(docId);
     await reference.delete();
   }
 }

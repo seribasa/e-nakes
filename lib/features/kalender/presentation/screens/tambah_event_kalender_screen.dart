@@ -47,8 +47,8 @@ class TambahEventKalenderScreen extends StatelessWidget {
                 firstDate: DateTime.now().add(const Duration(days: -365)),
                 lastDate: DateTime.now().add(const Duration(days: 365)),
                 icon: const Icon(FontAwesomeIcons.calendarXmark),
-                dateLabelText: 'Date',
-                timeLabelText: "Hour",
+                dateLabelText: 'Tanggal',
+                timeLabelText: "Jam",
                 selectableDayPredicate: (date) {
                   // Disable weekend days to select from the calendar
                   if (date.weekday == 6 || date.weekday == 7) {
@@ -127,13 +127,24 @@ class _SaveButton extends StatelessWidget {
     return BlocBuilder<FormCalendarActivityCubit, FormCalendarActivityState>(
       builder: (context, state) {
         if (state.status == FormzStatus.submissionInProgress) {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text('Menyimpan...'),
-              SizedBox(width: 10),
-              CircularProgressIndicator(),
-            ],
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: ElevatedButton(
+              onPressed: null,
+              style: ElevatedButton.styleFrom(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text('Menyimpan...'),
+                  SizedBox(width: 10),
+                  CircularProgressIndicator(),
+                ],
+              ),
+            ),
           );
         }
         return SizedBox(
