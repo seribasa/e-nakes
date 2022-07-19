@@ -60,51 +60,50 @@ class _BeratBadanForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final _pemeriksaanBloc =
         BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
+    return BlocBuilder<FormPemeriksaanVaksinasiCubit,
+        FormPemeriksaanVaksinasiState>(
+      builder: (context, state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Expanded(flex: 3, child: Text('Berat Badan')),
-            const SizedBox(width: 5),
-            Expanded(
-                flex: 2,
-                child: BlocBuilder<FormPemeriksaanVaksinasiCubit,
-                    FormPemeriksaanVaksinasiState>(
-                  builder: (context, state) {
-                    return MyTextFormField(
+            Row(
+              children: [
+                const Expanded(flex: 3, child: Text('Berat Badan')),
+                const SizedBox(width: 5),
+                Expanded(
+                    flex: 2,
+                    child: MyTextFormField(
                       keyboardType: TextInputType.number,
                       hintText: '10',
                       onChanged: (value) {
                         _pemeriksaanBloc.changeBeratBadan(int.parse(value));
                       },
-                    );
-                  },
-                )),
-            const SizedBox(width: 5),
-            const Expanded(flex: 1, child: Text('kg')),
-          ],
-        ),
-        const SizedBox(height: 10),
-        Container(
-          padding: const EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Text(
+                    )),
+                const SizedBox(width: 5),
+                const Expanded(flex: 1, child: Text('kg')),
+              ],
+            ),
             () {
               if (_pemeriksaanBloc.state.status == FormzStatus.invalid) {
                 if (_pemeriksaanBloc.state.beratBadan == null) {
-                  return 'Berat badan tidak boleh kosong!';
+                  return Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      'Berat badan harus diisi!',
+                      style: TextStyle(color: Colors.red[400]),
+                    ),
+                  );
                 }
               }
-              return '';
+              return Container();
             }(),
-            style: TextStyle(color: Colors.red[400]),
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 }
@@ -136,25 +135,24 @@ class TinggiBadanForm extends StatelessWidget {
             const Expanded(flex: 1, child: Text('cm')),
           ],
         ),
-        const SizedBox(height: 10),
-        Container(
-          padding: const EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Text(
-            () {
-              if (_pemeriksaanBloc.state.status == FormzStatus.invalid) {
-                if (_pemeriksaanBloc.state.tinggiBadan == null) {
-                  return 'Tinggi badan tidak boleh kosong!';
-                }
-              }
-              return '';
-            }(),
-            style: TextStyle(color: Colors.red[400]),
-          ),
-        ),
+        () {
+          if (_pemeriksaanBloc.state.status == FormzStatus.invalid) {
+            if (_pemeriksaanBloc.state.tinggiBadan == null) {
+              return Container(
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  'Tinggi badan harus diisi!',
+                  style: TextStyle(color: Colors.red[400]),
+                ),
+              );
+            }
+          }
+          return Container();
+        }(),
       ],
     );
   }
@@ -187,25 +185,24 @@ class LingkarKepalaForm extends StatelessWidget {
             const Expanded(flex: 1, child: Text('cm')),
           ],
         ),
-        const SizedBox(height: 10),
-        Container(
-          padding: const EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Text(
-            () {
-              if (_pemeriksaanBloc.state.status == FormzStatus.invalid) {
-                if (_pemeriksaanBloc.state.lingkarKepala == null) {
-                  return 'Lingkar kepala tidak boleh kosong!';
-                }
-              }
-              return '';
-            }(),
-            style: TextStyle(color: Colors.red[400]),
-          ),
-        ),
+        () {
+          if (_pemeriksaanBloc.state.status == FormzStatus.invalid) {
+            if (_pemeriksaanBloc.state.lingkarKepala == null) {
+              return Container(
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  'Lingkar kepala harus diisi!',
+                  style: TextStyle(color: Colors.red[400]),
+                ),
+              );
+            }
+          }
+          return Container();
+        }(),
       ],
     );
   }
