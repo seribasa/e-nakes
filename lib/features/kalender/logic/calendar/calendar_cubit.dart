@@ -38,7 +38,7 @@ class CalendarCubit extends Cubit<CalendarState> {
   }
 
   deleteCalendarByDocId(String docId) async {
-    emit(CalendarLoading());
+    emit(CalendarDeleting());
     try {
       await _calendarRepository.deleteCalendarActivity(docId: docId);
       emit(CalendarDeleted());

@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:eimunisasi_nakes/core/widgets/loading_dialog.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:eimunisasi_nakes/features/kalender/data/models/calendar_model.dart';
 import 'package:eimunisasi_nakes/features/kalender/logic/calendar/calendar_cubit.dart';
@@ -124,10 +125,19 @@ class _KalenderScreenState extends State<KalenderScreen> {
           BlocListener<CalendarCubit, CalendarState>(
               listener: (context, state) {
             if (state is CalendarDeleted) {
+              Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                 content: Text("Kegiatan berhasil dihapus"),
               ));
               context.read<CalendarCubit>().getAllCalendar();
+            } else if (state is CalendarDeleting) {
+              showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (context) => const LoadingDialog(
+                  label: 'Deleting...',
+                ),
+              );
             }
           }),
         ],
@@ -266,7 +276,7 @@ class _DataTableActivity extends StatelessWidget {
       builder: (context, state) {
         return DataTable(
             headingRowHeight: 40,
-            // dataRowHeight: DataRowHeight.flexible(),
+            columnSpacing: 0,
             headingTextStyle: const TextStyle(
                 fontFamily: 'Nunito',
                 color: Colors.white,
@@ -377,6 +387,7 @@ class _PopUpMenuActivity extends StatelessWidget {
         ),
         onPressed: () async {
           _calendarBloc.deleteCalendarByDocId(event.documentID!);
+          Navigator.pop(context);
         },
       );
       // set up the AlertDialog

@@ -11,6 +11,8 @@ class CalendarInitial extends CalendarState {}
 
 class CalendarLoading extends CalendarState {}
 
+class CalendarDeleting extends CalendarState {}
+
 class CalendarLoaded extends CalendarState {
   final List<CalendarModel>? listCalendarModel;
 

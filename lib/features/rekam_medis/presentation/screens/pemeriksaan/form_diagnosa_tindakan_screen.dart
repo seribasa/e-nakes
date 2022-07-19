@@ -1,6 +1,9 @@
 import 'package:eimunisasi_nakes/core/widgets/pasien_card.dart';
 import 'package:eimunisasi_nakes/features/bottom_navbar/presentation/screens/bottom_navbar.dart';
+import 'package:eimunisasi_nakes/features/rekam_medis/logic/cubit/form_pemeriksaan_vaksinasi_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 
 class FormDiagnosaTindakanScreen extends StatelessWidget {
   const FormDiagnosaTindakanScreen({Key? key}) : super(key: key);
@@ -11,21 +14,45 @@ class FormDiagnosaTindakanScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Form diagnosa dan tindakan'),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              PasienCard(
-                nama: 'Rizky faturriza',
-                umur: '1 bulan 2 tahun',
+      body: BlocListener<FormPemeriksaanVaksinasiCubit,
+          FormPemeriksaanVaksinasiState>(
+        listener: (context, state) {
+          if (state.status == FormzStatus.submissionSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Berhasil menyimpan pemeriksaan!'),
               ),
-              SizedBox(height: 10),
-              _DiagnosaForm(),
-              SizedBox(height: 10),
-              _TindakanForm()
-            ],
+            );
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const BottomNavbarWrapper()),
+              (Route<dynamic> route) => false,
+            );
+          } else if (state.status == FormzStatus.submissionFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Terjadi kesalahan!'),
+              ),
+            );
+          }
+        },
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                PasienCard(
+                  nama: 'Rizky faturriza',
+                  umur: '1 bulan 2 tahun',
+                ),
+                SizedBox(height: 10),
+                _DiagnosaForm(),
+                SizedBox(height: 10),
+                _TindakanForm()
+              ],
+            ),
           ),
         ),
       ),
@@ -39,6 +66,8 @@ class _DiagnosaForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _pemeriksaanBloc =
+        BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -53,10 +82,11 @@ class _DiagnosaForm extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             color: Colors.grey[200],
           ),
-          child: const TextField(
+          child: TextField(
+            onChanged: (value) => _pemeriksaanBloc.changeDiagnosa(value),
             minLines: 1,
             maxLines: 10,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: InputBorder.none,
             ),
           ),
@@ -71,6 +101,8 @@ class _TindakanForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _pemeriksaanBloc =
+        BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -85,10 +117,11 @@ class _TindakanForm extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             color: Colors.grey[200],
           ),
-          child: const TextField(
+          child: TextField(
+            onChanged: (value) => _pemeriksaanBloc.changeTindakan(value),
             minLines: 1,
             maxLines: 10,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: InputBorder.none,
             ),
           ),
@@ -103,20 +136,26 @@ class _NextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _pemeriksaanBloc =
+        BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
     return SizedBox(
       width: double.infinity,
       height: 50,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            shape:
-                const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
-        child: const Text("Selesai"),
-        onPressed: () {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const BottomNavbarWrapper()),
-            (Route<dynamic> route) => false,
+      child: BlocBuilder<FormPemeriksaanVaksinasiCubit,
+          FormPemeriksaanVaksinasiState>(
+        builder: (context, state) {
+          return ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero)),
+            child: state.status == FormzStatus.submissionInProgress
+                ? const CircularProgressIndicator()
+                : const Text("Selesai"),
+            onPressed: state.status == FormzStatus.submissionInProgress
+                ? null
+                : () {
+                    _pemeriksaanBloc.savePemeriksaanVaksinasi();
+                  },
           );
         },
       ),

@@ -1,7 +1,10 @@
 import 'dart:convert';
 
+import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
+import 'package:eimunisasi_nakes/features/rekam_medis/logic/cubit/form_pemeriksaan_vaksinasi_cubit.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/pemeriksaan/form_pemeriksaan_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class VerifikasiPasienScreen extends StatelessWidget {
@@ -122,15 +125,24 @@ class _NextButton extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       height: 50,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            shape:
-                const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
-        child: const Text("Lanjut"),
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return const FormPemeriksaanScreen();
-          }));
+      child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        builder: (context, state) {
+          return ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero)),
+            child: const Text("Lanjut"),
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return BlocProvider(
+                  create: (context) => FormPemeriksaanVaksinasiCubit(
+                    userData: state is Authenticated ? state.data : null,
+                  )..providePasienData('idPasien', 'idAnakPasien'),
+                  child: const FormPemeriksaanScreen(),
+                );
+              }));
+            },
+          );
         },
       ),
     );

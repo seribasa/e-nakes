@@ -9,7 +9,7 @@ class CalendarRepository {
 
   Future<List<CalendarModel>?> getCalendarActivity(
       {required String? uid}) async {
-    List<CalendarModel> result = [];
+    List<CalendarModel>? result = [];
     final calendar = await _firestore
         .collection('calendars')
         .where('uid', isEqualTo: uid)

@@ -20,6 +20,7 @@ class TambahEventKalenderScreen extends StatelessWidget {
       body: BlocListener<FormCalendarActivityCubit, FormCalendarActivityState>(
         listener: (context, state) {
           if (state.status == FormzStatus.submissionSuccess) {
+            formBloc.reset();
             Navigator.pop(context);
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(

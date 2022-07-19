@@ -1,7 +1,9 @@
 import 'package:eimunisasi_nakes/core/widgets/custom_text_field.dart';
 import 'package:eimunisasi_nakes/core/widgets/pasien_card.dart';
+import 'package:eimunisasi_nakes/features/rekam_medis/logic/cubit/form_pemeriksaan_vaksinasi_cubit.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/pemeriksaan/grafik_pemeriksaan_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FormPemeriksaanScreen extends StatelessWidget {
   const FormPemeriksaanScreen({Key? key}) : super(key: key);
@@ -40,13 +42,23 @@ class _BeratBadanForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _pemeriksaanBloc =
+        BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
     return Row(
-      children: const [
-        Expanded(flex: 3, child: Text('Berat Badan')),
-        SizedBox(width: 5),
-        Expanded(flex: 2, child: MyTextFormField()),
-        SizedBox(width: 5),
-        Expanded(flex: 1, child: Text('kg')),
+      children: [
+        const Expanded(flex: 3, child: Text('Berat Badan')),
+        const SizedBox(width: 5),
+        Expanded(
+            flex: 2,
+            child: MyTextFormField(
+              keyboardType: TextInputType.number,
+              hintText: '10',
+              onChanged: (value) {
+                _pemeriksaanBloc.changeBeratBadan(int.parse(value));
+              },
+            )),
+        const SizedBox(width: 5),
+        const Expanded(flex: 1, child: Text('kg')),
       ],
     );
   }
@@ -57,13 +69,23 @@ class TinggiBadanForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _pemeriksaanBloc =
+        BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
     return Row(
-      children: const [
-        Expanded(flex: 3, child: Text('Tinggi Badan')),
-        SizedBox(width: 5),
-        Expanded(flex: 2, child: MyTextFormField()),
-        SizedBox(width: 5),
-        Expanded(flex: 1, child: Text('cm')),
+      children: [
+        const Expanded(flex: 3, child: Text('Tinggi Badan')),
+        const SizedBox(width: 5),
+        Expanded(
+            flex: 2,
+            child: MyTextFormField(
+              keyboardType: TextInputType.number,
+              hintText: '50',
+              onChanged: (value) {
+                _pemeriksaanBloc.changeTinggiBadan(int.parse(value));
+              },
+            )),
+        const SizedBox(width: 5),
+        const Expanded(flex: 1, child: Text('cm')),
       ],
     );
   }
@@ -74,30 +96,23 @@ class LingkarKepalaForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _pemeriksaanBloc =
+        BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
     return Row(
-      children: const [
-        Expanded(flex: 3, child: Text('Lingkar Kepala')),
-        SizedBox(width: 5),
-        Expanded(flex: 2, child: MyTextFormField()),
-        SizedBox(width: 5),
-        Expanded(flex: 1, child: Text('cm')),
-      ],
-    );
-  }
-}
-
-class SuhuForm extends StatelessWidget {
-  const SuhuForm({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: const [
-        Text('Suhu'),
-        SizedBox(width: 5),
-        Expanded(child: MyTextFormField()),
-        SizedBox(width: 5),
-        Text('°C'),
+      children: [
+        const Expanded(flex: 3, child: Text('Lingkar Kepala')),
+        const SizedBox(width: 5),
+        Expanded(
+            flex: 2,
+            child: MyTextFormField(
+              keyboardType: TextInputType.number,
+              hintText: '15',
+              onChanged: (value) {
+                _pemeriksaanBloc.changeLingkarKepala(int.parse(value));
+              },
+            )),
+        const SizedBox(width: 5),
+        const Expanded(flex: 1, child: Text('cm')),
       ],
     );
   }
@@ -131,6 +146,8 @@ class _RiwayatKeluhan extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _pemeriksaanBloc =
+        BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -145,10 +162,11 @@ class _RiwayatKeluhan extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             color: Colors.grey[200],
           ),
-          child: const TextField(
+          child: TextField(
+            onChanged: (value) => _pemeriksaanBloc.changeRiwayatKeluhan(value),
             minLines: 1,
             maxLines: 10,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: InputBorder.none,
             ),
           ),
@@ -163,6 +181,8 @@ class _NextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _pemeriksaanBloc =
+        BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
     return SizedBox(
       width: double.infinity,
       height: 50,
@@ -173,7 +193,10 @@ class _NextButton extends StatelessWidget {
         child: const Text("Simpan dan Lanjutkan"),
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return const GrafikPemeriksaanScreen();
+            return BlocProvider.value(
+              value: _pemeriksaanBloc,
+              child: const GrafikPemeriksaanScreen(),
+            );
           }));
         },
       ),

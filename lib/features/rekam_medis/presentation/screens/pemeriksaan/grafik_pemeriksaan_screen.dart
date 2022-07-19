@@ -1,7 +1,9 @@
 import 'package:eimunisasi_nakes/core/widgets/pasien_card.dart';
+import 'package:eimunisasi_nakes/features/rekam_medis/logic/cubit/form_pemeriksaan_vaksinasi_cubit.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/pemeriksaan/form_diagnosa_tindakan_screen.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/rekam_medis_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GrafikPemeriksaanScreen extends StatelessWidget {
   const GrafikPemeriksaanScreen({Key? key}) : super(key: key);
@@ -67,6 +69,8 @@ class _NextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _pemeriksaanBloc =
+        BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
     return SizedBox(
       width: double.infinity,
       height: 50,
@@ -77,7 +81,10 @@ class _NextButton extends StatelessWidget {
         child: const Text("Lanjut"),
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return const FormDiagnosaTindakanScreen();
+            return BlocProvider.value(
+              value: _pemeriksaanBloc,
+              child: const FormDiagnosaTindakanScreen(),
+            );
           }));
         },
       ),
