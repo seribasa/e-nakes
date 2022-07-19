@@ -4,31 +4,47 @@ import 'package:eimunisasi_nakes/features/rekam_medis/logic/cubit/form_pemeriksa
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/pemeriksaan/grafik_pemeriksaan_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 
 class FormPemeriksaanScreen extends StatelessWidget {
   const FormPemeriksaanScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final _pemeriksaanBloc =
+        BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Form Pemeriksaan Pasien'),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              PasienCard(
-                nama: 'Rizky faturriza',
-                umur: '1 bulan 2 tahun',
-              ),
-              SizedBox(height: 10),
-              _PemeriksaanFisik(),
-              SizedBox(height: 10),
-              _RiwayatKeluhan()
-            ],
+      body: BlocListener<FormPemeriksaanVaksinasiCubit,
+          FormPemeriksaanVaksinasiState>(
+        listener: (context, state) {
+          if (state.status == FormzStatus.valid) {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return BlocProvider.value(
+                value: _pemeriksaanBloc,
+                child: const GrafikPemeriksaanScreen(),
+              );
+            }));
+          }
+        },
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                PasienCard(
+                  nama: 'Rizky faturriza',
+                  umur: '1 bulan 2 tahun',
+                ),
+                SizedBox(height: 10),
+                _PemeriksaanFisik(),
+                SizedBox(height: 10),
+                _RiwayatKeluhan()
+              ],
+            ),
           ),
         ),
       ),
@@ -44,21 +60,50 @@ class _BeratBadanForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final _pemeriksaanBloc =
         BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Expanded(flex: 3, child: Text('Berat Badan')),
-        const SizedBox(width: 5),
-        Expanded(
-            flex: 2,
-            child: MyTextFormField(
-              keyboardType: TextInputType.number,
-              hintText: '10',
-              onChanged: (value) {
-                _pemeriksaanBloc.changeBeratBadan(int.parse(value));
-              },
-            )),
-        const SizedBox(width: 5),
-        const Expanded(flex: 1, child: Text('kg')),
+        Row(
+          children: [
+            const Expanded(flex: 3, child: Text('Berat Badan')),
+            const SizedBox(width: 5),
+            Expanded(
+                flex: 2,
+                child: BlocBuilder<FormPemeriksaanVaksinasiCubit,
+                    FormPemeriksaanVaksinasiState>(
+                  builder: (context, state) {
+                    return MyTextFormField(
+                      keyboardType: TextInputType.number,
+                      hintText: '10',
+                      onChanged: (value) {
+                        _pemeriksaanBloc.changeBeratBadan(int.parse(value));
+                      },
+                    );
+                  },
+                )),
+            const SizedBox(width: 5),
+            const Expanded(flex: 1, child: Text('kg')),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Container(
+          padding: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Text(
+            () {
+              if (_pemeriksaanBloc.state.status == FormzStatus.invalid) {
+                if (_pemeriksaanBloc.state.beratBadan == null) {
+                  return 'Berat badan tidak boleh kosong!';
+                }
+              }
+              return '';
+            }(),
+            style: TextStyle(color: Colors.red[400]),
+          ),
+        ),
       ],
     );
   }
@@ -71,21 +116,45 @@ class TinggiBadanForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final _pemeriksaanBloc =
         BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Expanded(flex: 3, child: Text('Tinggi Badan')),
-        const SizedBox(width: 5),
-        Expanded(
-            flex: 2,
-            child: MyTextFormField(
-              keyboardType: TextInputType.number,
-              hintText: '50',
-              onChanged: (value) {
-                _pemeriksaanBloc.changeTinggiBadan(int.parse(value));
-              },
-            )),
-        const SizedBox(width: 5),
-        const Expanded(flex: 1, child: Text('cm')),
+        Row(
+          children: [
+            const Expanded(flex: 3, child: Text('Tinggi Badan')),
+            const SizedBox(width: 5),
+            Expanded(
+                flex: 2,
+                child: MyTextFormField(
+                  keyboardType: TextInputType.number,
+                  hintText: '50',
+                  onChanged: (value) {
+                    _pemeriksaanBloc.changeTinggiBadan(int.parse(value));
+                  },
+                )),
+            const SizedBox(width: 5),
+            const Expanded(flex: 1, child: Text('cm')),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Container(
+          padding: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Text(
+            () {
+              if (_pemeriksaanBloc.state.status == FormzStatus.invalid) {
+                if (_pemeriksaanBloc.state.tinggiBadan == null) {
+                  return 'Tinggi badan tidak boleh kosong!';
+                }
+              }
+              return '';
+            }(),
+            style: TextStyle(color: Colors.red[400]),
+          ),
+        ),
       ],
     );
   }
@@ -98,21 +167,45 @@ class LingkarKepalaForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final _pemeriksaanBloc =
         BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Expanded(flex: 3, child: Text('Lingkar Kepala')),
-        const SizedBox(width: 5),
-        Expanded(
-            flex: 2,
-            child: MyTextFormField(
-              keyboardType: TextInputType.number,
-              hintText: '15',
-              onChanged: (value) {
-                _pemeriksaanBloc.changeLingkarKepala(int.parse(value));
-              },
-            )),
-        const SizedBox(width: 5),
-        const Expanded(flex: 1, child: Text('cm')),
+        Row(
+          children: [
+            const Expanded(flex: 3, child: Text('Lingkar Kepala')),
+            const SizedBox(width: 5),
+            Expanded(
+                flex: 2,
+                child: MyTextFormField(
+                  keyboardType: TextInputType.number,
+                  hintText: '15',
+                  onChanged: (value) {
+                    _pemeriksaanBloc.changeLingkarKepala(int.parse(value));
+                  },
+                )),
+            const SizedBox(width: 5),
+            const Expanded(flex: 1, child: Text('cm')),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Container(
+          padding: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Text(
+            () {
+              if (_pemeriksaanBloc.state.status == FormzStatus.invalid) {
+                if (_pemeriksaanBloc.state.lingkarKepala == null) {
+                  return 'Lingkar kepala tidak boleh kosong!';
+                }
+              }
+              return '';
+            }(),
+            style: TextStyle(color: Colors.red[400]),
+          ),
+        ),
       ],
     );
   }
@@ -192,12 +285,7 @@ class _NextButton extends StatelessWidget {
                 const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
         child: const Text("Simpan dan Lanjutkan"),
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return BlocProvider.value(
-              value: _pemeriksaanBloc,
-              child: const GrafikPemeriksaanScreen(),
-            );
-          }));
+          _pemeriksaanBloc.validateForm();
         },
       ),
     );

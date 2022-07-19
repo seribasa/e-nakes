@@ -61,6 +61,24 @@ class FormPemeriksaanVaksinasiCubit
     ));
   }
 
+  validateForm() {
+    emit(state.copyWith(
+      status: FormzStatus.submissionInProgress,
+    ));
+    final validate = state.beratBadan != null &&
+        state.tinggiBadan != null &&
+        state.lingkarKepala != null;
+    if (validate) {
+      emit(state.copyWith(
+        status: FormzStatus.valid,
+      ));
+    } else {
+      emit(state.copyWith(
+        status: FormzStatus.invalid,
+      ));
+    }
+  }
+
   void savePemeriksaanVaksinasi() async {
     emit(state.copyWith(
       status: FormzStatus.submissionInProgress,

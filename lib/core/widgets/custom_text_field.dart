@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class MyTextFormField extends StatelessWidget {
   final String? initialValue;
   final String? hintText;
+  final String? errorText;
   final TextInputType? keyboardType;
   final bool? readOnly;
   final void Function(String)? onChanged;
@@ -13,6 +14,7 @@ class MyTextFormField extends StatelessWidget {
     this.readOnly,
     this.hintText,
     this.onChanged,
+    this.errorText,
   }) : super(key: key);
 
   @override
@@ -32,6 +34,7 @@ class MyTextFormField extends StatelessWidget {
         keyboardType: keyboardType,
         readOnly: readOnly ?? false,
         decoration: InputDecoration(
+          errorText: errorText,
           hintText: hintText,
           border: InputBorder.none,
         ),
