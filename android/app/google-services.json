@@ -112,12 +112,20 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:683504612347:android:c144d56c16119f0897115e",
+        "mobilesdk_app_id": "1:683504612347:android:40e9dfcd1fcd9e6d97115e",
         "android_client_info": {
           "package_name": "com.peltops.eimunisasi_nakes"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "683504612347-3eph1h0vnqn430qqtukc6v71o45k06t9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.peltops.eimunisasi_nakes",
+            "certificate_hash": "cea6168307d41d9e12837fa7bff766cc6a16638b"
+          }
+        },
         {
           "client_id": "683504612347-2inv0k0ltc7asj3cmli4junq0jg0uj4d.apps.googleusercontent.com",
           "client_type": 3

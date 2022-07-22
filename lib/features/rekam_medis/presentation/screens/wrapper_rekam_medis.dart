@@ -1,4 +1,5 @@
 import 'package:eimunisasi_nakes/features/klinik/logic/bloc/klinik_bloc/klinik_bloc.dart';
+import 'package:eimunisasi_nakes/features/rekam_medis/logic/pasien/pasien_cubit.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/pemeriksaan/pemeriksaan_screen.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/rekam_medis_pasien/daftar_pasien_screen.dart';
 import 'package:flutter/material.dart';
@@ -85,7 +86,11 @@ class _RekamMedisPasienButton extends StatelessWidget {
         ),
         onPressed: () {
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const DaftarPasienScreen()),
+            MaterialPageRoute(
+                builder: (context) => BlocProvider(
+                      create: (context) => PasienCubit()..getPasien(),
+                      child: const DaftarPasienScreen(),
+                    )),
           );
         },
         child: Row(

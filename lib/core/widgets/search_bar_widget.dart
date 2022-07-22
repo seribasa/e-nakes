@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 class SearchBar extends StatelessWidget {
   final void Function()? onPressed;
+  final void Function(String)? onChanged;
   final String? hintText;
-  const SearchBar({Key? key, required this.onPressed, this.hintText})
+  const SearchBar(
+      {Key? key, required this.onPressed, this.hintText, this.onChanged})
       : super(key: key);
 
   @override
@@ -15,6 +17,7 @@ class SearchBar extends StatelessWidget {
         color: Colors.grey[200],
       ),
       child: TextField(
+        onChanged: onChanged,
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: hintText,
