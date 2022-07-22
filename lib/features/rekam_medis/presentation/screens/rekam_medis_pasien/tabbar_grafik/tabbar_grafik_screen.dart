@@ -6,6 +6,38 @@ class TabbarGrafikScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const LineChartSample1();
+    return Expanded(
+        child: DefaultTabController(
+      length: 3,
+      child: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.all(5),
+            decoration: const BoxDecoration(
+              color: Colors.blue,
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+            ),
+            child: const TabBar(
+              indicatorColor: Colors.white,
+              tabs: [
+                Tab(text: 'Berat Badan'),
+                Tab(text: 'Tinggi Badan'),
+                Tab(text: 'Lingkar Kepala'),
+              ],
+            ),
+          ),
+          const Expanded(
+            child: TabBarView(
+              physics: NeverScrollableScrollPhysics(),
+              children: [
+                LineChartSample1(),
+                LineChartSample1(),
+                LineChartSample1(),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ));
   }
 }
