@@ -1,8 +1,11 @@
 import 'package:eimunisasi_nakes/core/widgets/custom_text_field.dart';
 import 'package:eimunisasi_nakes/core/widgets/pasien_card.dart';
+import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/logic/form_pemeriksaan/form_pemeriksaan_vaksinasi_cubit.dart';
+import 'package:eimunisasi_nakes/features/rekam_medis/logic/pemeriksaan/pemeriksaan_cubit.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/pemeriksaan/grafik_pemeriksaan_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
@@ -13,6 +16,8 @@ class FormPemeriksaanScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final _pemeriksaanBloc =
         BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
+    final _pasien = _pemeriksaanBloc.state.pasien;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Form Pemeriksaan Pasien'),
@@ -22,9 +27,22 @@ class FormPemeriksaanScreen extends StatelessWidget {
         listener: (context, state) {
           if (state.status == FormzStatus.valid) {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return BlocProvider.value(
-                value: _pemeriksaanBloc,
-                child: const GrafikPemeriksaanScreen(),
+              return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                builder: (context, auth) {
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider.value(
+                        value: _pemeriksaanBloc,
+                      ),
+                      BlocProvider(
+                        create: (context) => PemeriksaanCubit(
+                            userData: auth is Authenticated ? auth.data : null)
+                          ..getPemeriksaanByIdPasien(_pasien?.nik),
+                      ),
+                    ],
+                    child: const GrafikPemeriksaanScreen(),
+                  );
+                },
               );
             }));
           }
@@ -34,15 +52,16 @@ class FormPemeriksaanScreen extends StatelessWidget {
             padding: const EdgeInsets.all(20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 PasienCard(
-                  nama: 'Rizky faturriza',
-                  umur: '1 bulan 2 tahun',
+                  nama: _pasien?.nama,
+                  umur: _pasien?.umur,
+                  jenisKelamin: _pasien?.jenisKelamin,
                 ),
-                SizedBox(height: 10),
-                _PemeriksaanFisik(),
-                SizedBox(height: 10),
-                _RiwayatKeluhan()
+                const SizedBox(height: 10),
+                const _PemeriksaanFisik(),
+                const SizedBox(height: 10),
+                const _RiwayatKeluhan()
               ],
             ),
           ),
@@ -267,6 +286,7 @@ class _RiwayatKeluhan extends StatelessWidget {
             minLines: 1,
             maxLines: 10,
             decoration: const InputDecoration(
+              hintText: 'Tidak ada riwayat keluhan',
               border: InputBorder.none,
             ),
           ),

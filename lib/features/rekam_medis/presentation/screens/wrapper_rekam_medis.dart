@@ -51,7 +51,10 @@ class _PemeriksaanButton extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                    builder: (context) => const PemeriksaanScreen()),
+                    builder: (context) => BlocProvider(
+                          create: (context) => PasienCubit()..getPasien(),
+                          child: const PemeriksaanScreen(),
+                        )),
               );
             },
             child: Row(

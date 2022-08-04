@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pasien_model.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/pemeriksaan/verifikasi_pasien_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -146,6 +147,7 @@ class _QrRegistrasiPemeriksaanState extends State<QrRegistrasiPemeriksaan> {
           MaterialPageRoute(
               builder: (context) => VerifikasiPasienScreen(
                     result: scanData,
+                    pasien: PasienModel(),
                   )));
       controller.dispose();
     });

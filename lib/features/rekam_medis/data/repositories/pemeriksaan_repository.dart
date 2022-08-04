@@ -33,7 +33,7 @@ class PemeriksaanRepository {
     return result;
   }
 
-  Future<void> savePemeriksaan({
+  Future<void> setPemeriksaan({
     required PemeriksaanModel pemeriksaanModel,
   }) async {
     final DocumentReference reference = _firestore.collection('checkups').doc();

@@ -1,13 +1,16 @@
-import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/rekam_medis_screen.dart';
+import 'package:eimunisasi_nakes/core/widgets/grafik/grafik_berat_badan.dart';
+import 'package:eimunisasi_nakes/core/widgets/grafik/line_data_berat_badan_boy.dart';
+import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pemeriksaan_model.dart';
+import 'package:eimunisasi_nakes/features/rekam_medis/logic/pemeriksaan/pemeriksaan_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TabbarGrafikScreen extends StatelessWidget {
   const TabbarGrafikScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child: DefaultTabController(
+    return DefaultTabController(
       length: 3,
       child: Column(
         children: [
@@ -26,18 +29,27 @@ class TabbarGrafikScreen extends StatelessWidget {
               ],
             ),
           ),
-          const Expanded(
-            child: TabBarView(
-              physics: NeverScrollableScrollPhysics(),
-              children: [
-                LineChartSample1(),
-                LineChartSample1(),
-                LineChartSample1(),
-              ],
-            ),
+          BlocBuilder<PemeriksaanCubit, PemeriksaanState>(
+            builder: (context, state) {
+              final List<PemeriksaanModel> data =
+                  (state is PemeriksaanLoaded) ? state.pemeriksaan ?? [] : [];
+              return Expanded(
+                child: TabBarView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    GrafikBeratBadan(
+                      listData: data,
+                      isBoy: true,
+                    ),
+                    GrafikBeratBadan(listData: data),
+                    GrafikBeratBadan(listData: data),
+                  ],
+                ),
+              );
+            },
           ),
         ],
       ),
-    ));
+    );
   }
 }

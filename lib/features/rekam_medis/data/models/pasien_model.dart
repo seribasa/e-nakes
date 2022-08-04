@@ -10,6 +10,27 @@ class PasienModel extends Equatable {
   final DateTime? tanggalLahir;
   final String? golonganDarah;
 
+  get umur {
+    if (tanggalLahir != null) {
+      final now = DateTime.now();
+      final totalHari = now.difference(tanggalLahir!).inDays;
+      if (totalHari / 365 > 1) {
+        final tahun = (totalHari / 365).floor();
+        final bulan = ((totalHari % 365) / 30).floor();
+        final hari = ((totalHari % 365) % 30).floor();
+        return '$tahun tahun${bulan < 0 ? ' $bulan bulan' : ''} $hari hari';
+      }
+      if (totalHari / 30 > 1) {
+        final bulan = (totalHari / 30).floor();
+        final hari = ((totalHari % 30)).floor();
+        return '$bulan bulan $hari hari';
+      }
+      return '$totalHari hari';
+    } else {
+      return "0";
+    }
+  }
+
   const PasienModel({
     this.id,
     this.nama,

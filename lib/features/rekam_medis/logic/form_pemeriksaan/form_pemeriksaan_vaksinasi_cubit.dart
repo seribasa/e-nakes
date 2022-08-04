@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:eimunisasi_nakes/features/authentication/data/models/user.dart';
+import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pasien_model.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pemeriksaan_model.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/data/repositories/pemeriksaan_repository.dart';
 import 'package:equatable/equatable.dart';
@@ -18,10 +19,12 @@ class FormPemeriksaanVaksinasiCubit
             pemeriksaanRepository ?? PemeriksaanRepository(),
         super(const FormPemeriksaanVaksinasiState());
 
-  providePasienData(String idPasien, String idAnakPasien) {
+  providePasienData(
+      String? idPasien, String? idOrangTuaPasien, PasienModel pasien) {
     emit(state.copyWith(
       idPasien: idPasien,
-      idAnakPasien: idAnakPasien,
+      idOrangTuaPasien: idOrangTuaPasien,
+      pasien: pasien,
     ));
   }
 
@@ -88,15 +91,15 @@ class FormPemeriksaanVaksinasiCubit
         beratBadan: state.beratBadan,
         tinggiBadan: state.tinggiBadan,
         lingkarKepala: state.lingkarKepala,
-        riwayatKeluhan: state.riwayatKeluhan,
-        diagnosa: state.diagnosa,
-        tindakan: state.tindakan,
+        riwayatKeluhan: state.riwayatKeluhan ?? 'Tidak ada riwayat keluhan',
+        diagnosa: state.diagnosa ?? 'Tidak ada diagnosa',
+        tindakan: state.tindakan ?? 'Tidak ada tindakan',
         idPasien: state.idPasien,
-        idAnakPasien: state.idAnakPasien,
+        idOrangTuaPasien: state.idOrangTuaPasien,
         idDokter: userData?.id,
         createdAt: DateTime.now(),
       );
-      await _pemeriksaanRepository.savePemeriksaan(pemeriksaanModel: data);
+      await _pemeriksaanRepository.setPemeriksaan(pemeriksaanModel: data);
       emit(state.copyWith(
         status: FormzStatus.submissionSuccess,
       ));

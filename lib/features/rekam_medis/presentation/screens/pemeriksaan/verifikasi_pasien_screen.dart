@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
+import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pasien_model.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/logic/form_pemeriksaan/form_pemeriksaan_vaksinasi_cubit.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/pemeriksaan/form_pemeriksaan_screen.dart';
 import 'package:flutter/material.dart';
@@ -8,14 +9,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class VerifikasiPasienScreen extends StatelessWidget {
+  final PasienModel pasien;
   final Barcode? result;
-  const VerifikasiPasienScreen({Key? key, this.result}) : super(key: key);
+  const VerifikasiPasienScreen({Key? key, this.result, required this.pasien})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final String? dataBarcode = result?.code;
     final String? nama =
-        dataBarcode != null ? jsonDecode(dataBarcode)["nama"] : '';
+        dataBarcode != null ? jsonDecode(dataBarcode)["nama"] : pasien.nama;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Verifikasi Pasien'),
@@ -28,9 +31,9 @@ class VerifikasiPasienScreen extends StatelessWidget {
             children: [
               _IdentitasPasien(
                 namaAnak: '$nama',
-                umurAnak: '1 tahun 3 bulan',
-                namaOrangTua: 'orang',
-                alamat: 'banda aceh',
+                umurAnak: pasien.umur.toString(),
+                namaOrangTua: pasien.nik,
+                alamat: pasien.tempatLahir,
               ),
               const SizedBox(height: 10),
               const _JenisVaksin(
@@ -40,7 +43,7 @@ class VerifikasiPasienScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: const _NextButton(),
+      bottomNavigationBar: _NextButton(pasien: pasien),
     );
   }
 }
@@ -118,7 +121,8 @@ class _JenisVaksin extends StatelessWidget {
 }
 
 class _NextButton extends StatelessWidget {
-  const _NextButton({Key? key}) : super(key: key);
+  final PasienModel pasien;
+  const _NextButton({Key? key, required this.pasien}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -127,6 +131,7 @@ class _NextButton extends StatelessWidget {
       height: 50,
       child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
+          final _user = state is Authenticated ? state.data : null;
           return ElevatedButton(
             style: ElevatedButton.styleFrom(
                 shape: const RoundedRectangleBorder(
@@ -136,8 +141,8 @@ class _NextButton extends StatelessWidget {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return BlocProvider(
                   create: (context) => FormPemeriksaanVaksinasiCubit(
-                    userData: state is Authenticated ? state.data : null,
-                  )..providePasienData('idPasien', 'idAnakPasien'),
+                    userData: _user,
+                  )..providePasienData(pasien.nik, _user?.id, pasien),
                   child: const FormPemeriksaanScreen(),
                 );
               }));

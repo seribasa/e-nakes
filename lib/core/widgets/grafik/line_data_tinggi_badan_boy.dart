@@ -1,9 +1,11 @@
 // ignore_for_file: file_names
 
+import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pemeriksaan_model.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:math_expressions/math_expressions.dart';
 
-class LineDataModel {
+//  TODO: implement LineDataBeratBadanBoyModel
+class LineDataTinggiBadanGirlModel {
   //method lineChartBarData of y=3.8182*ln(x)+3.782
   List<FlSpot> listDataLine1() {
     List<FlSpot> list = [];
@@ -112,6 +114,16 @@ class LineDataModel {
       final exp = (const1 * Ln(x)) + const2;
       final double yvalue = exp.evaluate(EvaluationType.REAL, cm);
       list.add(FlSpot(i.toDouble(), double.parse(yvalue.toStringAsFixed(2))));
+    }
+    return list;
+  }
+
+  //method data pasien
+  List<FlSpot> listDataPasienLine(List<PemeriksaanModel> listData) {
+    List<FlSpot> list = [];
+    for (int i = 1; i <= listData.length; i++) {
+      list.add(
+          FlSpot(i.toDouble(), listData[i - 1].beratBadan?.toDouble() ?? 0.0));
     }
     return list;
   }

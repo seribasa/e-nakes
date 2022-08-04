@@ -1,7 +1,11 @@
 import 'package:eimunisasi_nakes/core/widgets/search_bar_widget.dart';
+import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:eimunisasi_nakes/features/jadwal/presentation/screens/registrasi/qrcode_screen.dart';
+import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pasien_model.dart';
+import 'package:eimunisasi_nakes/features/rekam_medis/logic/pasien/pasien_cubit.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/pemeriksaan/verifikasi_pasien_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class PemeriksaanScreen extends StatelessWidget {
@@ -41,27 +45,53 @@ class _ListPasien extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          ...List.generate(20, (index) {
-            return ListTile(
-              title: Text(
-                'Pasien $index',
-                style: const TextStyle(fontWeight: FontWeight.w600),
-              ),
-              subtitle: Text(
-                  'NIK $index${index + 1}${index + 2}${index + 3}${index + 4}'),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const VerifikasiPasienScreen()));
-              },
+    final _pasienBloc = BlocProvider.of<PasienCubit>(context);
+    return BlocBuilder<PasienCubit, PasienState>(
+      builder: (context, state) {
+        if (state is PasienLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (state is PasienLoaded) {
+          if (state.pasien.isEmpty) {
+            return const Center(
+              child: Text('Tidak ada pasien'),
             );
-          }),
-        ],
-      ),
+          } else {
+            return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                builder: (context, auth) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: List.generate(state.pasien.length, (index) {
+                      final pasien = state.pasien[index];
+                      return ListTile(
+                        title: Text(
+                          '${pasien.nama}',
+                          style: const TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        subtitle: Text('${pasien.nik}'),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    VerifikasiPasienScreen(pasien: pasien)),
+                          );
+                        },
+                      );
+                    }),
+                  );
+                },
+              ),
+            );
+          }
+        } else {
+          return const Center(
+            child: Text('Tidak ada data'),
+          );
+        }
+      },
     );
   }
 }

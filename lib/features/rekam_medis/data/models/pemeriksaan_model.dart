@@ -5,11 +5,12 @@ class PemeriksaanModel extends Equatable {
   final int? beratBadan;
   final int? tinggiBadan;
   final int? lingkarKepala;
+  final String? jenisVaksin;
   final String? riwayatKeluhan;
   final String? diagnosa;
   final String? tindakan;
   final String? id;
-  final String? idAnakPasien;
+  final String? idOrangTuaPasien;
   final String? idPasien;
   final String? idDokter;
   final DateTime? createdAt;
@@ -20,11 +21,12 @@ class PemeriksaanModel extends Equatable {
     this.beratBadan,
     this.tinggiBadan,
     this.lingkarKepala,
+    this.jenisVaksin,
     this.riwayatKeluhan,
     this.diagnosa,
     this.tindakan,
     this.id,
-    this.idAnakPasien,
+    this.idOrangTuaPasien,
     this.idPasien,
     this.idDokter,
     this.createdAt,
@@ -37,11 +39,12 @@ class PemeriksaanModel extends Equatable {
         beratBadan,
         tinggiBadan,
         lingkarKepala,
+        jenisVaksin,
         riwayatKeluhan,
         diagnosa,
         tindakan,
         id,
-        idAnakPasien,
+        idOrangTuaPasien,
         idPasien,
         idDokter,
         createdAt,
@@ -54,16 +57,23 @@ class PemeriksaanModel extends Equatable {
       beratBadan: map['berat_badan'],
       tinggiBadan: map['tinggi_badan'],
       lingkarKepala: map['lingkar_kepala'],
+      jenisVaksin: map['jenis_vaksin'],
       riwayatKeluhan: map['riwayat_keluhan'],
       diagnosa: map['diagnosa'],
       tindakan: map['tindakan'],
       id: docId,
-      idAnakPasien: map['id_anak_pasien'],
+      idOrangTuaPasien: map['id_orang_tua_pasien'],
       idPasien: map['id_pasien'],
       idDokter: map['id_dokter'],
-      createdAt: (map['created_at'] as Timestamp).toDate(),
-      updatedAt: (map['updated_at'] as Timestamp).toDate(),
-      deletedAt: (map['deleted_at'] as Timestamp).toDate(),
+      createdAt: ((map['created_at'] != null)
+          ? (map['created_at'] as Timestamp).toDate()
+          : null),
+      updatedAt: ((map['updated_at'] != null)
+          ? (map['updated_at'] as Timestamp).toDate()
+          : null),
+      deletedAt: ((map['deleted_at'] != null)
+          ? (map['deleted_at'] as Timestamp).toDate()
+          : null),
     );
   }
 
@@ -72,11 +82,12 @@ class PemeriksaanModel extends Equatable {
       'berat_badan': beratBadan,
       'tinggi_badan': tinggiBadan,
       'lingkar_kepala': lingkarKepala,
+      'jenis_vaksin': jenisVaksin,
       'riwayat_keluhan': riwayatKeluhan,
       'diagnosa': diagnosa,
       'tindakan': tindakan,
       'id_pasien': idPasien,
-      'id_anak_pasien': idAnakPasien,
+      'id_orang_tua_pasien': idOrangTuaPasien,
       'id_dokter': idDokter,
       'created_at': createdAt,
       'updated_at': updatedAt,

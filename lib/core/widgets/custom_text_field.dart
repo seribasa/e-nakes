@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class MyTextFormField extends StatelessWidget {
   final String? initialValue;
@@ -6,6 +7,7 @@ class MyTextFormField extends StatelessWidget {
   final String? errorText;
   final TextInputType? keyboardType;
   final bool? readOnly;
+  final List<TextInputFormatter>? inputFormatters;
   final void Function(String)? onChanged;
   const MyTextFormField({
     Key? key,
@@ -15,6 +17,7 @@ class MyTextFormField extends StatelessWidget {
     this.hintText,
     this.onChanged,
     this.errorText,
+    this.inputFormatters,
   }) : super(key: key);
 
   @override
@@ -27,6 +30,7 @@ class MyTextFormField extends StatelessWidget {
         color: Colors.grey[200],
       ),
       child: TextFormField(
+        inputFormatters: inputFormatters,
         minLines: 1,
         maxLines: 10,
         onChanged: onChanged,

@@ -87,6 +87,7 @@ class _DiagnosaForm extends StatelessWidget {
             minLines: 1,
             maxLines: 10,
             decoration: const InputDecoration(
+              hintText: 'Tidak ada riwayat diagnosa',
               border: InputBorder.none,
             ),
           ),
@@ -122,6 +123,7 @@ class _TindakanForm extends StatelessWidget {
             minLines: 1,
             maxLines: 10,
             decoration: const InputDecoration(
+              hintText: 'Tidak ada riwayat tindakan',
               border: InputBorder.none,
             ),
           ),

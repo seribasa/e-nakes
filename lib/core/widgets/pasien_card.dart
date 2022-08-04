@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 class PasienCard extends StatelessWidget {
   final String? nama;
   final String? umur;
-  const PasienCard({Key? key, this.nama, this.umur}) : super(key: key);
+  final String? jenisKelamin;
+  const PasienCard({Key? key, this.nama, this.umur, this.jenisKelamin})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,12 +18,12 @@ class PasienCard extends StatelessWidget {
       ),
       tileColor: Colors.blue,
       title: Text(
-        '$nama',
+        nama ?? '',
         style:
             const TextStyle(fontWeight: FontWeight.w600, color: Colors.white),
       ),
       subtitle: Text(
-        '$umur\nLaki-laki',
+        '${umur ?? ''}\n${jenisKelamin ?? ''}',
         style: const TextStyle(color: Colors.white),
       ),
     );

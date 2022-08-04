@@ -1,33 +1,44 @@
+import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pemeriksaan_model.dart';
+import 'package:eimunisasi_nakes/features/rekam_medis/logic/pemeriksaan/pemeriksaan_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TabbarDiagnosaScreen extends StatelessWidget {
   const TabbarDiagnosaScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          ...List.generate(50, (index) {
-            return Card(
-              child: Column(
-                children: [
-                  ListTile(
-                    title: Text('Keluhan $index'),
-                    subtitle: const Text(
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'),
+    return BlocBuilder<PemeriksaanCubit, PemeriksaanState>(
+      builder: (context, state) {
+        final List<PemeriksaanModel> _pemeriksaan =
+            (state is PemeriksaanLoaded) ? state.pemeriksaan ?? [] : [];
+
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              ...List.generate(_pemeriksaan.length, (index) {
+                final data = _pemeriksaan[index];
+                return Card(
+                  child: Column(
+                    children: [
+                      ListTile(
+                        title: Text(
+                            'Keluhan ${data.createdAt.toString().split(' ')[0]}'),
+                        subtitle:
+                            Text(data.riwayatKeluhan ?? 'Tidak ada keluhan'),
+                      ),
+                      ListTile(
+                        title: const Text('Diagnosa'),
+                        subtitle: Text(data.diagnosa ?? 'Tidak ada diagnosa'),
+                      ),
+                    ],
                   ),
-                  ListTile(
-                    title: Text('Diagnosa $index'),
-                    subtitle: const Text(
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'),
-                  ),
-                ],
-              ),
-            );
-          }),
-        ],
-      ),
+                );
+              }),
+            ],
+          ),
+        );
+      },
     );
   }
 }

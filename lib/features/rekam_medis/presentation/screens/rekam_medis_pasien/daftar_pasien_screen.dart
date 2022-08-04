@@ -1,5 +1,7 @@
 import 'package:eimunisasi_nakes/core/widgets/search_bar_widget.dart';
+import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/logic/pasien/pasien_cubit.dart';
+import 'package:eimunisasi_nakes/features/rekam_medis/logic/pemeriksaan/pemeriksaan_cubit.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/rekam_medis_pasien/rekam_medis_pasien_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,7 +35,7 @@ class _SearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final _pasienBloc = BlocProvider.of<PasienCubit>(context);
     return SearchBar(
-      hintText: 'Cari Pasien ...',
+      hintText: 'Cari Pasien (NIK) ...',
       onChanged: (val) {
         _pasienBloc.getPasienBySearch(val);
       },
@@ -48,7 +50,6 @@ class _ListPasien extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _pasienBloc = BlocProvider.of<PasienCubit>(context);
-    _pasienBloc.getPasien();
     return BlocBuilder<PasienCubit, PasienState>(
       builder: (context, state) {
         if (state is PasienLoading) {
@@ -63,25 +64,36 @@ class _ListPasien extends StatelessWidget {
           } else {
             return SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: List.generate(state.pasien.length, (index) {
-                  final pasien = state.pasien[index];
-                  return ListTile(
-                    title: Text(
-                      '${pasien.nama}',
-                      style: const TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    subtitle: Text('${pasien.nik}'),
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const RekamMedisPasienScreen()),
+              child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                builder: (context, auth) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: List.generate(state.pasien.length, (index) {
+                      final pasien = state.pasien[index];
+                      return ListTile(
+                        title: Text(
+                          '${pasien.nik}',
+                          style: const TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        subtitle: Text('${pasien.nama}'),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => BlocProvider(
+                                      create: (context) => PemeriksaanCubit(
+                                          userData: auth is Authenticated
+                                              ? auth.data
+                                              : null)
+                                        ..getPemeriksaanByIdPasien(pasien.nik),
+                                      child: RekamMedisPasienScreen(
+                                          pasien: pasien),
+                                    )),
+                          );
+                        },
                       );
-                    },
+                    }),
                   );
-                }),
+                },
               ),
             );
           }
