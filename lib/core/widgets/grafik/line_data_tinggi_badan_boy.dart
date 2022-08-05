@@ -4,114 +4,86 @@ import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pemeriksaan_mo
 import 'package:fl_chart/fl_chart.dart';
 import 'package:math_expressions/math_expressions.dart';
 
-//  TODO: implement LineDataBeratBadanBoyModel
-class LineDataTinggiBadanGirlModel {
-  //method lineChartBarData of y=3.8182*ln(x)+3.782
+class LineDataTinggiBadanBoyModel {
+  //method lineChartBarData of y = -0,0439x2 + 2,3398x + 49,978
   List<FlSpot> listDataLine1() {
     List<FlSpot> list = [];
     for (int i = 1; i <= 24; i++) {
       Variable x = Variable('x');
       final xValue = Number(i);
       ContextModel cm = ContextModel()..bindVariable(x, xValue);
-      Number const1 = Number(3.8182);
-      Number const2 = Number(3.782);
-      final exp = (const1 * Ln(x)) + const2;
+      Number const1 = Number(-0.0439);
+      Number const2 = Number(2.3398);
+      Number const3 = Number(49.978);
+      final exp = ((const1 * x) * (const1 * x)) + (const2 * x) + const3;
       final double yvalue = exp.evaluate(EvaluationType.REAL, cm);
       list.add(FlSpot(i.toDouble(), double.parse(yvalue.toStringAsFixed(2))));
     }
     return list;
   }
 
-  //method lineChartBarData of y=3.4693*ln(x)+3.4059
+  //method lineChartBarData of y = -0,0431x2 + 2,3589x + 51,644
   List<FlSpot> listDataLine2() {
     List<FlSpot> list = [];
     for (int i = 1; i <= 24; i++) {
       Variable x = Variable('x');
       final xValue = Number(i);
       ContextModel cm = ContextModel()..bindVariable(x, xValue);
-      Number const1 = Number(3.4693);
-      Number const2 = Number(3.4059);
-      final exp = (const1 * Ln(x)) + const2;
+      Number const1 = Number(-0.0431);
+      Number const2 = Number(2.3589);
+      Number const3 = Number(51.644);
+      final exp = ((const1 * x) * (const1 * x)) + (const2 * x) + const3;
       final double yvalue = exp.evaluate(EvaluationType.REAL, cm);
       list.add(FlSpot(i.toDouble(), double.parse(yvalue.toStringAsFixed(2))));
     }
     return list;
   }
 
-  //method lineChartBarData of y=3.1113*ln(x)+3.0207
+  //method lineChartBarData of y = -0,0423x2 + 2,3877x + 53,652
   List<FlSpot> listDataLine3() {
     List<FlSpot> list = [];
     for (int i = 1; i <= 24; i++) {
       Variable x = Variable('x');
       final xValue = Number(i);
       ContextModel cm = ContextModel()..bindVariable(x, xValue);
-      Number const1 = Number(3.1113);
-      Number const2 = Number(3.0207);
-      final exp = (const1 * Ln(x)) + const2;
+      Number const1 = Number(-0.0423);
+      Number const2 = Number(2.3877);
+      Number const3 = Number(53.652);
+      final exp = ((const1 * x) * (const1 * x)) + (const2 * x) + const3;
       final double yvalue = exp.evaluate(EvaluationType.REAL, cm);
       list.add(FlSpot(i.toDouble(), double.parse(yvalue.toStringAsFixed(2))));
     }
     return list;
   }
 
-  //method lineChartBarData of y=2.8107*ln(x)+2.6236
+  //method lineChartBarData of y = -0,0413x2 + 2,414x + 55,678
   List<FlSpot> listDataLine4() {
     List<FlSpot> list = [];
     for (int i = 1; i <= 24; i++) {
       Variable x = Variable('x');
       final xValue = Number(i);
       ContextModel cm = ContextModel()..bindVariable(x, xValue);
-      Number const1 = Number(2.8107);
-      Number const2 = Number(2.6236);
-      final exp = (const1 * Ln(x)) + const2;
+      Number const1 = Number(-0.0413);
+      Number const2 = Number(2.414);
+      Number const3 = Number(55.678);
+      final exp = ((const1 * x) * (const1 * x)) + (const2 * x) + const3;
       final double yvalue = exp.evaluate(EvaluationType.REAL, cm);
       list.add(FlSpot(i.toDouble(), double.parse(yvalue.toStringAsFixed(2))));
     }
     return list;
   }
 
-  //method lineChartBarData of y=2.561*ln(x)+2.1886
+  //method lineChartBarData of y = -0,0408x2 + 2,4416x + 57,286
   List<FlSpot> listDataLine5() {
     List<FlSpot> list = [];
     for (int i = 1; i <= 24; i++) {
       Variable x = Variable('x');
       final xValue = Number(i);
       ContextModel cm = ContextModel()..bindVariable(x, xValue);
-      Number const1 = Number(2.561);
-      Number const2 = Number(2.1886);
-      final exp = (const1 * Ln(x)) + const2;
-      final double yvalue = exp.evaluate(EvaluationType.REAL, cm);
-      list.add(FlSpot(i.toDouble(), double.parse(yvalue.toStringAsFixed(2))));
-    }
-    return list;
-  }
-
-  //method lineChartBarData of y=2.3198*ln(x)+1.8911
-  List<FlSpot> listDataLine6() {
-    List<FlSpot> list = [];
-    for (int i = 1; i <= 24; i++) {
-      Variable x = Variable('x');
-      final xValue = Number(i);
-      ContextModel cm = ContextModel()..bindVariable(x, xValue);
-      Number const1 = Number(2.3198);
-      Number const2 = Number(1.8911);
-      final exp = (const1 * Ln(x)) + const2;
-      final double yvalue = exp.evaluate(EvaluationType.REAL, cm);
-      list.add(FlSpot(i.toDouble(), double.parse(yvalue.toStringAsFixed(2))));
-    }
-    return list;
-  }
-
-  //method lineChartBarData of y=2.1049*ln(x)+1.6098
-  List<FlSpot> listDataLine7() {
-    List<FlSpot> list = [];
-    for (int i = 1; i <= 24; i++) {
-      Variable x = Variable('x');
-      final xValue = Number(i);
-      ContextModel cm = ContextModel()..bindVariable(x, xValue);
-      Number const1 = Number(2.1049);
-      Number const2 = Number(1.6098);
-      final exp = (const1 * Ln(x)) + const2;
+      Number const1 = Number(-0.0408);
+      Number const2 = Number(2.4416);
+      Number const3 = Number(57.286);
+      final exp = ((const1 * x) * (const1 * x)) + (const2 * x) + const3;
       final double yvalue = exp.evaluate(EvaluationType.REAL, cm);
       list.add(FlSpot(i.toDouble(), double.parse(yvalue.toStringAsFixed(2))));
     }
