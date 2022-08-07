@@ -19,7 +19,7 @@ class TabbarTabelScreen extends StatelessWidget {
           final data = _pemeriksaan[index];
           return TableRow(
             children: <Widget>[
-              Text(DateFormat('EEEE/ MMMM')
+              Text(DateFormat('dd/MM/yyyy')
                   .format(data.createdAt ?? DateTime.now())),
               Text(data.beratBadan?.toString() ?? ''),
               Text(data.tinggiBadan?.toString() ?? ''),

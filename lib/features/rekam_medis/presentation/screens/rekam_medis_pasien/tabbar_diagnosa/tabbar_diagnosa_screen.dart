@@ -2,6 +2,7 @@ import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pemeriksaan_mo
 import 'package:eimunisasi_nakes/features/rekam_medis/logic/pemeriksaan/pemeriksaan_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class TabbarDiagnosaScreen extends StatelessWidget {
   const TabbarDiagnosaScreen({Key? key}) : super(key: key);
@@ -23,7 +24,7 @@ class TabbarDiagnosaScreen extends StatelessWidget {
                     children: [
                       ListTile(
                         title: Text(
-                            'Keluhan ${data.createdAt.toString().split(' ')[0]}'),
+                            'Keluhan ${DateFormat('dd/MM/yyyy').format(data.createdAt ?? DateTime.now())}'),
                         subtitle:
                             Text(data.riwayatKeluhan ?? 'Tidak ada keluhan'),
                       ),

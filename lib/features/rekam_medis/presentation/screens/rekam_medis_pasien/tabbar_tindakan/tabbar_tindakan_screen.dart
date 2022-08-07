@@ -2,6 +2,7 @@ import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pemeriksaan_mo
 import 'package:eimunisasi_nakes/features/rekam_medis/logic/pemeriksaan/pemeriksaan_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class TabbarTindakanScreen extends StatelessWidget {
   const TabbarTindakanScreen({Key? key}) : super(key: key);
@@ -21,7 +22,7 @@ class TabbarTindakanScreen extends StatelessWidget {
                 return Card(
                   child: ListTile(
                     title: Text(
-                        'Tindakan ${data.createdAt.toString().split(' ')[0]}'),
+                        'Tindakan ${DateFormat('dd/MM/yyyy').format(data.createdAt ?? DateTime.now())}'),
                     subtitle: Text(
                         data.tindakan ?? 'Tidak ada tindakan yang dilakukan'),
                   ),

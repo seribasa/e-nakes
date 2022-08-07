@@ -1,4 +1,6 @@
 import 'package:eimunisasi_nakes/core/widgets/grafik/grafik_berat_badan.dart';
+import 'package:eimunisasi_nakes/core/widgets/grafik/grafik_tinggi_badan.dart';
+import 'package:eimunisasi_nakes/core/widgets/grafik/grafik_lingkar_kepala.dart';
 import 'package:eimunisasi_nakes/core/widgets/grafik/line_data_berat_badan_boy.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pemeriksaan_model.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/logic/pemeriksaan/pemeriksaan_cubit.dart';
@@ -41,8 +43,14 @@ class TabbarGrafikScreen extends StatelessWidget {
                       listData: data,
                       isBoy: true,
                     ),
-                    GrafikBeratBadan(listData: data),
-                    GrafikBeratBadan(listData: data),
+                    GrafikTinggiBadan(
+                      listData: data,
+                      isBoy: true,
+                    ),
+                    GrafikLingkarKepala(
+                      listData: data,
+                      isBoy: true,
+                    ),
                   ],
                 ),
               );

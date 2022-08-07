@@ -2,6 +2,7 @@ import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pemeriksaan_mo
 import 'package:eimunisasi_nakes/features/rekam_medis/logic/pemeriksaan/pemeriksaan_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class TabbarVaksinScreen extends StatelessWidget {
   const TabbarVaksinScreen({Key? key}) : super(key: key);
@@ -31,9 +32,8 @@ class TabbarVaksinScreen extends StatelessWidget {
                     } else {
                       final data = _pemeriksaan[index - 1];
                       // Body
-                      return Text(
-                        data.createdAt.toString().split(' ')[0],
-                      );
+                      return Text(DateFormat('dd/MM/yyyy')
+                          .format(data.createdAt ?? DateTime.now()));
                     }
                   }),
                 ),

@@ -1,11 +1,11 @@
 import 'package:eimunisasi_nakes/core/widgets/grafik/grafik_berat_badan.dart';
+import 'package:eimunisasi_nakes/core/widgets/grafik/grafik_tinggi_badan.dart';
+import 'package:eimunisasi_nakes/core/widgets/grafik/grafik_lingkar_kepala.dart';
 import 'package:eimunisasi_nakes/core/widgets/pasien_card.dart';
-import 'package:eimunisasi_nakes/core/widgets/grafik/line_data_berat_badan_boy.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pemeriksaan_model.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/logic/form_pemeriksaan/form_pemeriksaan_vaksinasi_cubit.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/logic/pemeriksaan/pemeriksaan_cubit.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/pemeriksaan/form_diagnosa_tindakan_screen.dart';
-import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/rekam_medis_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -68,10 +68,18 @@ class GrafikPemeriksaanScreen extends StatelessWidget {
                                     ? true
                                     : false,
                               ),
-                              const SizedBox(),
-                              const SizedBox(),
-                              // GrafikBeratBadan(),
-                              // GrafikBeratBadan(),
+                              GrafikTinggiBadan(
+                                listData: data,
+                                isBoy: _pasien?.jenisKelamin == "Laki-laki"
+                                    ? true
+                                    : false,
+                              ),
+                              GrafikLingkarKepala(
+                                listData: data,
+                                isBoy: _pasien?.jenisKelamin == "Laki-laki"
+                                    ? true
+                                    : false,
+                              ),
                             ],
                           ),
                         );

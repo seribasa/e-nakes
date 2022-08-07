@@ -128,8 +128,8 @@ class LineDataLingkarKepalaBoyModel {
   List<FlSpot> listDataPasienLine(List<PemeriksaanModel> listData) {
     List<FlSpot> list = [];
     for (int i = 1; i <= listData.length; i++) {
-      list.add(
-          FlSpot(i.toDouble(), listData[i - 1].beratBadan?.toDouble() ?? 0.0));
+      list.add(FlSpot(
+          i.toDouble(), listData[i - 1].lingkarKepala?.toDouble() ?? 0.0));
     }
     return list;
   }

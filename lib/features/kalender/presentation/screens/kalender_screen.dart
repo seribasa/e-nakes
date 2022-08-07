@@ -218,7 +218,8 @@ class _KalenderScreenState extends State<KalenderScreen> {
                               ),
                               CircleAvatar(
                                 foregroundColor: Colors.white,
-                                backgroundColor: Theme.of(context).accentColor,
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.secondary,
                                 child: IconButton(
                                     onPressed: () {
                                       setState(() {

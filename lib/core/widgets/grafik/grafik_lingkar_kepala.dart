@@ -1,5 +1,5 @@
-import 'package:eimunisasi_nakes/core/widgets/grafik/line_data_berat_badan_boy.dart';
-import 'package:eimunisasi_nakes/core/widgets/grafik/line_data_berat_badan_girl.dart';
+import 'package:eimunisasi_nakes/core/widgets/grafik/line_data_lingkar_kepala_boy.dart';
+import 'package:eimunisasi_nakes/core/widgets/grafik/line_data_lingkar_kepala_girl.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pemeriksaan_model.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -123,13 +123,13 @@ class _LineChart extends StatelessWidget {
       );
 
   List<LineChartBarData> get lineBarsData2 => [
-        lineChartBarData2_1,
-        lineChartBarData2_2,
-        lineChartBarData2_3,
-        lineChartBarData2_4,
-        lineChartBarData2_5,
-        lineChartBarData2_6,
-        lineChartBarData2_7,
+        lineChartBarData_1,
+        lineChartBarData_2,
+        lineChartBarData_3,
+        lineChartBarData_4,
+        lineChartBarData_5,
+        lineChartBarData_6,
+        lineChartBarData_7,
         lineChartDataPasien,
       ];
 
@@ -180,7 +180,7 @@ class _LineChart extends StatelessWidget {
         ),
       );
 
-  LineChartBarData get lineChartBarData2_1 => LineChartBarData(
+  LineChartBarData get lineChartBarData_1 => LineChartBarData(
         isCurved: true,
         curveSmoothness: 0,
         color: const Color.fromARGB(108, 136, 32, 255),
@@ -189,11 +189,11 @@ class _LineChart extends StatelessWidget {
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
         spots: (isBoy ?? true)
-            ? LineDataBeratBadanBoyModel().listDataLine1()
-            : LineDataBeratBadanGirlModel().listDataLine1(),
+            ? LineDataLingkarKepalaBoyModel().listDataLine1()
+            : LineDataLingkarKepalaGirlModel().listDataLine1(),
       );
 
-  LineChartBarData get lineChartBarData2_2 => LineChartBarData(
+  LineChartBarData get lineChartBarData_2 => LineChartBarData(
         isCurved: true,
         curveSmoothness: 0,
         color: const Color.fromARGB(199, 25, 0, 255),
@@ -202,11 +202,11 @@ class _LineChart extends StatelessWidget {
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
         spots: (isBoy ?? true)
-            ? LineDataBeratBadanBoyModel().listDataLine2()
-            : LineDataBeratBadanGirlModel().listDataLine2(),
+            ? LineDataLingkarKepalaBoyModel().listDataLine2()
+            : LineDataLingkarKepalaGirlModel().listDataLine2(),
       );
 
-  LineChartBarData get lineChartBarData2_3 => LineChartBarData(
+  LineChartBarData get lineChartBarData_3 => LineChartBarData(
         isCurved: true,
         curveSmoothness: 0,
         color: const Color.fromARGB(68, 0, 170, 255),
@@ -215,11 +215,11 @@ class _LineChart extends StatelessWidget {
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
         spots: (isBoy ?? true)
-            ? LineDataBeratBadanBoyModel().listDataLine3()
-            : LineDataBeratBadanGirlModel().listDataLine3(),
+            ? LineDataLingkarKepalaBoyModel().listDataLine3()
+            : LineDataLingkarKepalaGirlModel().listDataLine3(),
       );
 
-  LineChartBarData get lineChartBarData2_4 => LineChartBarData(
+  LineChartBarData get lineChartBarData_4 => LineChartBarData(
         isCurved: true,
         curveSmoothness: 0,
         color: const Color.fromARGB(68, 0, 255, 98),
@@ -228,11 +228,11 @@ class _LineChart extends StatelessWidget {
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
         spots: (isBoy ?? true)
-            ? LineDataBeratBadanBoyModel().listDataLine4()
-            : LineDataBeratBadanGirlModel().listDataLine4(),
+            ? LineDataLingkarKepalaBoyModel().listDataLine4()
+            : LineDataLingkarKepalaGirlModel().listDataLine4(),
       );
 
-  LineChartBarData get lineChartBarData2_5 => LineChartBarData(
+  LineChartBarData get lineChartBarData_5 => LineChartBarData(
         isCurved: true,
         curveSmoothness: 0,
         color: const Color.fromARGB(68, 255, 251, 0),
@@ -241,11 +241,11 @@ class _LineChart extends StatelessWidget {
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
         spots: (isBoy ?? true)
-            ? LineDataBeratBadanBoyModel().listDataLine5()
-            : LineDataBeratBadanGirlModel().listDataLine5(),
+            ? LineDataLingkarKepalaBoyModel().listDataLine5()
+            : LineDataLingkarKepalaGirlModel().listDataLine5(),
       );
 
-  LineChartBarData get lineChartBarData2_6 => LineChartBarData(
+  LineChartBarData get lineChartBarData_6 => LineChartBarData(
         isCurved: true,
         curveSmoothness: 0,
         color: const Color.fromARGB(68, 255, 174, 0),
@@ -254,11 +254,11 @@ class _LineChart extends StatelessWidget {
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
         spots: (isBoy ?? true)
-            ? LineDataBeratBadanBoyModel().listDataLine6()
-            : LineDataBeratBadanGirlModel().listDataLine6(),
+            ? LineDataLingkarKepalaBoyModel().listDataLine6()
+            : LineDataLingkarKepalaGirlModel().listDataLine6(),
       );
 
-  LineChartBarData get lineChartBarData2_7 => LineChartBarData(
+  LineChartBarData get lineChartBarData_7 => LineChartBarData(
         isCurved: true,
         curveSmoothness: 0,
         color: const Color.fromARGB(68, 255, 39, 23),
@@ -267,8 +267,8 @@ class _LineChart extends StatelessWidget {
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
         spots: (isBoy ?? true)
-            ? LineDataBeratBadanBoyModel().listDataLine7()
-            : LineDataBeratBadanGirlModel().listDataLine7(),
+            ? LineDataLingkarKepalaBoyModel().listDataLine7()
+            : LineDataLingkarKepalaGirlModel().listDataLine7(),
       );
 
   LineChartBarData get lineChartDataPasien => LineChartBarData(
@@ -280,25 +280,25 @@ class _LineChart extends StatelessWidget {
         dotData: FlDotData(show: true),
         belowBarData: BarAreaData(show: false),
         spots: (isBoy ?? true)
-            ? LineDataBeratBadanBoyModel().listDataPasienLine(listData)
-            : LineDataBeratBadanGirlModel().listDataPasienLine(listData),
+            ? LineDataLingkarKepalaBoyModel().listDataPasienLine(listData)
+            : LineDataLingkarKepalaGirlModel().listDataPasienLine(listData),
       );
 }
 
-class GrafikBeratBadan extends StatefulWidget {
+class GrafikLingkarKepala extends StatefulWidget {
   final List<PemeriksaanModel> listData;
   final bool? isBoy;
-  const GrafikBeratBadan({
+  const GrafikLingkarKepala({
     Key? key,
     required this.listData,
     required this.isBoy,
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => GrafikBeratBadanState();
+  State<StatefulWidget> createState() => GrafikLingkarKepalaState();
 }
 
-class GrafikBeratBadanState extends State<GrafikBeratBadan> {
+class GrafikLingkarKepalaState extends State<GrafikLingkarKepala> {
   late bool isShowingMainData;
   late double minX;
   late double maxX;
