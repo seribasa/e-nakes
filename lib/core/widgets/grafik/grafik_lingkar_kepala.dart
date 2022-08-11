@@ -338,7 +338,6 @@ class GrafikLingkarKepalaState extends State<GrafikLingkarKepala> {
           },
           onHorizontalDragUpdate: (dragUpdDet) {
             setState(() {
-              print(dragUpdDet.primaryDelta);
               double primDelta = dragUpdDet.primaryDelta ?? 0.0;
 
               if (primDelta != 0) {

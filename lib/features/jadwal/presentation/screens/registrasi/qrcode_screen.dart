@@ -147,7 +147,7 @@ class _QrRegistrasiPemeriksaanState extends State<QrRegistrasiPemeriksaan> {
           MaterialPageRoute(
               builder: (context) => VerifikasiPasienScreen(
                     result: scanData,
-                    pasien: PasienModel(),
+                    pasien: const PasienModel(),
                   )));
       controller.dispose();
     });

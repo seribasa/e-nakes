@@ -13,14 +13,12 @@ class PasienCubit extends Cubit<PasienState> {
 
   Future<void> getPasienBySearch(String searchQuery) async {
     emit(PasienLoading());
-    print(searchQuery);
     try {
       final listPasien = await _pasienRepository.getPasienByNIK(
         searchQuery: searchQuery,
       );
       emit(PasienLoaded(pasien: listPasien ?? []));
     } catch (e) {
-      print(e);
       emit(PasienError(message: e.toString()));
     }
   }
@@ -31,7 +29,6 @@ class PasienCubit extends Cubit<PasienState> {
       final listPasien = await _pasienRepository.getPasienLimited(limit: 10);
       emit(PasienLoaded(pasien: listPasien ?? []));
     } catch (e) {
-      print(e);
       emit(PasienError(message: e.toString()));
     }
   }

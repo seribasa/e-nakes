@@ -39,7 +39,6 @@ class LoginCubit extends Cubit<LoginState> {
       );
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on FirebaseAuthException catch (e) {
-      print(e.message);
       emit(state.copyWith(
           status: FormzStatus.submissionFailure, errorMessage: e.message));
     }

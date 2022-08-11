@@ -24,7 +24,6 @@ class PemeriksaanCubit extends Cubit<PemeriksaanState> {
           await _pemeriksaanRepository.getPemeriksaan(uid: idPasien);
 
       pemeriksaan?.sort((a, b) => a.createdAt!.compareTo(b.createdAt!));
-      print(pemeriksaan);
       emit(PemeriksaanLoaded(pemeriksaan: pemeriksaan));
     } catch (e) {
       emit(PemeriksaanError(message: e.toString()));

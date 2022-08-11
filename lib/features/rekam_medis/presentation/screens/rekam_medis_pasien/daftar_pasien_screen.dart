@@ -49,7 +49,6 @@ class _ListPasien extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _pasienBloc = BlocProvider.of<PasienCubit>(context);
     return BlocBuilder<PasienCubit, PasienState>(
       builder: (context, state) {
         if (state is PasienLoading) {

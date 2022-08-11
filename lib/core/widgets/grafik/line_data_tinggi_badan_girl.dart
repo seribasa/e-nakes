@@ -15,7 +15,7 @@ class LineDataTinggiBadanGirlModel {
       Number const1 = Number(-0.0378);
       Number const2 = Number(2.172);
       Number const3 = Number(48.94);
-      final exp = ((const1 * x) * (const1 * x)) + (const2 * x) + const3;
+      final exp = (const1 * x * x) + (const2 * x) + const3;
       final double yvalue = exp.evaluate(EvaluationType.REAL, cm);
       list.add(FlSpot(i.toDouble(), double.parse(yvalue.toStringAsFixed(2))));
     }
@@ -32,7 +32,7 @@ class LineDataTinggiBadanGirlModel {
       Number const1 = Number(-0.0375);
       Number const2 = Number(2.2102);
       Number const3 = Number(50.6);
-      final exp = ((const1 * x) * (const1 * x)) + (const2 * x) + const3;
+      final exp = (const1 * x * x) + (const2 * x) + const3;
       final double yvalue = exp.evaluate(EvaluationType.REAL, cm);
       list.add(FlSpot(i.toDouble(), double.parse(yvalue.toStringAsFixed(2))));
     }
@@ -49,7 +49,7 @@ class LineDataTinggiBadanGirlModel {
       Number const1 = Number(-0.0377);
       Number const2 = Number(2.2696);
       Number const3 = Number(52.583);
-      final exp = ((const1 * x) * (const1 * x)) + (const2 * x) + const3;
+      final exp = (const1 * x * x) + (const2 * x) + const3;
       final double yvalue = exp.evaluate(EvaluationType.REAL, cm);
       list.add(FlSpot(i.toDouble(), double.parse(yvalue.toStringAsFixed(2))));
     }
@@ -66,7 +66,7 @@ class LineDataTinggiBadanGirlModel {
       Number const1 = Number(-0.038);
       Number const2 = Number(2.3339);
       Number const3 = Number(54.522);
-      final exp = ((const1 * x) * (const1 * x)) + (const2 * x) + const3;
+      final exp = (const1 * x * x) + (const2 * x) + const3;
       final double yvalue = exp.evaluate(EvaluationType.REAL, cm);
       list.add(FlSpot(i.toDouble(), double.parse(yvalue.toStringAsFixed(2))));
     }
@@ -83,7 +83,7 @@ class LineDataTinggiBadanGirlModel {
       Number const1 = Number(-0.0382);
       Number const2 = Number(2.3875);
       Number const3 = Number(56.098);
-      final exp = ((const1 * x) * (const1 * x)) + (const2 * x) + const3;
+      final exp = (const1 * x * x) + (const2 * x) + const3;
       final double yvalue = exp.evaluate(EvaluationType.REAL, cm);
       list.add(FlSpot(i.toDouble(), double.parse(yvalue.toStringAsFixed(2))));
     }

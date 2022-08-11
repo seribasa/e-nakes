@@ -5,7 +5,6 @@ import 'package:eimunisasi_nakes/features/rekam_medis/logic/form_pemeriksaan/for
 import 'package:eimunisasi_nakes/features/rekam_medis/logic/pemeriksaan/pemeriksaan_cubit.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/pemeriksaan/grafik_pemeriksaan_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
@@ -25,26 +24,12 @@ class FormPemeriksaanScreen extends StatelessWidget {
       body: BlocListener<FormPemeriksaanVaksinasiCubit,
           FormPemeriksaanVaksinasiState>(
         listener: (context, state) {
-          if (state.status == FormzStatus.valid) {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                builder: (context, auth) {
-                  return MultiBlocProvider(
-                    providers: [
-                      BlocProvider.value(
-                        value: _pemeriksaanBloc,
-                      ),
-                      BlocProvider(
-                        create: (context) => PemeriksaanCubit(
-                            userData: auth is Authenticated ? auth.data : null)
-                          ..getPemeriksaanByIdPasien(_pasien?.nik),
-                      ),
-                    ],
-                    child: const GrafikPemeriksaanScreen(),
-                  );
-                },
-              );
-            }));
+          if (state.status == FormzStatus.invalid) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Form tidak valid'),
+              ),
+            );
           }
         },
         child: SingleChildScrollView(
@@ -303,6 +288,7 @@ class _NextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final _pemeriksaanBloc =
         BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
+    final _pasien = _pemeriksaanBloc.state.pasien;
     return SizedBox(
       width: double.infinity,
       height: 50,
@@ -313,6 +299,25 @@ class _NextButton extends StatelessWidget {
         child: const Text("Simpan dan Lanjutkan"),
         onPressed: () {
           _pemeriksaanBloc.validateForm();
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+              builder: (context, auth) {
+                return MultiBlocProvider(
+                  providers: [
+                    BlocProvider.value(
+                      value: _pemeriksaanBloc,
+                    ),
+                    BlocProvider(
+                      create: (context) => PemeriksaanCubit(
+                          userData: auth is Authenticated ? auth.data : null)
+                        ..getPemeriksaanByIdPasien(_pasien?.nik),
+                    ),
+                  ],
+                  child: const GrafikPemeriksaanScreen(),
+                );
+              },
+            );
+          }));
         },
       ),
     );

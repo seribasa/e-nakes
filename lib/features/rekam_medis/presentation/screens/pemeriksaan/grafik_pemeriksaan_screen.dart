@@ -29,64 +29,84 @@ class GrafikPemeriksaanScreen extends StatelessWidget {
               jenisKelamin: _pasien?.jenisKelamin,
             ),
           ),
-          Expanded(
-            child: DefaultTabController(
-                length: 3,
-                child: Column(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      color: Colors.blue,
-                      child: const TabBar(
-                        indicatorColor: Colors.white,
-                        tabs: [
-                          Tab(
-                            text: 'Berat badan',
+          BlocBuilder<PemeriksaanCubit, PemeriksaanState>(
+            builder: (context, state) {
+              if (state is PemeriksaanLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is PemeriksaanLoaded) {
+                return Expanded(
+                  child: DefaultTabController(
+                      length: 3,
+                      child: Column(
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            color: Colors.blue,
+                            child: const TabBar(
+                              indicatorColor: Colors.white,
+                              tabs: [
+                                Tab(
+                                  text: 'Berat badan',
+                                ),
+                                Tab(
+                                  text: 'Tinggi badan',
+                                ),
+                                Tab(
+                                  text: 'Lingkar kepala',
+                                ),
+                              ],
+                            ),
                           ),
-                          Tab(
-                            text: 'Tinggi badan',
-                          ),
-                          Tab(
-                            text: 'Lingkar kepala',
+                          BlocBuilder<PemeriksaanCubit, PemeriksaanState>(
+                            builder: (context, state) {
+                              List<PemeriksaanModel> data =
+                                  (state is PemeriksaanLoaded)
+                                      ? state.pemeriksaan ?? []
+                                      : [];
+                              PemeriksaanModel pemeriksaanModel =
+                                  PemeriksaanModel(
+                                beratBadan: _pemeriksaanBloc.state.beratBadan,
+                                tinggiBadan: _pemeriksaanBloc.state.tinggiBadan,
+                                lingkarKepala:
+                                    _pemeriksaanBloc.state.lingkarKepala,
+                              );
+                              data.add(pemeriksaanModel);
+                              return Expanded(
+                                child: TabBarView(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  children: [
+                                    GrafikBeratBadan(
+                                      listData: data,
+                                      isBoy:
+                                          _pasien?.jenisKelamin == "Laki-laki"
+                                              ? true
+                                              : false,
+                                    ),
+                                    GrafikTinggiBadan(
+                                      listData: data,
+                                      isBoy:
+                                          _pasien?.jenisKelamin == "Laki-laki"
+                                              ? true
+                                              : false,
+                                    ),
+                                    GrafikLingkarKepala(
+                                      listData: data,
+                                      isBoy:
+                                          _pasien?.jenisKelamin == "Laki-laki"
+                                              ? true
+                                              : false,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
                         ],
-                      ),
-                    ),
-                    BlocBuilder<PemeriksaanCubit, PemeriksaanState>(
-                      builder: (context, state) {
-                        final List<PemeriksaanModel> data =
-                            (state is PemeriksaanLoaded)
-                                ? state.pemeriksaan ?? []
-                                : [];
-                        return Expanded(
-                          child: TabBarView(
-                            physics: const NeverScrollableScrollPhysics(),
-                            children: [
-                              GrafikBeratBadan(
-                                listData: data,
-                                isBoy: _pasien?.jenisKelamin == "Laki-laki"
-                                    ? true
-                                    : false,
-                              ),
-                              GrafikTinggiBadan(
-                                listData: data,
-                                isBoy: _pasien?.jenisKelamin == "Laki-laki"
-                                    ? true
-                                    : false,
-                              ),
-                              GrafikLingkarKepala(
-                                listData: data,
-                                isBoy: _pasien?.jenisKelamin == "Laki-laki"
-                                    ? true
-                                    : false,
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                )),
+                      )),
+                );
+              }
+              return const SizedBox();
+            },
           ),
         ],
       ),

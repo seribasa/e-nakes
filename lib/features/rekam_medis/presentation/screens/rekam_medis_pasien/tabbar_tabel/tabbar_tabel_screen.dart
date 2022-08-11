@@ -14,43 +14,49 @@ class TabbarTabelScreen extends StatelessWidget {
         final List<PemeriksaanModel> _pemeriksaan =
             (state is PemeriksaanLoaded) ? state.pemeriksaan ?? [] : [];
 
-        final List<TableRow> listBodyTable =
+        final List<DataRow> listBodyTable =
             List.generate(_pemeriksaan.length, (index) {
           final data = _pemeriksaan[index];
-          return TableRow(
-            children: <Widget>[
-              Text(DateFormat('dd/MM/yyyy')
-                  .format(data.createdAt ?? DateTime.now())),
-              Text(data.beratBadan?.toString() ?? ''),
-              Text(data.tinggiBadan?.toString() ?? ''),
-              Text(data.lingkarKepala?.toString() ?? ''),
-            ],
-          );
+          return DataRow(cells: [
+            DataCell(Text(DateFormat('dd/MM/yyyy')
+                .format(data.createdAt ?? DateTime.now()))),
+            DataCell(Text(data.beratBadan?.toString() ?? '')),
+            DataCell(Text(data.tinggiBadan?.toString() ?? '')),
+            DataCell(Text(data.lingkarKepala?.toString() ?? '')),
+          ]);
         });
 
         return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
           child: Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Table(
+            child: DataTable(
+              headingTextStyle: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Nunito',
+                color: Colors.black,
+              ),
               border: TableBorder.all(
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
                 color: Colors.grey,
                 width: 1,
               ),
-              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-              children: <TableRow>[
-                const TableRow(
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                  ),
-                  children: [
-                    Text('Hari/Bulan'),
-                    Text('BB (KG)'),
-                    Text('TB (CM)'),
-                    Text('LK (CM)'),
-                  ],
+              columns: const [
+                DataColumn(
+                  label: Text('Tanggal'),
                 ),
-                ...listBodyTable.map((e) => e),
+                DataColumn(
+                  label: Text('BB (KG)'),
+                ),
+                DataColumn(
+                  label: Text('TB (CM)'),
+                ),
+                DataColumn(
+                  label: Text('LK (CM)'),
+                ),
+              ],
+              rows: [
+                ...listBodyTable,
               ],
             ),
           ),

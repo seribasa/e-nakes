@@ -14,45 +14,32 @@ class TabbarVaksinScreen extends StatelessWidget {
         final List<PemeriksaanModel> _pemeriksaan =
             (state is PemeriksaanLoaded) ? state.pemeriksaan ?? [] : [];
         return SingleChildScrollView(
+          scrollDirection: Axis.vertical,
           child: Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: List.generate(_pemeriksaan.length + 1, (index) {
-                    if (index == 0) {
-                      // Title
-                      return const Text(
-                        'Tanggal',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      );
-                    } else {
-                      final data = _pemeriksaan[index - 1];
-                      // Body
-                      return Text(DateFormat('dd/MM/yyyy')
-                          .format(data.createdAt ?? DateTime.now()));
-                    }
-                  }),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: List.generate(_pemeriksaan.length + 1, (index) {
-                    if (index == 0) {
-                      // Title
-                      return const Text(
-                        'Jenis Vaksin',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      );
-                    } else {
-                      final data = _pemeriksaan[index - 1];
-                      // Body
-                      return Text(data.jenisVaksin ?? '');
-                    }
-                  }),
-                ),
+            child: DataTable(
+              headingTextStyle: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Nunito',
+                color: Colors.black,
+              ),
+              border: TableBorder.all(
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                color: Colors.grey,
+                width: 1,
+              ),
+              columns: const [
+                DataColumn(label: Text('Tanggal')),
+                DataColumn(label: Text('Vaksin')),
+              ],
+              rows: [
+                ..._pemeriksaan.map((data) {
+                  return DataRow(cells: [
+                    DataCell(Text(DateFormat('dd/MM/yyyy')
+                        .format(data.createdAt ?? DateTime.now()))),
+                    DataCell(Text(data.jenisVaksin ?? '')),
+                  ]);
+                }).toList(),
               ],
             ),
           ),
