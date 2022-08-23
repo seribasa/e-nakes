@@ -1,9 +1,10 @@
 part of 'authentication_bloc.dart';
 
 abstract class AuthenticationState extends Equatable {
-  const AuthenticationState();
+  final UserData? user;
+  const AuthenticationState({this.user});
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [user];
 }
 
 class Uninitialized extends AuthenticationState {
@@ -17,15 +18,16 @@ class Loading extends AuthenticationState {
 }
 
 class Authenticated extends AuthenticationState {
-  final UserData data;
+  @override
+  final UserData? user;
 
-  const Authenticated(this.data);
+  const Authenticated(this.user);
 
   @override
-  List<Object> get props => [data];
+  List<Object?> get props => [user];
 
   @override
-  String toString() => 'Authenticated { displayName: $data }';
+  String toString() => 'Authenticated { displayName: $user }';
 }
 
 class Unauthenticated extends AuthenticationState {

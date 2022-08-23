@@ -1,3 +1,5 @@
+import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
+import 'package:eimunisasi_nakes/features/jadwal/logic/jadwal/jadwal_cubit.dart';
 import 'package:eimunisasi_nakes/features/jadwal/presentation/screens/registrasi/registrasi_screen.dart';
 import 'package:eimunisasi_nakes/features/jadwal/presentation/screens/riwayat%20janji/riwayat_janji_screen.dart';
 import 'package:eimunisasi_nakes/features/klinik/logic/bloc/klinik_bloc/klinik_bloc.dart';
@@ -10,8 +12,10 @@ class WrapperJadwal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = context.read<AuthenticationBloc>();
     return BlocProvider(
-      create: (context) => KlinikBloc(),
+      create: (context) =>
+          JadwalCubit(userData: authProvider.state.user)..getAllJadwal(),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Jadwal'),

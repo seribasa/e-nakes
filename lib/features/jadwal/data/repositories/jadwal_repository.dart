@@ -14,7 +14,7 @@ class JadwalRepository {
     List<JadwalPasienModel>? result = [];
     final jadwalPasien = await _firestore
         .collection(collection)
-        .where('uid', isEqualTo: uid)
+        .where('id_nakes', isEqualTo: uid)
         .get();
     for (var element in jadwalPasien.docs) {
       result.add(JadwalPasienModel.fromMap(element.data(), element.id));
