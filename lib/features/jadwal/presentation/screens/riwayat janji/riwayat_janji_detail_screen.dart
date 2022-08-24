@@ -1,7 +1,11 @@
+import 'package:eimunisasi_nakes/features/jadwal/data/models/jadwal_model.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class RiwayatJanjiDetailScreen extends StatelessWidget {
-  const RiwayatJanjiDetailScreen({Key? key}) : super(key: key);
+  final JadwalPasienModel? jadwalPasienModel;
+  const RiwayatJanjiDetailScreen({Key? key, this.jadwalPasienModel})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,9 +16,13 @@ class RiwayatJanjiDetailScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
-          children: const [
-            _Header(),
-            Expanded(child: _DetailJanjiCard(onTap: null)),
+          children: [
+            const _Header(),
+            Expanded(
+                child: _DetailJanjiCard(
+              onTap: null,
+              jadwalPasienModel: jadwalPasienModel,
+            )),
           ],
         ),
       ),
@@ -41,7 +49,10 @@ class _Header extends StatelessWidget {
 
 class _DetailJanjiCard extends StatelessWidget {
   final void Function(int)? onTap;
-  const _DetailJanjiCard({Key? key, required this.onTap}) : super(key: key);
+  final JadwalPasienModel? jadwalPasienModel;
+  const _DetailJanjiCard(
+      {Key? key, required this.onTap, this.jadwalPasienModel})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,26 +63,27 @@ class _DetailJanjiCard extends StatelessWidget {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text('Tanggal Kunjung'),
-                SizedBox(width: 10),
-                Text('12/12/2020'),
+              children: [
+                const Text('Tanggal Kunjung'),
+                const SizedBox(width: 10),
+                Text(DateFormat('dd MMMM yyyy')
+                    .format(jadwalPasienModel?.tanggal ?? DateTime.now())),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text('Nama Orangtua'),
-                SizedBox(width: 10),
-                Text('Aisyah'),
+              children: [
+                const Text('Nama Orangtua'),
+                const SizedBox(width: 10),
+                Text(jadwalPasienModel?.idOrangtua ?? ''),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text('Nama Anak'),
-                SizedBox(width: 10),
-                Text('Rahmat Kurniawan'),
+              children: [
+                const Text('Nama Anak'),
+                const SizedBox(width: 10),
+                Text(jadwalPasienModel?.idPasien ?? ''),
               ],
             ),
             Row(

@@ -36,7 +36,7 @@ class BottomNavbarWrapper extends StatelessWidget {
                       return const NotificationScreen();
                     } else {
                       return Center(
-                        child: Text('Unknown ${state.data.id}'),
+                        child: Text('Unknown ${state.user.id}'),
                       );
                     }
                   },

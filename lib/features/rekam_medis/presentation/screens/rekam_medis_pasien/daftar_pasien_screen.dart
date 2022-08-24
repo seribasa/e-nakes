@@ -81,7 +81,7 @@ class _ListPasien extends StatelessWidget {
                                 builder: (context) => BlocProvider(
                                       create: (context) => PemeriksaanCubit(
                                           userData: auth is Authenticated
-                                              ? auth.data
+                                              ? auth.user
                                               : null)
                                         ..getPemeriksaanByIdPasien(pasien.nik),
                                       child: RekamMedisPasienScreen(

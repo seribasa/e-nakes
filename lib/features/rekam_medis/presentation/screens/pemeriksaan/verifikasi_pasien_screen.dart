@@ -131,7 +131,7 @@ class _NextButton extends StatelessWidget {
       height: 50,
       child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
-          final _user = state is Authenticated ? state.data : null;
+          final _user = state is Authenticated ? state.user : null;
           return ElevatedButton(
             style: ElevatedButton.styleFrom(
                 shape: const RoundedRectangleBorder(

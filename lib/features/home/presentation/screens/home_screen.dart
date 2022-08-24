@@ -26,7 +26,7 @@ class HomeScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _HelloHeader(
-                      data: state.data,
+                      data: state.user,
                     ),
                     const _AppoinmentToday(),
                     const Flexible(child: _MenuList()),
@@ -136,14 +136,14 @@ class _MenuList extends StatelessWidget {
                               BlocProvider(
                                 create: (context) => CalendarCubit(
                                     userData: (state is Authenticated)
-                                        ? state.data
+                                        ? state.user
                                         : null)
                                   ..getAllCalendar(),
                               ),
                               BlocProvider(
                                 create: (context) => FormCalendarActivityCubit(
                                     userData: (state is Authenticated)
-                                        ? (state.data)
+                                        ? (state.user)
                                         : null),
                               ),
                             ],

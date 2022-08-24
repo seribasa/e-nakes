@@ -19,7 +19,7 @@ class Loading extends AuthenticationState {
 
 class Authenticated extends AuthenticationState {
   @override
-  final UserData? user;
+  final UserData user;
 
   const Authenticated(this.user);
 

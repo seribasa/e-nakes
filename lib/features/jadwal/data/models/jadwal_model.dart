@@ -4,9 +4,10 @@ import 'package:equatable/equatable.dart';
 class JadwalPasienModel extends Equatable {
   final String? id;
   final DateTime? tanggal;
-  final int? idPasien;
+  final String? idPasien;
   final String? idOrangtua;
   final String? idNakes;
+  final String? notes;
 
   const JadwalPasienModel({
     this.id,
@@ -14,10 +15,12 @@ class JadwalPasienModel extends Equatable {
     this.idPasien,
     this.idOrangtua,
     this.idNakes,
+    this.notes,
   });
 
   @override
-  List<Object?> get props => [id, tanggal, idPasien, idOrangtua];
+  List<Object?> get props =>
+      [id, tanggal, idPasien, idOrangtua, idNakes, notes];
 
   factory JadwalPasienModel.fromMap(Map<String, dynamic> map, String docId) {
     return JadwalPasienModel(
@@ -27,6 +30,8 @@ class JadwalPasienModel extends Equatable {
           : null),
       idPasien: map['id_pasien'],
       idOrangtua: map['id_orangtua'],
+      idNakes: map['id_nakes'],
+      notes: map['notes'],
     );
   }
 
@@ -36,6 +41,7 @@ class JadwalPasienModel extends Equatable {
       'id_pasien': idPasien,
       'id_orangtua': idOrangtua,
       'id_nakes': idNakes,
+      'notes': notes,
     };
   }
 }

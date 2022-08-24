@@ -309,7 +309,7 @@ class _NextButton extends StatelessWidget {
                     ),
                     BlocProvider(
                       create: (context) => PemeriksaanCubit(
-                          userData: auth is Authenticated ? auth.data : null)
+                          userData: auth is Authenticated ? auth.user : null)
                         ..getPemeriksaanByIdPasien(_pasien?.nik),
                     ),
                   ],

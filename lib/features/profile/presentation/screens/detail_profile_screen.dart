@@ -29,14 +29,14 @@ class DetailProfileScreen extends StatelessWidget {
                     pekerjaan: 'dokter anak',
                   ),
                   const SizedBox(height: 10),
-                  state.data.email != null && state.data.email != ''
+                  state.user.email != null && state.user.email != ''
                       ? _EmailForm(
-                          initialValue: '${state.data.email}',
+                          initialValue: '${state.user.email}',
                         )
                       : Container(),
-                  state.data.phone != null && state.data.phone != ''
+                  state.user.phone != null && state.user.phone != ''
                       ? _NomorHPForm(
-                          initialValue: '${state.data.phone}',
+                          initialValue: '${state.user.phone}',
                         )
                       : Container(),
                   const SizedBox(height: 10),
