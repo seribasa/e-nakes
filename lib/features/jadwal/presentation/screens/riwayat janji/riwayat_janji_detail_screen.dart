@@ -75,7 +75,7 @@ class _DetailJanjiCard extends StatelessWidget {
               children: [
                 const Text('Nama Orangtua'),
                 const SizedBox(width: 10),
-                Text(jadwalPasienModel?.idOrangtua ?? ''),
+                Text(jadwalPasienModel?.orangtua?.nama ?? '-'),
               ],
             ),
             Row(
@@ -83,15 +83,15 @@ class _DetailJanjiCard extends StatelessWidget {
               children: [
                 const Text('Nama Anak'),
                 const SizedBox(width: 10),
-                Text(jadwalPasienModel?.idPasien ?? ''),
+                Text(jadwalPasienModel?.pasien?.nama ?? '-'),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text('Umur Anak'),
-                SizedBox(width: 10),
-                Text('20'),
+              children: [
+                const Text('Umur Anak'),
+                const SizedBox(width: 10),
+                Text(jadwalPasienModel?.pasien?.umur ?? '-'),
               ],
             ),
           ],

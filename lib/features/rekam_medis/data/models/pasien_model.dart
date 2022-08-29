@@ -10,7 +10,7 @@ class PasienModel extends Equatable {
   final DateTime? tanggalLahir;
   final String? golonganDarah;
 
-  get umur {
+  String get umur {
     if (tanggalLahir != null) {
       final now = DateTime.now();
       final totalHari = now.difference(tanggalLahir!).inDays;

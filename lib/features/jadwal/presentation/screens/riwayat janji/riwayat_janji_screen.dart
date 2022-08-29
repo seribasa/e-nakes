@@ -77,42 +77,42 @@ class _ListDate extends StatelessWidget {
                             title: Text(DateFormat('hh:mm').format(
                                 jadwalPasienModel.tanggal ?? DateTime.now())),
                             subtitle: Text(jadwalPasienModel.notes ?? '-'),
-                            trailing: IconButton(
-                              icon: FaIcon(
-                                FontAwesomeIcons.trash,
-                                color: Colors.red[500],
-                              ),
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: const Text('Hapus Janji'),
-                                    content: const Text(
-                                        'Apakah anda yakin ingin menghapus janji ini?'),
-                                    actions: [
-                                      TextButton(
-                                        child: const Text('Tidak'),
-                                        onPressed: () => Navigator.pop(context),
-                                      ),
-                                      TextButton(
-                                        child: const Text('Ya'),
-                                        style: TextButton.styleFrom(
-                                          backgroundColor: Colors.red[500],
-                                          primary: Colors.white,
-                                        ),
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                          // BlocProvider.of<JadwalCubit>(context)
-                                          //     .add(DeleteJadwal(
-                                          //         jadwalPasienModel:
-                                          //             jadwalPasienModel));
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
+                            // trailing: IconButton(
+                            //   icon: FaIcon(
+                            //     FontAwesomeIcons.trash,
+                            //     color: Colors.red[500],
+                            //   ),
+                            //   onPressed: () {
+                            //     showDialog(
+                            //       context: context,
+                            //       builder: (context) => AlertDialog(
+                            //         title: const Text('Hapus Janji'),
+                            //         content: const Text(
+                            //             'Apakah anda yakin ingin menghapus janji ini?'),
+                            //         actions: [
+                            //           TextButton(
+                            //             child: const Text('Tidak'),
+                            //             onPressed: () => Navigator.pop(context),
+                            //           ),
+                            //           TextButton(
+                            //             child: const Text('Ya'),
+                            //             style: TextButton.styleFrom(
+                            //               backgroundColor: Colors.red[500],
+                            //               primary: Colors.white,
+                            //             ),
+                            //             onPressed: () {
+                            //               Navigator.pop(context);
+                            //               // BlocProvider.of<JadwalCubit>(context)
+                            //               //     .add(DeleteJadwal(
+                            //               //         jadwalPasienModel:
+                            //               //             jadwalPasienModel));
+                            //             },
+                            //           ),
+                            //         ],
+                            //       ),
+                            //     );
+                            //   },
+                            // ),
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(

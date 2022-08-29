@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eimunisasi_nakes/features/jadwal/data/models/jadwal_model.dart';
+import 'package:eimunisasi_nakes/features/rekam_medis/data/repositories/pasien_repository.dart';
 
 class JadwalRepository {
   final FirebaseFirestore _firestore;
@@ -8,6 +9,8 @@ class JadwalRepository {
       : _firestore = firestore ?? FirebaseFirestore.instance;
 
   final String collection = 'appointments';
+  final String collectionPasien = 'children';
+  final _pasienRepository = PasienRepository();
 
   Future<List<JadwalPasienModel>?> getJadwalActivity(
       {required String? uid}) async {
@@ -17,7 +20,21 @@ class JadwalRepository {
         .where('id_nakes', isEqualTo: uid)
         .get();
     for (var element in jadwalPasien.docs) {
-      result.add(JadwalPasienModel.fromMap(element.data(), element.id));
+      JadwalPasienModel dataJadwal = JadwalPasienModel.fromMap(
+        element.data(),
+        element.id,
+      );
+      final pasien = await _pasienRepository.getPasienByID(
+        searchQuery: element.data()['id_pasien'],
+      );
+      final orangtua = await _pasienRepository.getOrangtuaByID(
+        searchQuery: element.data()['id_orangtua'],
+      );
+      dataJadwal = dataJadwal.copyWith(
+        pasien: pasien,
+        orangtua: orangtua,
+      );
+      result.add(dataJadwal);
     }
     return result;
   }

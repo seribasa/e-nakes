@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eimunisasi_nakes/core/models/orang_tua_model.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pasien_model.dart';
 
 class PasienRepository {
@@ -18,6 +19,26 @@ class PasienRepository {
       result.add(PasienModel.fromMap(element.data(), element.id));
     }
     return result;
+  }
+
+  Future<PasienModel?> getPasienByID({required String searchQuery}) async {
+    final getData =
+        await _firestore.collection('children').doc(searchQuery).get();
+    if (getData.exists) {
+      return PasienModel.fromMap(getData.data()!, getData.id);
+    } else {
+      return null;
+    }
+  }
+
+  Future<OrangtuaModel?> getOrangtuaByID({required String searchQuery}) async {
+    final getData = await _firestore.collection('users').doc(searchQuery).get();
+    if (getData.exists) {
+      final result = OrangtuaModel.fromMap(getData.data(), getData.id);
+      return result;
+    } else {
+      return null;
+    }
   }
 
   Future<List<PasienModel>?> getPasienLimited({int? limit}) async {
