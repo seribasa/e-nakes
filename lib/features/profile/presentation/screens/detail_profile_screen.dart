@@ -1,9 +1,13 @@
 import 'package:eimunisasi_nakes/core/widgets/custom_text_field.dart';
 import 'package:eimunisasi_nakes/core/widgets/profile_card.dart';
+import 'package:eimunisasi_nakes/features/authentication/data/models/user.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
+import 'package:eimunisasi_nakes/features/klinik/presentation/screens/profile_klinik_screen.dart';
 import 'package:eimunisasi_nakes/features/profile/presentation/screens/form_ganti_pin_screen.dart';
+import 'package:eimunisasi_nakes/features/profile/presentation/screens/profile_nakes_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DetailProfileScreen extends StatelessWidget {
   const DetailProfileScreen({Key? key}) : super(key: key);
@@ -17,37 +21,284 @@ class DetailProfileScreen extends StatelessWidget {
             appBar: AppBar(
               title: const Text('Profile saya'),
             ),
-            body: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const ProfileCard(
-                    urlGambar:
-                        'https://avatars.githubusercontent.com/u/56538058?v=4',
-                    nama: 'Rizky',
-                    pekerjaan: 'dokter anak',
-                  ),
-                  const SizedBox(height: 10),
-                  state.user.email != null && state.user.email != ''
-                      ? _EmailForm(
-                          initialValue: '${state.user.email}',
-                        )
-                      : Container(),
-                  state.user.phone != null && state.user.phone != ''
-                      ? _NomorHPForm(
-                          initialValue: '${state.user.phone}',
-                        )
-                      : Container(),
-                  const SizedBox(height: 10),
-                  const _GantiPasscodeButton(),
-                ],
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const ProfileCard(
+                      urlGambar:
+                          'https://avatars.githubusercontent.com/u/56538058?v=4',
+                      nama: 'Rizky',
+                      pekerjaan: 'dokter anak',
+                    ),
+                    const SizedBox(height: 10),
+                    const _ProfilNakesSection(),
+                    const SizedBox(height: 10),
+                    _InformasiAkunSection(
+                      user: state.user,
+                    ),
+                  ],
+                ),
               ),
             ),
           );
         }
         return Container();
       },
+    );
+  }
+}
+
+class _ProfilNakesSection extends StatelessWidget {
+  const _ProfilNakesSection({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: const [
+        Text(
+          'Profil Nakes',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
+        SizedBox(height: 10),
+        _NamaForm(),
+        SizedBox(height: 10),
+        _TempatLahirForm(),
+        SizedBox(height: 10),
+        _TanggalLahirForm(),
+        SizedBox(height: 10),
+        _NikForm(),
+        SizedBox(height: 10),
+        _NoKartuKeluargaForm(),
+        SizedBox(height: 10),
+        _ProfesiForm(),
+        SizedBox(height: 10),
+        _JadwalForm(),
+      ],
+    );
+  }
+}
+
+class _InformasiAkunSection extends StatelessWidget {
+  final UserData? user;
+  const _InformasiAkunSection({Key? key, required this.user}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Informasi Akun',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
+        const SizedBox(height: 10),
+        () {
+          if (user?.email != null && user?.email != '') {
+            return _EmailForm(
+              initialValue: '${user?.email}',
+            );
+          } else if (user?.phone != null && user?.phone != '') {
+            return _NomorHPForm(
+              initialValue: '${user?.phone}',
+            );
+          }
+          return Container();
+        }(),
+        const SizedBox(height: 10),
+        const _ProfileViewButton(),
+        // const _GantiPasscodeButton(),
+      ],
+    );
+  }
+}
+
+class _NamaForm extends StatelessWidget {
+  final String? initialValue;
+  const _NamaForm({Key? key, this.initialValue}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text.rich(
+          TextSpan(
+            text: 'Nama Lengkap',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+            children: [
+              TextSpan(
+                text: ' (Sesuai Akte Lahir/KTP)',
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontSize: 12,
+                ),
+              )
+            ],
+          ),
+        ),
+        const SizedBox(width: 5),
+        MyTextFormField(
+          readOnly: true,
+          initialValue: initialValue,
+          keyboardType: TextInputType.emailAddress,
+        ),
+      ],
+    );
+  }
+}
+
+class _TempatLahirForm extends StatelessWidget {
+  final String? initialValue;
+  const _TempatLahirForm({Key? key, this.initialValue}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Tempat Lahir',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(width: 5),
+        MyTextFormField(
+          readOnly: true,
+          initialValue: initialValue,
+          keyboardType: TextInputType.emailAddress,
+        ),
+      ],
+    );
+  }
+}
+
+class _TanggalLahirForm extends StatelessWidget {
+  final String? initialValue;
+  const _TanggalLahirForm({Key? key, this.initialValue}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Tanggal Lahir',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(width: 5),
+        MyTextFormField(
+          readOnly: true,
+          initialValue: initialValue,
+          keyboardType: TextInputType.emailAddress,
+        ),
+      ],
+    );
+  }
+}
+
+class _NikForm extends StatelessWidget {
+  final String? initialValue;
+  const _NikForm({Key? key, this.initialValue}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'NIK',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(width: 5),
+        MyTextFormField(
+          readOnly: true,
+          initialValue: initialValue,
+          keyboardType: TextInputType.emailAddress,
+        ),
+      ],
+    );
+  }
+}
+
+class _NoKartuKeluargaForm extends StatelessWidget {
+  final String? initialValue;
+  const _NoKartuKeluargaForm({Key? key, this.initialValue}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'No KK',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(width: 5),
+        MyTextFormField(
+          readOnly: true,
+          initialValue: initialValue,
+          keyboardType: TextInputType.emailAddress,
+        ),
+      ],
+    );
+  }
+}
+
+class _ProfesiForm extends StatelessWidget {
+  final String? initialValue;
+  const _ProfesiForm({Key? key, this.initialValue}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Profesi',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(width: 5),
+        MyTextFormField(
+          readOnly: true,
+          initialValue: initialValue,
+          keyboardType: TextInputType.emailAddress,
+        ),
+      ],
+    );
+  }
+}
+
+class _JadwalForm extends StatelessWidget {
+  final String? initialValue;
+  const _JadwalForm({Key? key, this.initialValue}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Jadwal',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(width: 5),
+        MyTextFormField(
+          readOnly: true,
+          initialValue: initialValue,
+          keyboardType: TextInputType.emailAddress,
+        ),
+      ],
     );
   }
 }
@@ -67,6 +318,7 @@ class _EmailForm extends StatelessWidget {
         ),
         const SizedBox(width: 5),
         MyTextFormField(
+          readOnly: true,
           initialValue: initialValue,
           keyboardType: TextInputType.emailAddress,
         ),
@@ -90,6 +342,7 @@ class _NomorHPForm extends StatelessWidget {
         ),
         const SizedBox(width: 5),
         MyTextFormField(
+          readOnly: true,
           initialValue: initialValue,
           keyboardType: TextInputType.number,
         ),
@@ -100,22 +353,30 @@ class _NomorHPForm extends StatelessWidget {
 
 class _GantiPasscodeButton extends StatelessWidget {
   const _GantiPasscodeButton({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: double.infinity,
       height: 50,
+      width: double.infinity,
       child: ElevatedButton(
+        key: const Key('my_profile_raisedButton'),
         style: ElevatedButton.styleFrom(
-            shape:
-                const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
-        child: const Text("Ganti PIN"),
+          alignment: Alignment.centerLeft,
+        ),
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return const GantiPINScreen();
           }));
         },
+        child: Row(
+          children: const [
+            FaIcon(FontAwesomeIcons.lock),
+            SizedBox(width: 10),
+            Text(
+              'Ganti PIN',
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -139,6 +400,38 @@ class _SaveButton extends StatelessWidget {
           //   return GrafikPemeriksaanScreen();
           // }));
         },
+      ),
+    );
+  }
+}
+
+class _ProfileViewButton extends StatelessWidget {
+  const _ProfileViewButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 50,
+      width: double.infinity,
+      child: ElevatedButton(
+        key: const Key('my_profile_raisedButton'),
+        style: ElevatedButton.styleFrom(
+          alignment: Alignment.centerLeft,
+        ),
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return const ProfileNakesScreen();
+          }));
+        },
+        child: Row(
+          children: const [
+            FaIcon(FontAwesomeIcons.usersViewfinder),
+            SizedBox(width: 10),
+            Text(
+              'Lihat Sebagai',
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -21,13 +21,13 @@ class Klinik {
   factory Klinik.fromJson(Map<String, dynamic> json) {
     return Klinik(
       id: json['id'],
-      name: json['name'],
+      name: json['nama'],
       motto: json['motto'],
       photos: json['photos']?.cast<List>(),
-      address: json['address'],
-      phoneNumber: json['phoneNumber'],
-      schedules: json['schedules'],
-      listUid: json['listUid']?.cast<Map>(),
+      address: json['alamat'],
+      phoneNumber: json['phone'],
+      schedules: json['jadwal'],
+      listUid: json['anggota']?.cast<Map>(),
     );
   }
 

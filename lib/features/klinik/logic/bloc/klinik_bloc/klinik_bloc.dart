@@ -19,7 +19,7 @@ class KlinikBloc extends Bloc<KlinikEvent, KlinikState> {
     emit(KlinikLoading());
     try {
       DocumentSnapshot<Map<String, dynamic>> data =
-          await _klinikRepository.getKlinik(id: 'npoSSEMlxMSbuQ9nFEJh');
+          await _klinikRepository.getKlinik(id: '31VERUiwjrZyB6NfiGPK');
       if (data.exists) {
         Klinik dataKlinik = Klinik.fromJson(data.data()!);
         emit(KlinikFetchData(klinik: dataKlinik));
@@ -36,7 +36,7 @@ class KlinikBloc extends Bloc<KlinikEvent, KlinikState> {
     emit(KlinikLoading());
     try {
       DocumentSnapshot<Map<String, dynamic>> data =
-          await _klinikRepository.getAnggotaKlinik(id: 'npoSSEMlxMSbuQ9nFEJh');
+          await _klinikRepository.getAnggotaKlinik(id: '31VERUiwjrZyB6NfiGPK');
       if (data.exists) {
         List<AnggotaKlinik> dataKlinik = data
             .get('listMember')

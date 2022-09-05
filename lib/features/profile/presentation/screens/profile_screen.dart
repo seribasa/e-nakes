@@ -91,7 +91,7 @@ class _MyProfileButton extends StatelessWidget {
             FaIcon(FontAwesomeIcons.userNurse),
             SizedBox(width: 10),
             Text(
-              'Profil Saya',
+              'Tenaga Kesehatan',
             ),
           ],
         ),
