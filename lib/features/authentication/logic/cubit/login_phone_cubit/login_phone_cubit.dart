@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:eimunisasi_nakes/features/authentication/data/models/user.dart';
 import '../../../data/models/country_code.dart';
 import '../../../data/models/otp.dart';
 import '../../../data/models/phone.dart';
@@ -72,7 +73,18 @@ class LoginPhoneCubit extends Cubit<LoginPhoneState> {
     if (state.otpCode.invalid) return;
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     try {
-      await _userRepository.signUpWithOTP(state.otpCode.value, verId);
+      final userResult = await _userRepository.signUpWithOTP(
+        state.otpCode.value,
+        verId,
+      );
+
+      final userModel = UserData(
+        id: userResult.user?.uid,
+        phone: userResult.user?.phoneNumber,
+      );
+      await _userRepository.insertUserToDatabase(
+        user: userModel,
+      );
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on FirebaseAuthException catch (e) {
       emit(state.copyWith(

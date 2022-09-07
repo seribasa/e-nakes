@@ -1,14 +1,17 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/user.dart';
 
 class UserRepository {
+  final FirebaseFirestore _firestore;
   final FirebaseAuth _firebaseAuth;
 
-  UserRepository({FirebaseAuth? firebaseAuth})
-      : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
+  UserRepository({FirebaseAuth? firebaseAuth, FirebaseFirestore? firestore})
+      : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
+        _firestore = firestore ?? FirebaseFirestore.instance;
 
   Future<void> logInWithEmailAndPassword(
       {required String email, required String password}) {
@@ -38,11 +41,11 @@ class UserRepository {
     );
   }
 
-  Future<void> signUpWithOTP(smsCode, verId) async {
+  Future<UserCredential> signUpWithOTP(smsCode, verId) async {
     AuthCredential credential =
         PhoneAuthProvider.credential(verificationId: verId, smsCode: smsCode);
     try {
-      await _firebaseAuth.signInWithCredential(credential);
+      return await _firebaseAuth.signInWithCredential(credential);
     } catch (e) {
       rethrow;
     }
@@ -56,6 +59,14 @@ class UserRepository {
     );
   }
 
+  Future<void> insertUserToDatabase({
+    required UserData user,
+  }) async {
+    final DocumentReference reference =
+        _firestore.collection('user_medis').doc(user.id);
+    await reference.set(user.toMap());
+  }
+
   Future<void> signOut() async {
     return _firebaseAuth.signOut();
   }
@@ -66,11 +77,15 @@ class UserRepository {
   }
 
   Future<UserData?> getUser() async {
-    return UserData(
-      id: _firebaseAuth.currentUser!.uid,
-      email: _firebaseAuth.currentUser!.email,
-      phone: _firebaseAuth.currentUser!.phoneNumber,
-      name: _firebaseAuth.currentUser!.displayName,
-    );
+    final user = await _firestore
+        .collection('user_medis')
+        .doc(_firebaseAuth.currentUser!.uid)
+        .get();
+    if (user.exists) {
+      final userResult = UserData.fromMap(user.data(), user.id);
+      return userResult;
+    } else {
+      return null;
+    }
   }
 }

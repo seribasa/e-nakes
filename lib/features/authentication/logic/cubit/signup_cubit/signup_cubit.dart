@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:eimunisasi_nakes/features/authentication/data/models/user.dart';
 import '../../../data/models/email.dart';
 import '../../../data/models/password.dart';
 import '../../../data/repositories/user_repository.dart';
@@ -38,9 +39,16 @@ class SignUpCubit extends Cubit<SignUpState> {
     if (!state.status.isValidated) return;
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     try {
-      await _userRepository.signUpWithEmailAndPassword(
+      final userResult = await _userRepository.signUpWithEmailAndPassword(
         email: state.email.value,
         password: state.password.value,
+      );
+      final userModel = UserData(
+        id: userResult.user?.uid,
+        email: userResult.user?.email,
+      );
+      await _userRepository.insertUserToDatabase(
+        user: userModel,
       );
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } catch (_) {
