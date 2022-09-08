@@ -1,8 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eimunisasi_nakes/core/widgets/custom_text_field.dart';
-import 'package:eimunisasi_nakes/core/widgets/profile_card.dart';
 import 'package:eimunisasi_nakes/features/authentication/data/models/user.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
-import 'package:eimunisasi_nakes/features/klinik/presentation/screens/profile_klinik_screen.dart';
 import 'package:eimunisasi_nakes/features/profile/presentation/screens/form_ganti_pin_screen.dart';
 import 'package:eimunisasi_nakes/features/profile/presentation/screens/profile_nakes_screen.dart';
 import 'package:flutter/material.dart';
@@ -27,11 +26,13 @@ class DetailProfileScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const ProfileCard(
-                      urlGambar:
-                          'https://avatars.githubusercontent.com/u/56538058?v=4',
-                      nama: 'Rizky',
-                      pekerjaan: 'dokter anak',
+                    const Center(
+                      child: CircleAvatar(
+                        radius: 50,
+                        backgroundImage: CachedNetworkImageProvider(
+                          "https://avatars.githubusercontent.com/u/56538058?v=4",
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 10),
                     const _ProfilNakesSection(),
