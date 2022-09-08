@@ -25,7 +25,7 @@ class AuthenticationBloc
       final isSignedIn = await _userRepository.isSignedIn();
       if (isSignedIn) {
         final data = await _userRepository.getUser();
-        emit(Authenticated(data!));
+        emit(Authenticated(user: data));
       } else {
         emit(Unauthenticated());
       }
@@ -37,7 +37,7 @@ class AuthenticationBloc
   void _onLoggedIn(LoggedIn event, Emitter<AuthenticationState> emit) async {
     emit(Loading());
     final data = await _userRepository.getUser();
-    emit(Authenticated(data!));
+    emit(Authenticated(user: data));
   }
 
   void _onLoggedOut(LoggedOut event, Emitter<AuthenticationState> emit) async {

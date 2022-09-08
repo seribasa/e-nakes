@@ -20,10 +20,10 @@ class App extends StatelessWidget {
     return RepositoryProvider.value(
       value: _userRepository,
       child: BlocProvider(
-          create: (context) =>
-              AuthenticationBloc(userRepository: _userRepository)
-                ..add(AppStarted()),
-          child: const AppView()),
+        create: (context) => AuthenticationBloc(userRepository: _userRepository)
+          ..add(AppStarted()),
+        child: const AppView(),
+      ),
     );
   }
 }

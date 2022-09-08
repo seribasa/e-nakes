@@ -18,16 +18,13 @@ class Loading extends AuthenticationState {
 }
 
 class Authenticated extends AuthenticationState {
-  @override
-  final UserData user;
-
-  const Authenticated(this.user);
+  const Authenticated({UserData? user}) : super(user: user);
 
   @override
   List<Object?> get props => [user];
 
   @override
-  String toString() => 'Authenticated { displayName: $user }';
+  String toString() => 'Authenticated { $user }';
 }
 
 class Unauthenticated extends AuthenticationState {

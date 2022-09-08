@@ -45,7 +45,7 @@ class ProfileNakesScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             _NamaNakes(
-                              namaNakes: state.user.email,
+                              namaNakes: state.user?.email,
                             ),
                             const Text(
                               'Profesi/Spesialis',

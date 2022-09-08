@@ -2,7 +2,6 @@ import 'package:eimunisasi_nakes/features/jadwal/logic/jadwal/jadwal_cubit.dart'
 import 'package:eimunisasi_nakes/features/jadwal/presentation/screens/riwayat%20janji/riwayat_janji_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 class RiwayatJanjiScreen extends StatelessWidget {
@@ -57,22 +56,22 @@ class _ListDate extends StatelessWidget {
         if (state is JadwalLoaded) {
           final data = state.jadwalPasienModel;
           return ListView.builder(
-              itemCount: data.length,
+              itemCount: data?.length,
               itemBuilder: (context, index) {
                 if ((index == 0) ||
                     (DateFormat('dd MMMM yyyy')
-                            .format(data[index].tanggal ?? DateTime.now()) !=
+                            .format(data?[index].tanggal ?? DateTime.now()) !=
                         DateFormat('dd MMMM yyyy').format(
-                            data[index - 1].tanggal ?? DateTime.now()))) {
+                            data?[index - 1].tanggal ?? DateTime.now()))) {
                   return ExpansionTile(
                     title: Text(DateFormat('dd MMMM yyyy')
-                        .format(data[index].tanggal ?? DateTime.now())),
+                        .format(data?[index].tanggal ?? DateTime.now())),
                     children: [
-                      for (final jadwalPasienModel in data)
+                      for (final jadwalPasienModel in data ?? [])
                         if (DateFormat('dd-MM-yyyy').format(
                                 jadwalPasienModel.tanggal ?? DateTime.now()) ==
                             DateFormat('dd-MM-yyyy')
-                                .format(data[index].tanggal ?? DateTime.now()))
+                                .format(data?[index].tanggal ?? DateTime.now()))
                           ListTile(
                             title: Text(DateFormat('hh:mm').format(
                                 jadwalPasienModel.tanggal ?? DateTime.now())),

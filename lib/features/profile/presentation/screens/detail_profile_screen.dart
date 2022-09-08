@@ -7,6 +7,7 @@ import 'package:eimunisasi_nakes/features/profile/presentation/screens/profile_n
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 
 class DetailProfileScreen extends StatelessWidget {
   const DetailProfileScreen({Key? key}) : super(key: key);
@@ -35,7 +36,9 @@ class DetailProfileScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    const _ProfilNakesSection(),
+                    _ProfilNakesSection(
+                      user: state.user,
+                    ),
                     const SizedBox(height: 10),
                     _InformasiAkunSection(
                       user: state.user,
@@ -53,34 +56,40 @@ class DetailProfileScreen extends StatelessWidget {
 }
 
 class _ProfilNakesSection extends StatelessWidget {
-  const _ProfilNakesSection({Key? key}) : super(key: key);
+  final UserData? user;
+  const _ProfilNakesSection({Key? key, required this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final birthDate = user?.birthDate != null
+        ? DateFormat('dd-M-yyyy').format(user?.birthDate ?? DateTime.now())
+        : '';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        Text(
+      children: [
+        const Text(
           'Profil Nakes',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,
           ),
         ),
-        SizedBox(height: 10),
-        _NamaForm(),
-        SizedBox(height: 10),
-        _TempatLahirForm(),
-        SizedBox(height: 10),
-        _TanggalLahirForm(),
-        SizedBox(height: 10),
-        _NikForm(),
-        SizedBox(height: 10),
-        _NoKartuKeluargaForm(),
-        SizedBox(height: 10),
-        _ProfesiForm(),
-        SizedBox(height: 10),
-        _JadwalForm(),
+        const SizedBox(height: 10),
+        _NamaForm(
+          initialValue: user?.fullName,
+        ),
+        const SizedBox(height: 10),
+        _TempatLahirForm(initialValue: user?.birthPlace),
+        const SizedBox(height: 10),
+        _TanggalLahirForm(initialValue: birthDate),
+        const SizedBox(height: 10),
+        _NikForm(initialValue: user?.nik),
+        const SizedBox(height: 10),
+        _NoKartuKeluargaForm(initialValue: user?.kartuKeluarga),
+        const SizedBox(height: 10),
+        _ProfesiForm(initialValue: user?.profession),
+        const SizedBox(height: 10),
+        _JadwalForm(initialValue: user?.schedules.toString()),
       ],
     );
   }

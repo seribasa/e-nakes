@@ -65,7 +65,7 @@ class UserData extends Equatable {
       email: map?['email'],
       phone: map?['noTelpon'],
       fullName: map?['namaLengkap'],
-      photo: map?['photo'],
+      photo: map?['photoURL'],
       birthDate: ((map?['tanggalLahir'] != null)
           ? (map?['tanggalLahir'] as Timestamp).toDate()
           : null),
@@ -92,5 +92,17 @@ class UserData extends Equatable {
   }
 
   @override
-  List<Object?> get props => [email, phone, id, fullName, photo];
+  List<Object?> get props => [
+        email,
+        phone,
+        id,
+        fullName,
+        photo,
+        birthDate,
+        birthPlace,
+        kartuKeluarga,
+        nik,
+        profession,
+        schedules
+      ];
 }

@@ -1,10 +1,11 @@
 part of 'jadwal_cubit.dart';
 
 abstract class JadwalState extends Equatable {
-  const JadwalState();
+  final List<JadwalPasienModel>? jadwalPasienModel;
+  const JadwalState({this.jadwalPasienModel});
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [jadwalPasienModel];
 }
 
 class JadwalInitial extends JadwalState {}
@@ -12,12 +13,11 @@ class JadwalInitial extends JadwalState {}
 class JadwalLoading extends JadwalState {}
 
 class JadwalLoaded extends JadwalState {
-  final List<JadwalPasienModel> jadwalPasienModel;
-
-  const JadwalLoaded({required this.jadwalPasienModel});
+  const JadwalLoaded({List<JadwalPasienModel>? jadwalPasienModel})
+      : super(jadwalPasienModel: jadwalPasienModel);
 
   @override
-  List<Object> get props => [jadwalPasienModel];
+  List<Object?> get props => [jadwalPasienModel];
 }
 
 class JadwalError extends JadwalState {

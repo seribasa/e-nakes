@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class ProfileCard extends StatelessWidget {
   final String? nama;
   final String? pekerjaan;
-  final String urlGambar;
+  final String? urlGambar;
   const ProfileCard(
       {Key? key, this.nama, this.pekerjaan, required this.urlGambar})
       : super(key: key);
@@ -14,7 +14,8 @@ class ProfileCard extends StatelessWidget {
     return ListTile(
       leading: CircleAvatar(
         radius: 25,
-        backgroundImage: CachedNetworkImageProvider(urlGambar),
+        backgroundImage:
+            urlGambar != null ? CachedNetworkImageProvider(urlGambar!) : null,
       ),
       title: Text(
         nama ?? '',

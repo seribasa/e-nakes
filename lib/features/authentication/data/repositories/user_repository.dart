@@ -63,7 +63,7 @@ class UserRepository {
     required UserData user,
   }) async {
     final DocumentReference reference =
-        _firestore.collection('user_medis').doc(user.id);
+        _firestore.collection('users_medis').doc(user.id);
     await reference.set(user.toMap());
   }
 
@@ -78,7 +78,7 @@ class UserRepository {
 
   Future<UserData?> getUser() async {
     final user = await _firestore
-        .collection('user_medis')
+        .collection('users_medis')
         .doc(_firebaseAuth.currentUser!.uid)
         .get();
     if (user.exists) {

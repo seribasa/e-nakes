@@ -10,19 +10,20 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _userProvider = context.read<AuthenticationBloc>().state.user;
     return Scaffold(
       body: SafeArea(
           child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
-          children: const <Widget>[
+          children: <Widget>[
             ProfileCard(
-              urlGambar: 'https://avatars.githubusercontent.com/u/56538058?v=4',
-              nama: 'Rizky',
-              pekerjaan: 'dokter anak',
+              urlGambar: _userProvider?.photo,
+              nama: _userProvider?.fullName,
+              pekerjaan: _userProvider?.profession,
             ),
-            SizedBox(height: 20),
-            _MyProfileButton(),
+            const SizedBox(height: 20),
+            const _MyProfileButton(),
           ],
         ),
       )),

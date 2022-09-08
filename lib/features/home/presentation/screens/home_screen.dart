@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
+import 'package:eimunisasi_nakes/features/jadwal/logic/jadwal/jadwal_cubit.dart';
+import 'package:eimunisasi_nakes/features/jadwal/presentation/screens/riwayat%20janji/riwayat_janji_screen.dart';
 import 'package:eimunisasi_nakes/features/jadwal/presentation/screens/wrapper_jadwal.dart';
 import 'package:eimunisasi_nakes/features/kalender/logic/calendar/calendar_cubit.dart';
 import 'package:eimunisasi_nakes/features/kalender/logic/form_calendar_activity/form_calendar_activity_cubit.dart';
@@ -9,6 +11,7 @@ import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/wrapp
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 
 import '../../../authentication/data/models/user.dart';
 
@@ -28,7 +31,11 @@ class HomeScreen extends StatelessWidget {
                     _HelloHeader(
                       data: state.user,
                     ),
-                    const _AppoinmentToday(),
+                    BlocBuilder<JadwalCubit, JadwalState>(
+                      builder: (context, stateJadwal) {
+                        return const _AppoinmentToday();
+                      },
+                    ),
                     const Flexible(child: _MenuList()),
                   ]),
             ),
@@ -43,7 +50,7 @@ class HomeScreen extends StatelessWidget {
 }
 
 class _HelloHeader extends StatelessWidget {
-  final UserData data;
+  final UserData? data;
   const _HelloHeader({Key? key, required this.data}) : super(key: key);
 
   @override
@@ -58,20 +65,28 @@ class _HelloHeader extends StatelessWidget {
               'Halo',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            data.phone == '' || data.phone == null
-                ? Text(
-                    data.email!,
+            () {
+              if (data?.fullName != null) {
+                return Text(data?.fullName ?? '');
+              } else {
+                if (data?.phone == '' || data?.phone == null) {
+                  return Text(
+                    data?.email ?? '',
                     style: Theme.of(context).textTheme.bodyText1,
-                  )
-                : Text(
-                    data.phone!,
+                  );
+                } else {
+                  return Text(
+                    data?.phone ?? '',
                     style: Theme.of(context).textTheme.caption,
-                  ),
+                  );
+                }
+              }
+            }(),
           ]),
-          const CircleAvatar(
+          CircleAvatar(
             radius: 30,
-            backgroundImage: CachedNetworkImageProvider(
-                "https://avatars.githubusercontent.com/u/56538058?v=4"),
+            backgroundImage: CachedNetworkImageProvider(data?.photo ??
+                'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'),
           ),
         ],
       ),
@@ -190,6 +205,8 @@ class _AppoinmentToday extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _user = context.read<AuthenticationBloc>().state.user;
+    final _jadwal = context.read<JadwalCubit>().state.jadwalPasienModel;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Column(
@@ -202,7 +219,16 @@ class _AppoinmentToday extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => BlocProvider(
+                              create: (context) =>
+                                  JadwalCubit(userData: _user)..getAllJadwal(),
+                              child: const RiwayatJanjiScreen(),
+                            )),
+                  );
+                },
                 child: const Text(
                   'Lihat Semua',
                   style: TextStyle(color: Colors.blue),
@@ -226,19 +252,31 @@ class _AppoinmentToday extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
-                      children: const [
-                        CircleAvatar(
+                      children: [
+                        const CircleAvatar(
                           radius: 20,
                           backgroundImage: CachedNetworkImageProvider(
-                              'https://avatars.githubusercontent.com/u/56538058?v=4'),
+                            'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                          ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 20,
                         ),
-                        Text(
-                          'Rizky Faturrahman',
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                        BlocBuilder<JadwalCubit, JadwalState>(
+                          builder: (context, state) {
+                            if (state is JadwalLoading) {
+                              return const Expanded(
+                                  child: LinearProgressIndicator());
+                            }
+                            return Text(
+                              state.jadwalPasienModel?.first.pasien?.nama ??
+                                  'Tidak ada pasien',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -251,25 +289,46 @@ class _AppoinmentToday extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: const [
-                          FaIcon(
-                            FontAwesomeIcons.calendarDays,
-                            color: Colors.white,
-                            size: 18,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              const FaIcon(
+                                FontAwesomeIcons.calendarDays,
+                                color: Colors.white,
+                                size: 18,
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                DateFormat('dd-MMM-yyyy').format(
+                                    _jadwal?.first.tanggal ?? DateTime.now()),
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ],
                           ),
-                          Text(
-                            '28 Februari 2022',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          FaIcon(
-                            FontAwesomeIcons.clock,
-                            color: Colors.white,
-                            size: 18,
-                          ),
-                          Text(
-                            '08:00 - 09:00 AM',
-                            style: TextStyle(color: Colors.white),
+                          Row(
+                            children: [
+                              const FaIcon(
+                                FontAwesomeIcons.clock,
+                                color: Colors.white,
+                                size: 18,
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              BlocBuilder<JadwalCubit, JadwalState>(
+                                builder: (context, state) {
+                                  return Text(
+                                    DateFormat('HH:mm').format(state
+                                            .jadwalPasienModel?.first.tanggal ??
+                                        DateTime.now()),
+                                    style: const TextStyle(color: Colors.white),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                         ],
                       ),

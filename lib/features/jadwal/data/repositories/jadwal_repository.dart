@@ -40,15 +40,35 @@ class JadwalRepository {
   }
 
   Future<List<JadwalPasienModel>?> getSpecificJadwalActivity(
-      {required String? uid, DateTime? date}) async {
-    List<JadwalPasienModel>? result;
+      {required String? uid, required DateTime date}) async {
+    List<JadwalPasienModel>? result = [];
     final jadwalPasien = await _firestore
         .collection(collection)
-        .where('uid', isEqualTo: uid)
-        .where('date', isEqualTo: date)
+        .where('id_nakes', isEqualTo: uid)
+        .where(
+          'tanggal',
+          isGreaterThanOrEqualTo: Timestamp.fromDate(date),
+          isLessThan: Timestamp.fromDate(
+            date.add(const Duration(days: 1)),
+          ),
+        )
         .get();
     for (var element in jadwalPasien.docs) {
-      result?.add(JadwalPasienModel.fromMap(element.data(), element.id));
+      JadwalPasienModel dataJadwal = JadwalPasienModel.fromMap(
+        element.data(),
+        element.id,
+      );
+      final pasien = await _pasienRepository.getPasienByID(
+        searchQuery: element.data()['id_pasien'],
+      );
+      final orangtua = await _pasienRepository.getOrangtuaByID(
+        searchQuery: element.data()['id_orangtua'],
+      );
+      dataJadwal = dataJadwal.copyWith(
+        pasien: pasien,
+        orangtua: orangtua,
+      );
+      result.add(dataJadwal);
     }
     return result;
   }
