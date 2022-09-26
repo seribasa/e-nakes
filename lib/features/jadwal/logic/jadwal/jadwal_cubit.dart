@@ -33,7 +33,7 @@ class JadwalCubit extends Cubit<JadwalState> {
       final listJadwal = await _jadwalRepository.getSpecificJadwalActivity(
           uid: userData?.id, date: DateTime.now());
       listJadwal?.sort((a, b) => a.tanggal!.compareTo(b.tanggal!));
-      emit(JadwalLoaded(jadwalPasienModel: listJadwal ?? []));
+      emit(JadwalLoaded(jadwalPasienModel: listJadwal));
     } catch (e) {
       emit(JadwalError(message: e.toString()));
     }

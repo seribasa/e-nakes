@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eimunisasi_nakes/features/klinik/data/models/klinik.dart';
 import 'package:equatable/equatable.dart';
 
 /// {@template user}
@@ -20,6 +21,7 @@ class UserData extends Equatable {
     this.nik,
     this.profession,
     this.schedules,
+    this.clinic,
   });
 
   /// The current user's email address.
@@ -46,6 +48,8 @@ class UserData extends Equatable {
   final DateTime? birthDate;
 
   final String? birthPlace;
+
+  final Klinik? clinic;
 
   /// Map<Hari, List<jam>>
   final Map<String, dynamic>? schedules;
@@ -91,6 +95,36 @@ class UserData extends Equatable {
     };
   }
 
+  UserData copyWith({
+    String? id,
+    String? email,
+    String? phone,
+    String? fullName,
+    String? photo,
+    DateTime? birthDate,
+    String? birthPlace,
+    String? kartuKeluarga,
+    String? nik,
+    String? profession,
+    Map<String, dynamic>? schedules,
+    Klinik? clinic,
+  }) {
+    return UserData(
+      id: id ?? this.id,
+      email: email ?? this.email,
+      phone: phone ?? this.phone,
+      fullName: fullName ?? this.fullName,
+      photo: photo ?? this.photo,
+      birthDate: birthDate ?? this.birthDate,
+      birthPlace: birthPlace ?? this.birthPlace,
+      kartuKeluarga: kartuKeluarga ?? this.kartuKeluarga,
+      nik: nik ?? this.nik,
+      profession: profession ?? this.profession,
+      schedules: schedules ?? this.schedules,
+      clinic: clinic ?? this.clinic,
+    );
+  }
+
   @override
   List<Object?> get props => [
         email,
@@ -103,6 +137,7 @@ class UserData extends Equatable {
         kartuKeluarga,
         nik,
         profession,
-        schedules
+        schedules,
+        clinic,
       ];
 }

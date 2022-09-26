@@ -18,16 +18,17 @@ class Klinik {
     this.motto,
   });
 
-  factory Klinik.fromJson(Map<String, dynamic> json) {
+  factory Klinik.fromJson(Map<String, dynamic>? json) {
     return Klinik(
-      id: json['id'],
-      name: json['nama'],
-      motto: json['motto'],
-      photos: json['photos']?.cast<List>(),
-      address: json['alamat'],
-      phoneNumber: json['phone'],
-      schedules: json['jadwal'],
-      listUid: json['anggota']?.cast<Map>(),
+      id: json?['id'],
+      name: json?['nama'],
+      motto: json?['motto'],
+      photos:
+          json?['photos'] != null ? List<String>.from(json?['photos']) : null,
+      address: json?['alamat'],
+      phoneNumber: json?['phone'],
+      schedules: json?['jadwal'],
+      listUid: json?['anggota']?.cast<Map>(),
     );
   }
 

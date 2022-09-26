@@ -321,9 +321,10 @@ class _AppoinmentToday extends StatelessWidget {
                               BlocBuilder<JadwalCubit, JadwalState>(
                                 builder: (context, state) {
                                   return Text(
-                                    DateFormat('HH:mm').format(state
-                                            .jadwalPasienModel?.first.tanggal ??
-                                        DateTime.now()),
+                                    DateFormat('HH:mm').format(
+                                      state.jadwalPasienModel?.first.tanggal ??
+                                          DateTime.now(),
+                                    ),
                                     style: const TextStyle(color: Colors.white),
                                   );
                                 },

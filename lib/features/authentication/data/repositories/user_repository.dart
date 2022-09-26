@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eimunisasi_nakes/features/klinik/data/models/klinik.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/user.dart';
@@ -82,7 +83,20 @@ class UserRepository {
         .doc(_firebaseAuth.currentUser!.uid)
         .get();
     if (user.exists) {
-      final userResult = UserData.fromMap(user.data(), user.id);
+      UserData userResult = UserData.fromMap(user.data(), user.id);
+
+      final klinik = await _firestore
+          .collection('klinik')
+          .doc(user.data()?['clinicID'])
+          .get();
+
+      if (klinik.exists) {
+        userResult = userResult.copyWith(
+          clinic: Klinik.fromJson(
+            klinik.data(),
+          ),
+        );
+      }
       return userResult;
     } else {
       return null;

@@ -3,6 +3,7 @@ import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authenticati
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileNakesScreen extends StatelessWidget {
   const ProfileNakesScreen({Key? key}) : super(key: key);
@@ -35,9 +36,9 @@ class ProfileNakesScreen extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Flexible(
+                      Flexible(
                         child: _GambarNakes(
-                          gambarNakesUrl: null,
+                          gambarNakesUrl: state.user?.clinic?.photos,
                         ),
                       ),
                       Flexible(
@@ -45,32 +46,33 @@ class ProfileNakesScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             _NamaNakes(
-                              namaNakes: state.user?.email,
+                              namaNakes: state.user?.fullName,
                             ),
-                            const Text(
-                              'Profesi/Spesialis',
+                            Text(
+                              state.user?.profession ?? '',
                             ),
-                            const Text(
-                              'Biografi',
+                            Text(
+                              state.user?.birthDate
+                                      .toString()
+                                      .split(' ')
+                                      .first ??
+                                  '',
                             ),
-                            const _KontakCardNakes(
-                              nomorTelepon: '085211011002',
-                              alamat:
-                                  'Jl. Raya Cibadak No. 1, Cibadak, Cimahi Utara, Kota Cimahi, Jawa Barat 40512',
-                            ),
+                            state.user?.phone != null && state.user?.phone != ''
+                                ? _KontakCardNakes(
+                                    nomorTelepon: state.user?.phone,
+                                  )
+                                : const SizedBox()
                           ],
                         ),
                       ),
                     ],
                   ),
-                  const _TempatPraktekNakes(
-                    namaTempatPraktek: 'Klinik Cibadak',
+                  _TempatPraktekNakes(
+                    namaTempatPraktek: state.user?.clinic?.name,
                   ),
-                  const _JadwalNakes(
-                    jadwal: {
-                      'hari': ['Senin', 'Rabu'],
-                      'waktu': ['08.00 - 16.00', '08.00 - 16.00']
-                    },
+                  _JadwalNakes(
+                    jadwal: state.user?.schedules,
                   ),
                 ],
               );
@@ -111,16 +113,14 @@ class _GambarNakes extends StatelessWidget {
       child: CachedNetworkImage(
           fit: BoxFit.cover,
           imageUrl: gambarNakesUrl?.last ??
-              'https://cdn0-production-images-kly.akamaized.net/WzN7WyLJIUKB0rcUbnpm1MlKKzI=/640x360/smart/filters:quality(75):strip_icc():format(jpeg)/kly-media-production/medias/2368558/original/008993600_1538023053-Klinik_Mediska_CIkampek.jpg'),
+              'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png'),
     );
   }
 }
 
 class _KontakCardNakes extends StatelessWidget {
   final String? nomorTelepon;
-  final String? alamat;
-  const _KontakCardNakes(
-      {Key? key, required this.nomorTelepon, required this.alamat})
+  const _KontakCardNakes({Key? key, required this.nomorTelepon})
       : super(key: key);
 
   @override
@@ -135,14 +135,42 @@ class _KontakCardNakes extends StatelessWidget {
               FontAwesomeIcons.phone,
               color: Theme.of(context).primaryColor,
             ),
-            onPressed: () {},
+            onPressed: () async {
+              final Uri _phoneLaunchUri = Uri(
+                scheme: 'tel',
+                path: nomorTelepon,
+              );
+              if (await canLaunch(_phoneLaunchUri.toString())) {
+                await launch(_phoneLaunchUri.toString());
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Tidak dapat membuka aplikasi telepon'),
+                  ),
+                );
+              }
+            },
           ),
           IconButton(
             icon: FaIcon(
               FontAwesomeIcons.solidMessage,
               color: Theme.of(context).primaryColor,
             ),
-            onPressed: () {},
+            onPressed: () async {
+              final Uri _smsLaunchUri = Uri(
+                scheme: 'sms',
+                path: nomorTelepon,
+              );
+              if (await canLaunch(_smsLaunchUri.toString())) {
+                await launch(_smsLaunchUri.toString());
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Tidak dapat membuka aplikasi sms'),
+                  ),
+                );
+              }
+            },
           ),
         ],
       ),
@@ -198,22 +226,34 @@ class _JadwalNakes extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(jadwal?['hari'][0] ?? ''),
-              Text(jadwal?['waktu'][0] ?? ''),
-            ],
-          ),
+          ...jadwal?.entries.map(
+                (e) => Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(e.key ?? ''),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            ...e.value
+                                .map(
+                                  (e) => Text(e ?? ''),
+                                )
+                                .toList(),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const Divider(
+                      thickness: 1,
+                    ),
+                  ],
+                ),
+              ) ??
+              [],
           const SizedBox(
             height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(jadwal!['hari'][1] ?? ''),
-              Text(jadwal!['waktu'][1] ?? ''),
-            ],
           ),
         ],
       ),
