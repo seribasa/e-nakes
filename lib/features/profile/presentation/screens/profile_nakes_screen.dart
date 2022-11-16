@@ -140,8 +140,8 @@ class _KontakCardNakes extends StatelessWidget {
                 scheme: 'tel',
                 path: nomorTelepon,
               );
-              if (await canLaunch(_phoneLaunchUri.toString())) {
-                await launch(_phoneLaunchUri.toString());
+              if (await canLaunchUrl(_phoneLaunchUri)) {
+                await launchUrl(_phoneLaunchUri);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
