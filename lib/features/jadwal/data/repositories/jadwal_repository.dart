@@ -17,7 +17,7 @@ class JadwalRepository {
     List<JadwalPasienModel>? result = [];
     final jadwalPasien = await _firestore
         .collection(collection)
-        .where('id_nakes', isEqualTo: uid)
+        .where('medic_id', isEqualTo: uid)
         .get();
     for (var element in jadwalPasien.docs) {
       JadwalPasienModel dataJadwal = JadwalPasienModel.fromMap(
@@ -25,10 +25,10 @@ class JadwalRepository {
         element.id,
       );
       final pasien = await _pasienRepository.getPasienByID(
-        searchQuery: element.data()['id_pasien'],
+        searchQuery: element.data()['patient_id'],
       );
       final orangtua = await _pasienRepository.getOrangtuaByID(
-        searchQuery: element.data()['id_orangtua'],
+        searchQuery: element.data()['parent_id'],
       );
       dataJadwal = dataJadwal.copyWith(
         anak: pasien,
@@ -44,9 +44,9 @@ class JadwalRepository {
     List<JadwalPasienModel>? result;
     final jadwalPasien = await _firestore
         .collection(collection)
-        .where('id_nakes', isEqualTo: uid)
+        .where('medic_id', isEqualTo: uid)
         .where(
-          'tanggal',
+          'appointment_date',
           isGreaterThanOrEqualTo: Timestamp.fromDate(date),
           isLessThan: Timestamp.fromDate(
             date.add(const Duration(days: 1)),
@@ -61,10 +61,10 @@ class JadwalRepository {
           element.id,
         );
         final pasien = await _pasienRepository.getPasienByID(
-          searchQuery: element.data()['id_pasien'],
+          searchQuery: element.data()['patient_id'],
         );
         final orangtua = await _pasienRepository.getOrangtuaByID(
-          searchQuery: element.data()['id_orangtua'],
+          searchQuery: element.data()['parent_id'],
         );
         dataJadwal = dataJadwal.copyWith(
           anak: pasien,

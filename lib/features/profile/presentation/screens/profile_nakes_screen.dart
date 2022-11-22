@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eimunisasi_nakes/features/authentication/data/models/user.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -73,6 +74,7 @@ class ProfileNakesScreen extends StatelessWidget {
                   ),
                   _JadwalNakes(
                     jadwal: state.user?.schedules,
+                    jadwalImunisasi: state.user?.schedulesImunisasi,
                   ),
                 ],
               );
@@ -208,8 +210,10 @@ class _TempatPraktekNakes extends StatelessWidget {
 }
 
 class _JadwalNakes extends StatelessWidget {
-  final Map? jadwal;
-  const _JadwalNakes({Key? key, required this.jadwal}) : super(key: key);
+  final List<JadwalPraktek>? jadwal;
+  final List<JadwalPraktek>? jadwalImunisasi;
+  const _JadwalNakes({Key? key, required this.jadwal, this.jadwalImunisasi})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -226,28 +230,35 @@ class _JadwalNakes extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          ...jadwal?.entries.map(
-                (e) => Column(
+          ...jadwal?.map(
+                (e) => Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(e.key ?? ''),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            ...e.value
-                                .map(
-                                  (e) => Text(e ?? ''),
-                                )
-                                .toList(),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const Divider(
-                      thickness: 1,
-                    ),
+                    Text(e.hari ?? ''),
+                    const Divider(thickness: 1),
+                    Text(e.jam ?? ''),
+                  ],
+                ),
+              ) ??
+              [],
+          const SizedBox(
+            height: 10,
+          ),
+          const Align(
+            alignment: Alignment.centerLeft,
+            child: Text('Jadwal Praktek Imunisasi',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          ...jadwalImunisasi?.map(
+                (e) => Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(e.hari ?? ''),
+                    const Divider(thickness: 1),
+                    Text(e.jam ?? ''),
                   ],
                 ),
               ) ??

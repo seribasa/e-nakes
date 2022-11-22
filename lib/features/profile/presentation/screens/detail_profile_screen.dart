@@ -292,7 +292,7 @@ class _ProfesiForm extends StatelessWidget {
 }
 
 class _JadwalForm extends StatelessWidget {
-  final Map? initialValue;
+  final List<JadwalPraktek>? initialValue;
   const _JadwalForm({Key? key, this.initialValue}) : super(key: key);
 
   @override
@@ -305,7 +305,7 @@ class _JadwalForm extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         const SizedBox(width: 5),
-        ...initialValue?.entries.map(
+        ...initialValue?.map(
               (e) => Column(
                 children: [
                   Container(
@@ -315,26 +315,21 @@ class _JadwalForm extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.grey[200],
                     ),
-                    child: Column(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(e.key ?? '',
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                )),
-                            Column(
-                              children: [
-                                ...e.value
-                                    .map(
-                                      (e) => Text(e ?? ''),
-                                    )
-                                    .toList(),
-                              ],
-                            ),
-                          ],
+                        Text(
+                          e.hari ?? '',
+                          style: const TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
+                        Text(
+                          e.jam ?? '',
+                          style: const TextStyle(
+                            fontSize: 15,
+                          ),
                         ),
                       ],
                     ),

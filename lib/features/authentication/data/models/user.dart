@@ -21,6 +21,7 @@ class UserData extends Equatable {
     this.nik,
     this.profession,
     this.schedules,
+    this.schedulesImunisasi,
     this.clinic,
   });
 
@@ -52,7 +53,8 @@ class UserData extends Equatable {
   final Klinik? clinic;
 
   /// Map<Hari, List<jam>>
-  final Map<String, dynamic>? schedules;
+  final List<JadwalPraktek>? schedules;
+  final List<JadwalPraktek>? schedulesImunisasi;
 
   /// Empty user which represents an unauthenticated user.
   static const empty = UserData(id: '');
@@ -77,7 +79,12 @@ class UserData extends Equatable {
       kartuKeluarga: map?['kartuKeluarga'],
       nik: map?['nik'],
       profession: map?['profesi'],
-      schedules: map?['jadwal'],
+      schedules: (map?['jadwal'] as List?)
+          ?.map((e) => JadwalPraktek.fromMap(e))
+          .toList(),
+      schedulesImunisasi: (map?['jadwalImunisasi'] as List?)
+          ?.map((e) => JadwalPraktek.fromMap(e))
+          .toList(),
     );
   }
   Map<String, dynamic> toMap() {
@@ -106,7 +113,8 @@ class UserData extends Equatable {
     String? kartuKeluarga,
     String? nik,
     String? profession,
-    Map<String, dynamic>? schedules,
+    List<JadwalPraktek>? schedules,
+    List<JadwalPraktek>? schedulesImunisasi,
     Klinik? clinic,
   }) {
     return UserData(
@@ -121,6 +129,7 @@ class UserData extends Equatable {
       nik: nik ?? this.nik,
       profession: profession ?? this.profession,
       schedules: schedules ?? this.schedules,
+      schedulesImunisasi: schedulesImunisasi ?? this.schedulesImunisasi,
       clinic: clinic ?? this.clinic,
     );
   }
@@ -138,6 +147,34 @@ class UserData extends Equatable {
         nik,
         profession,
         schedules,
+        schedulesImunisasi,
         clinic,
       ];
+}
+
+class JadwalPraktek extends Equatable {
+  final String? hari;
+  final String? jam;
+
+  const JadwalPraktek({
+    this.hari,
+    this.jam,
+  });
+
+  factory JadwalPraktek.fromMap(Map data) {
+    return JadwalPraktek(
+      hari: data['hari'],
+      jam: data['jam'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      "hari": hari,
+      "jam": jam,
+    };
+  }
+
+  @override
+  List<Object?> get props => [hari, jam];
 }
