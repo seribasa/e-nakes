@@ -269,7 +269,7 @@ class _AppoinmentToday extends StatelessWidget {
                                   child: LinearProgressIndicator());
                             }
                             return Text(
-                              state.jadwalPasienModel?.first.pasien?.nama ??
+                              state.jadwalPasienModel?.first.anak?.nama ??
                                   'Tidak ada pasien',
                               style: const TextStyle(
                                 color: Colors.white,
