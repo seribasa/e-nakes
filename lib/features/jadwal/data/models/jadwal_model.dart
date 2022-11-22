@@ -1,75 +1,76 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eimunisasi_nakes/core/models/orang_tua_model.dart';
+import 'package:eimunisasi_nakes/features/authentication/data/models/user.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pasien_model.dart';
 import 'package:equatable/equatable.dart';
 
 class JadwalPasienModel extends Equatable {
   final String? id;
   final DateTime? tanggal;
-  final String? idPasien;
-  final PasienModel? pasien;
-  final String? idOrangtua;
+  final PasienModel? anak;
   final OrangtuaModel? orangtua;
-  final String? idNakes;
+  final UserData? nakes;
+  final String? tujuan;
+  final String? desc;
   final String? notes;
 
   const JadwalPasienModel({
     this.id,
     this.tanggal,
-    this.idPasien,
-    this.pasien,
-    this.idOrangtua,
+    this.anak,
     this.orangtua,
-    this.idNakes,
+    this.nakes,
+    this.tujuan,
+    this.desc,
     this.notes,
   });
 
   JadwalPasienModel copyWith({
     String? id,
     DateTime? tanggal,
-    String? idPasien,
-    PasienModel? pasien,
-    String? idOrangtua,
+    PasienModel? anak,
     OrangtuaModel? orangtua,
-    String? idNakes,
+    UserData? nakes,
+    String? tujuan,
+    String? desc,
     String? notes,
   }) {
     return JadwalPasienModel(
       id: id ?? this.id,
       tanggal: tanggal ?? this.tanggal,
-      idPasien: idPasien ?? this.idPasien,
-      pasien: pasien ?? this.pasien,
-      idOrangtua: idOrangtua ?? this.idOrangtua,
+      anak: anak ?? this.anak,
       orangtua: orangtua ?? this.orangtua,
-      idNakes: idNakes ?? this.idNakes,
+      nakes: nakes ?? this.nakes,
+      tujuan: tujuan ?? this.tujuan,
+      desc: desc ?? this.desc,
       notes: notes ?? this.notes,
     );
   }
 
   @override
   List<Object?> get props =>
-      [id, tanggal, idPasien, idOrangtua, idNakes, notes, pasien, orangtua];
-
+      [id, tanggal, anak, orangtua, nakes, tujuan, desc, notes];
   factory JadwalPasienModel.fromMap(Map<String, dynamic> map, String docId) {
     return JadwalPasienModel(
       id: docId,
-      tanggal: ((map['tanggal'] != null)
-          ? (map['tanggal'] as Timestamp).toDate()
+      tanggal: ((map['appointment_date'] != null)
+          ? (map['appointment_date'] as Timestamp).toDate()
           : null),
-      idPasien: map['id_pasien'],
-      idOrangtua: map['id_orangtua'],
-      idNakes: map['id_nakes'],
       notes: map['notes'],
+      desc: map['appointment_desc'],
+      tujuan: map['purpose'],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'tanggal': tanggal,
-      'id_pasien': idPasien,
-      'id_orangtua': idOrangtua,
-      'id_nakes': idNakes,
+      'appointment_date': tanggal,
+      'appointment_desc': desc,
+      'medic_id': nakes?.id,
       'notes': notes,
+      'parent_id': orangtua?.id,
+      'patient_id': anak?.id,
+      'purpose': tujuan,
     };
   }
 }

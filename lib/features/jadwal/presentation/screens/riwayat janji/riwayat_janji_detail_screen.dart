@@ -83,7 +83,7 @@ class _DetailJanjiCard extends StatelessWidget {
               children: [
                 const Text('Nama Anak'),
                 const SizedBox(width: 10),
-                Text(jadwalPasienModel?.pasien?.nama ?? '-'),
+                Text(jadwalPasienModel?.anak?.nama ?? '-'),
               ],
             ),
             Row(
@@ -91,7 +91,7 @@ class _DetailJanjiCard extends StatelessWidget {
               children: [
                 const Text('Umur Anak'),
                 const SizedBox(width: 10),
-                Text(jadwalPasienModel?.pasien?.umur ?? '-'),
+                Text(jadwalPasienModel?.anak?.umur ?? '-'),
               ],
             ),
           ],

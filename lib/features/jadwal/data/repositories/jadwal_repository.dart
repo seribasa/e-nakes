@@ -31,7 +31,7 @@ class JadwalRepository {
         searchQuery: element.data()['id_orangtua'],
       );
       dataJadwal = dataJadwal.copyWith(
-        pasien: pasien,
+        anak: pasien,
         orangtua: orangtua,
       );
       result.add(dataJadwal);
@@ -67,7 +67,7 @@ class JadwalRepository {
           searchQuery: element.data()['id_orangtua'],
         );
         dataJadwal = dataJadwal.copyWith(
-          pasien: pasien,
+          anak: pasien,
           orangtua: orangtua,
         );
         result.add(dataJadwal);
