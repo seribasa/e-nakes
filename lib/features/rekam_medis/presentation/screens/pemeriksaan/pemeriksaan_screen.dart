@@ -73,8 +73,10 @@ class _ListPasien extends StatelessWidget {
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    VerifikasiPasienScreen(pasien: pasien)),
+                                builder: (context) => VerifikasiPasienScreen(
+                                      pasien: pasien,
+                                      jadwalPasienModel: null,
+                                    )),
                           );
                         },
                       );

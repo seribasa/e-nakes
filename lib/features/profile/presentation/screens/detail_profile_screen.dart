@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eimunisasi_nakes/core/widgets/custom_text_field.dart';
 import 'package:eimunisasi_nakes/features/authentication/data/models/user.dart';
+import 'package:eimunisasi_nakes/features/authentication/data/repositories/user_repository.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:eimunisasi_nakes/features/profile/presentation/screens/form_ganti_pin_screen.dart';
 import 'package:eimunisasi_nakes/features/profile/presentation/screens/profile_nakes_screen.dart';
@@ -8,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+
+import '../../../../core/widgets/image_picker.dart';
 
 class DetailProfileScreen extends StatelessWidget {
   const DetailProfileScreen({Key? key}) : super(key: key);
@@ -27,14 +30,10 @@ class DetailProfileScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Center(
-                      child: CircleAvatar(
-                        radius: 50,
-                        backgroundImage: CachedNetworkImageProvider(
-                          "https://avatars.githubusercontent.com/u/56538058?v=4",
-                        ),
-                      ),
-                    ),
+                    Center(
+                        child: _ProfilePicture(
+                      imageUrl: state.user?.photo,
+                    )),
                     const SizedBox(height: 10),
                     _ProfilNakesSection(
                       user: state.user,
@@ -51,6 +50,109 @@ class DetailProfileScreen extends StatelessWidget {
         }
         return Container();
       },
+    );
+  }
+}
+
+class _ProfilePicture extends StatelessWidget {
+  final String? imageUrl;
+  const _ProfilePicture({Key? key, this.imageUrl}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final _userRepository = UserRepository();
+    Future<void> showAndSaveImage() async {
+      ModalPickerImage().showPicker(context, (val) {
+        if (val != null) {
+          _userRepository
+              .updateUserAvatar(val)
+              .then(
+                (value) => ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Berhasil mengubah foto profil'),
+                  ),
+                ),
+              )
+              .catchError(
+                (e) => ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Gagal mengubah foto profil'),
+                  ),
+                ),
+              );
+        }
+      });
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Column(
+        children: [
+          imageUrl == null
+              ? CircleAvatar(
+                  foregroundColor: Colors.white,
+                  radius: 50.0,
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: CircleAvatar(
+                          foregroundColor: Colors.white,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary,
+                          radius: 15,
+                          child: IconButton(
+                              alignment: Alignment.center,
+                              icon: const Icon(
+                                Icons.photo_camera,
+                                size: 15.0,
+                              ),
+                              onPressed: () async {
+                                showAndSaveImage();
+                              }),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : CircleAvatar(
+                  radius: 50.0,
+                  backgroundColor: Colors.transparent,
+                  backgroundImage: const CachedNetworkImageProvider(
+                      'https://i.pinimg.com/originals/d2/4d/db/d24ddb8271b8ea9b4bbf4b67df8cbc01.gif',
+                      scale: 0.1),
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.center,
+                        child: CircleAvatar(
+                          radius: 50,
+                          backgroundColor: Colors.transparent,
+                          backgroundImage: CachedNetworkImageProvider(
+                              imageUrl ?? '',
+                              scale: 0.1),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: CircleAvatar(
+                          radius: 15,
+                          child: IconButton(
+                              alignment: Alignment.center,
+                              icon: const Icon(
+                                Icons.photo_camera,
+                                size: 15.0,
+                              ),
+                              onPressed: () async {
+                                showAndSaveImage();
+                              }),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+        ],
+      ),
     );
   }
 }

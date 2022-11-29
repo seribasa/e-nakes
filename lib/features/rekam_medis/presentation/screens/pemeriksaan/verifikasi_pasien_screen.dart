@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
+import 'package:eimunisasi_nakes/features/jadwal/data/models/jadwal_model.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pasien_model.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/logic/form_pemeriksaan/form_pemeriksaan_vaksinasi_cubit.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/pemeriksaan/form_pemeriksaan_screen.dart';
@@ -9,16 +10,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class VerifikasiPasienScreen extends StatelessWidget {
-  final PasienModel pasien;
+  final JadwalPasienModel? jadwalPasienModel;
+  final PasienModel? pasien;
   final Barcode? result;
-  const VerifikasiPasienScreen({Key? key, this.result, required this.pasien})
+  const VerifikasiPasienScreen(
+      {Key? key,
+      this.result,
+      required this.pasien,
+      required this.jadwalPasienModel})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final String? dataBarcode = result?.code;
     final String? nama =
-        dataBarcode != null ? jsonDecode(dataBarcode)["nama"] : pasien.nama;
+        dataBarcode != null ? jsonDecode(dataBarcode)["nama"] : pasien?.nama;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Verifikasi Pasien'),
@@ -31,19 +37,19 @@ class VerifikasiPasienScreen extends StatelessWidget {
             children: [
               _IdentitasPasien(
                 namaAnak: '$nama',
-                umurAnak: pasien.umur.toString(),
-                namaOrangTua: pasien.nik,
-                alamat: pasien.tempatLahir,
+                umurAnak: pasien?.umur.toString(),
+                namaOrangTua: pasien?.nik,
+                alamat: pasien?.tempatLahir,
               ),
               const SizedBox(height: 10),
-              const _JenisVaksin(
-                namaVaksin: 'Tahap 1 Vaksin Polio',
+              _JenisVaksin(
+                namaVaksin: jadwalPasienModel?.notes,
               )
             ],
           ),
         ),
       ),
-      bottomNavigationBar: _NextButton(pasien: pasien),
+      bottomNavigationBar: _NextButton(pasien: pasien ?? const PasienModel()),
     );
   }
 }
@@ -98,7 +104,7 @@ class _JenisVaksin extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Jenis Vaksin',
+          'Deskripsi',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         Container(
@@ -111,7 +117,7 @@ class _JenisVaksin extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('$namaVaksin'),
+              Text(namaVaksin ?? ''),
             ],
           ),
         ),

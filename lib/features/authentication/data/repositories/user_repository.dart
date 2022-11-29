@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eimunisasi_nakes/features/klinik/data/models/klinik.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import '../models/user.dart';
 
@@ -94,6 +96,8 @@ class UserRepository {
         userResult = userResult.copyWith(
           clinic: Klinik.fromJson(
             klinik.data(),
+          ).copyWith(
+            id: klinik.id,
           ),
         );
       }
@@ -101,5 +105,23 @@ class UserRepository {
     } else {
       return null;
     }
+  }
+
+  // add new and update avatar
+  Future<void> updateUserAvatar(String url) => _firestore
+      .collection('users_medis')
+      .doc(_firebaseAuth.currentUser?.uid)
+      .update({'photoURL': url});
+
+  //Upload Image firebase Storage
+  Future<String> uploadImage(File imageFile) async {
+    final fileName = _firebaseAuth.currentUser?.uid ?? 'user';
+
+    firebase_storage.Reference ref =
+        firebase_storage.FirebaseStorage.instance.ref().child(fileName);
+
+    final result = await ref.putFile(imageFile);
+    final fileUrl = await result.ref.getDownloadURL();
+    return fileUrl;
   }
 }

@@ -22,8 +22,8 @@ class KeanggotaanKlinikScreen extends StatelessWidget {
                 child: CircularProgressIndicator(),
               );
             } else if (state is KlinikFailure) {
-              return Center(
-                child: Text('Error: ${state.error}'),
+              return const Center(
+                child: Text('Data gagal dimuat'),
               );
             } else if (state is KlinikFetchDataAnggota) {
               return Column(

@@ -9,6 +9,7 @@ class PasienModel extends Equatable {
   final String? jenisKelamin;
   final DateTime? tanggalLahir;
   final String? golonganDarah;
+  final String? photoUrl;
 
   String get umur {
     if (tanggalLahir != null) {
@@ -39,6 +40,7 @@ class PasienModel extends Equatable {
     this.tanggalLahir,
     this.tempatLahir,
     this.golonganDarah,
+    this.photoUrl,
   });
 
   @override
@@ -50,6 +52,7 @@ class PasienModel extends Equatable {
         tanggalLahir,
         tempatLahir,
         golonganDarah,
+        photoUrl,
       ];
 
   factory PasienModel.fromMap(Map<String, dynamic> map, String docId) {
@@ -63,6 +66,7 @@ class PasienModel extends Equatable {
           : null),
       tempatLahir: map['tempat_lahir'],
       golonganDarah: map['golongan_darah'],
+      photoUrl: map['photo_url'],
     );
   }
 
@@ -74,6 +78,7 @@ class PasienModel extends Equatable {
       'tanggal_lahir': tanggalLahir,
       'tempat_lahir': tempatLahir,
       'gol_darah': golonganDarah,
+      'photo_url': photoUrl,
     };
   }
 }

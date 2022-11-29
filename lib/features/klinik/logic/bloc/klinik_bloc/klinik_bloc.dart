@@ -14,12 +14,13 @@ class KlinikBloc extends Bloc<KlinikEvent, KlinikState> {
     on<KlinikProfilePressed>(_fetchDataKlinik);
     on<KlinikKeanggotaanPressed>(_fetchDataKeanggotaan);
   }
-  _fetchDataKlinik(
+  Future<void> _fetchDataKlinik(
       KlinikProfilePressed event, Emitter<KlinikState> emit) async {
     emit(KlinikLoading());
     try {
+      // 31VERUiwjrZyB6NfiGPK
       DocumentSnapshot<Map<String, dynamic>> data =
-          await _klinikRepository.getKlinik(id: '31VERUiwjrZyB6NfiGPK');
+          await _klinikRepository.getKlinik(id: event.clinicId);
       if (data.exists) {
         Klinik dataKlinik = Klinik.fromJson(data.data()!);
         emit(KlinikFetchData(klinik: dataKlinik));
@@ -31,12 +32,13 @@ class KlinikBloc extends Bloc<KlinikEvent, KlinikState> {
     }
   }
 
-  _fetchDataKeanggotaan(
+  Future<void> _fetchDataKeanggotaan(
       KlinikKeanggotaanPressed event, Emitter<KlinikState> emit) async {
     emit(KlinikLoading());
+    // 31VERUiwjrZyB6NfiGPK
     try {
       DocumentSnapshot<Map<String, dynamic>> data =
-          await _klinikRepository.getAnggotaKlinik(id: '31VERUiwjrZyB6NfiGPK');
+          await _klinikRepository.getAnggotaKlinik(id: event.clinicId);
       if (data.exists) {
         List<AnggotaKlinik> dataKlinik = data
             .get('listMember')
@@ -48,6 +50,8 @@ class KlinikBloc extends Bloc<KlinikEvent, KlinikState> {
       }
     } on FirebaseException catch (e) {
       emit(KlinikFailure(error: e.message));
+    } catch (e) {
+      emit(KlinikFailure(error: e.toString()));
     }
   }
 }

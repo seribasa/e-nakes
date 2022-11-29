@@ -17,6 +17,28 @@ class Klinik {
     this.listUid,
     this.motto,
   });
+//  copywith
+  Klinik copyWith({
+    String? id,
+    String? name,
+    String? motto,
+    List<String>? photos,
+    String? address,
+    String? phoneNumber,
+    Map? schedules,
+    Map<int, String>? listUid,
+  }) {
+    return Klinik(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      motto: motto ?? this.motto,
+      photos: photos ?? this.photos,
+      address: address ?? this.address,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      schedules: schedules ?? this.schedules,
+      listUid: listUid ?? this.listUid,
+    );
+  }
 
   factory Klinik.fromJson(Map<String, dynamic>? json) {
     return Klinik(

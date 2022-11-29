@@ -20,7 +20,6 @@ class JadwalCubit extends Cubit<JadwalState> {
     try {
       final listJadwal =
           await _jadwalRepository.getJadwalActivity(uid: userData?.id);
-      print(listJadwal);
       if (listJadwal != null && listJadwal.isNotEmpty) {
         listJadwal.sort((a, b) => a.tanggal!.compareTo(b.tanggal!));
       }

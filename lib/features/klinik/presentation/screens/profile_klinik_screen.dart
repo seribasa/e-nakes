@@ -1,8 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eimunisasi_nakes/core/extension/string_extension.dart';
 import 'package:eimunisasi_nakes/features/klinik/logic/bloc/klinik_bloc/klinik_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../../../../core/common/method_helper.dart';
 
 class ProfileKlinikScreen extends StatelessWidget {
   const ProfileKlinikScreen({Key? key}) : super(key: key);
@@ -24,8 +28,8 @@ class ProfileKlinikScreen extends StatelessWidget {
                 child: CircularProgressIndicator(),
               );
             } else if (state is KlinikFailure) {
-              return Center(
-                child: Text('Error: ${state.error}'),
+              return const Center(
+                child: Text('Data gagal dimuat'),
               );
             } else if (state is KlinikFetchData) {
               return Column(
@@ -40,6 +44,7 @@ class ProfileKlinikScreen extends StatelessWidget {
                   _KontakCardKlinik(
                     nomorTelepon: state.klinik?.phoneNumber,
                     alamat: state.klinik?.address,
+                    namaKlinik: state.klinik?.name,
                   ),
                   _JadwalKlinik(
                     jadwal: state.klinik?.schedules,
@@ -102,8 +107,12 @@ class _GambarKlinik extends StatelessWidget {
 class _KontakCardKlinik extends StatelessWidget {
   final String? nomorTelepon;
   final String? alamat;
+  final String? namaKlinik;
   const _KontakCardKlinik(
-      {Key? key, required this.nomorTelepon, required this.alamat})
+      {Key? key,
+      required this.nomorTelepon,
+      required this.namaKlinik,
+      this.alamat})
       : super(key: key);
 
   @override
@@ -119,17 +128,62 @@ class _KontakCardKlinik extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              FaIcon(
-                FontAwesomeIcons.phone,
-                color: Theme.of(context).primaryColor,
+              IconButton(
+                icon: FaIcon(
+                  FontAwesomeIcons.phone,
+                  color: Theme.of(context).primaryColor,
+                ),
+                onPressed: () async {
+                  final Uri _phoneLaunchUri = Uri(
+                    scheme: 'tel',
+                    path: nomorTelepon,
+                  );
+                  if (await canLaunchUrl(_phoneLaunchUri)) {
+                    await launchUrl(_phoneLaunchUri);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Tidak dapat membuka aplikasi telepon'),
+                      ),
+                    );
+                  }
+                },
               ),
-              FaIcon(
-                FontAwesomeIcons.envelopesBulk,
-                color: Theme.of(context).primaryColor,
+              IconButton(
+                icon: FaIcon(
+                  FontAwesomeIcons.solidMessage,
+                  color: Theme.of(context).primaryColor,
+                ),
+                onPressed: () async {
+                  final Uri _smsLaunchUri = Uri(
+                    scheme: 'sms',
+                    path: nomorTelepon,
+                  );
+                  if (await canLaunchUrl(_smsLaunchUri)) {
+                    await launchUrl(_smsLaunchUri);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Tidak dapat membuka aplikasi sms'),
+                      ),
+                    );
+                  }
+                },
               ),
-              FaIcon(
-                FontAwesomeIcons.mapLocationDot,
-                color: Theme.of(context).primaryColor,
+              IconButton(
+                icon: FaIcon(
+                  FontAwesomeIcons.mapLocationDot,
+                  color: Theme.of(context).primaryColor,
+                ),
+                onPressed: () async {
+                  navigateGoogleMapTo(namaKlinik ?? '').catchError((e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Tidak dapat membuka aplikasi maps'),
+                      ),
+                    );
+                  });
+                },
               ),
             ],
           )
@@ -158,23 +212,28 @@ class _JadwalKlinik extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(jadwal!['hari'][0] ?? ''),
-              Text(jadwal!['waktu'][0] ?? ''),
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(jadwal!['hari'][1] ?? ''),
-              Text(jadwal!['waktu'][1] ?? ''),
-            ],
-          ),
+          () {
+            if (jadwal == null) {
+              return const Center(child: Text('Tidak ada jadwal'));
+            }
+            final length = jadwal?['hari'].length ?? 0;
+            List<Widget> list = [];
+            for (int i = 0; i < length; i++) {
+              list.add(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(jadwal!['hari'][i]?.toString().capitalize() ?? ''),
+                    Text(jadwal!['waktu'][i] ?? ''),
+                  ],
+                ),
+              );
+              list.add(const SizedBox(height: 10));
+            }
+            return Column(
+              children: list,
+            );
+          }(),
         ],
       ),
     );

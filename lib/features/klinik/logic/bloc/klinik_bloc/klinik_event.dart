@@ -8,11 +8,17 @@ class KlinikEvent extends Equatable {
 }
 
 class KlinikKeanggotaanPressed extends KlinikEvent {
+  final String? clinicId;
+
+  const KlinikKeanggotaanPressed({required this.clinicId});
   @override
   String toString() => 'KeanggotaanKlinikPressed';
 }
 
 class KlinikProfilePressed extends KlinikEvent {
+  final String? clinicId;
+
+  const KlinikProfilePressed({required this.clinicId});
   @override
   String toString() => 'KlinikProfilePressed';
 }

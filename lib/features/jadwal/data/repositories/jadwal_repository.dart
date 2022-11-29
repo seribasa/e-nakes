@@ -39,6 +39,27 @@ class JadwalRepository {
     return result;
   }
 
+  Future<JadwalPasienModel?> getJadwalActivityById(
+      {required String? id}) async {
+    final jadwalPasien = await _firestore.collection(collection).doc(id).get();
+    JadwalPasienModel dataJadwal = JadwalPasienModel.fromMap(
+      jadwalPasien.data() ?? {},
+      jadwalPasien.id,
+    );
+    final pasien = await _pasienRepository.getPasienByID(
+      searchQuery: jadwalPasien.data()?['patient_id'],
+    );
+    final orangtua = await _pasienRepository.getOrangtuaByID(
+      searchQuery: jadwalPasien.data()?['parent_id'],
+    );
+    dataJadwal = dataJadwal.copyWith(
+      anak: pasien,
+      orangtua: orangtua,
+    );
+
+    return dataJadwal;
+  }
+
   Future<List<JadwalPasienModel>?> getSpecificJadwalActivity(
       {required String? uid, required DateTime date}) async {
     List<JadwalPasienModel>? result;

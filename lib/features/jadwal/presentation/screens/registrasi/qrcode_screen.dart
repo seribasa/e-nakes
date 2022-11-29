@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pasien_model.dart';
+import 'package:eimunisasi_nakes/features/jadwal/data/repositories/jadwal_repository.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/pemeriksaan/verifikasi_pasien_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -50,12 +50,10 @@ class _QrRegistrasiPemeriksaanState extends State<QrRegistrasiPemeriksaan> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    if (result != null)
-                      Text(
-                          'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
-                    else
-                      const Text('Scan a code',
-                          style: TextStyle(color: Colors.white)),
+                    const Text(
+                      'Scan qr code dari pasien',
+                      style: TextStyle(color: Colors.white),
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -135,21 +133,43 @@ class _QrRegistrasiPemeriksaanState extends State<QrRegistrasiPemeriksaan> {
   }
 
   void _onQRViewCreated(QRViewController controller) {
+    final jadwalRepository = JadwalRepository();
     setState(() {
       this.controller = controller;
     });
     controller.scannedDataStream.listen((scanData) {
+      controller.pauseCamera();
       setState(() {
         result = scanData;
       });
-      Navigator.push(
+      jadwalRepository.getJadwalActivityById(id: scanData.code).then((value) {
+        Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => VerifikasiPasienScreen(
-                    result: scanData,
-                    pasien: const PasienModel(),
-                  )));
-      controller.dispose();
+            builder: (context) => VerifikasiPasienScreen(
+              jadwalPasienModel: value,
+              pasien: value?.anak,
+            ),
+          ),
+        );
+        controller.dispose();
+      }).catchError((e) {
+        log(e.toString());
+        // showSnackbar
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            // unlimited duration
+            duration: const Duration(days: 365),
+            content: const Text('Data tidak ditemukan'),
+            action: SnackBarAction(
+              label: 'Ulang',
+              onPressed: () {
+                controller.resumeCamera();
+              },
+            ),
+          ),
+        );
+      });
     });
   }
 
