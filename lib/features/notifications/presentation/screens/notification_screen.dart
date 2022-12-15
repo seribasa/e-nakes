@@ -14,7 +14,7 @@ class NotificationScreen extends StatelessWidget {
           padding: const EdgeInsets.all(10.0),
           child: Column(
             children: const [
-              _ListPesan(),
+              // _ListPesan(),
             ],
           ),
         ),
