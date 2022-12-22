@@ -82,9 +82,12 @@ class LoginPhoneCubit extends Cubit<LoginPhoneState> {
         id: userResult.user?.uid,
         phone: userResult.user?.phoneNumber,
       );
-      await _userRepository.insertUserToDatabase(
-        user: userModel,
-      );
+      final isUserExist = await _userRepository.isUserExist();
+      if (!isUserExist) {
+        await _userRepository.insertUserToDatabase(
+          user: userModel,
+        );
+      }
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on FirebaseAuthException catch (e) {
       emit(state.copyWith(

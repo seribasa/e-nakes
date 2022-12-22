@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -70,6 +71,16 @@ class UserRepository {
     await reference.set(user.toMap());
   }
 
+  Future<bool> isUserExist() async {
+    final isSignedIn = await this.isSignedIn();
+    final getUser = await this.getUser();
+    final isUserExist = getUser != null;
+    if (isSignedIn && isUserExist) {
+      return true;
+    }
+    return false;
+  }
+
   Future<void> signOut() async {
     return _firebaseAuth.signOut();
   }
@@ -108,10 +119,18 @@ class UserRepository {
   }
 
   // add new and update avatar
-  Future<void> updateUserAvatar(String url) => _firestore
-      .collection('users_medis')
-      .doc(_firebaseAuth.currentUser?.uid)
-      .update({'photoURL': url});
+  Future<void> updateUserAvatar(String url) async {
+    try {
+      await _firebaseAuth.currentUser?.updatePhotoURL(url);
+      await _firestore
+          .collection('users_medis')
+          .doc(_firebaseAuth.currentUser?.uid)
+          .update({'photoURL': url});
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
 
   //Upload Image firebase Storage
   Future<String> uploadImage(File imageFile) async {
