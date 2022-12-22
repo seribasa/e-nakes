@@ -127,6 +127,14 @@
           }
         },
         {
+          "client_id": "683504612347-d2975q6gut03dfj6t44ee3gghuv6qfaq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.peltops.eimunisasi_nakes",
+            "certificate_hash": "1ab17926ae1e5880b958fbcc1dba4965ab399739"
+          }
+        },
+        {
           "client_id": "683504612347-2inv0k0ltc7asj3cmli4junq0jg0uj4d.apps.googleusercontent.com",
           "client_type": 3
         }
