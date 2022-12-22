@@ -31,18 +31,25 @@ class UserRepository {
     );
   }
 
-  Future<void> verifyPhoneNumber(
-      {required String phone,
-      required void Function(String, int?) codeSent,
-      required void Function(FirebaseAuthException) verificationFailed}) {
+  Future<void> verifyPhoneNumber({
+    required String phone,
+    required void Function(String, int?) codeSent,
+    required void Function(FirebaseAuthException) verificationFailed,
+    required void Function(PhoneAuthCredential) verificationCompleted,
+  }) {
     return _firebaseAuth.verifyPhoneNumber(
       phoneNumber: phone,
       timeout: const Duration(seconds: 60),
       verificationFailed: verificationFailed,
       codeSent: codeSent,
       codeAutoRetrievalTimeout: (String verificationId) {},
-      verificationCompleted: (PhoneAuthCredential phoneAuthCredential) {},
+      verificationCompleted: verificationCompleted,
     );
+  }
+
+  // signin with credential
+  Future<UserCredential> signInWithCredential(PhoneAuthCredential credential) {
+    return _firebaseAuth.signInWithCredential(credential);
   }
 
   Future<UserCredential> signUpWithOTP(smsCode, verId) async {

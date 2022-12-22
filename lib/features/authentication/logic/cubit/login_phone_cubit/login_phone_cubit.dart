@@ -61,6 +61,22 @@ class LoginPhoneCubit extends Cubit<LoginPhoneState> {
           emit(state.copyWith(
               status: FormzStatus.submissionFailure, errorMessage: e.message));
         },
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          final userResult = await _userRepository.signInWithCredential(
+            credential,
+          );
+          final userModel = UserData(
+            id: userResult.user?.uid,
+            phone: userResult.user?.phoneNumber,
+          );
+          final isUserExist = await _userRepository.isUserExist();
+          if (!isUserExist) {
+            await _userRepository.insertUserToDatabase(
+              user: userModel,
+            );
+          }
+          emit(state.copyWith(status: FormzStatus.submissionSuccess));
+        },
       );
     } catch (_) {
       emit(state.copyWith(
