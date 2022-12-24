@@ -7,6 +7,11 @@ class NotificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: false,
+        foregroundColor: Colors.black,
+        centerTitle: true,
         title: const Text('Notifikasi'),
       ),
       body: SingleChildScrollView(

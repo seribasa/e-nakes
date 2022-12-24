@@ -97,11 +97,11 @@ class _NextButton extends StatelessWidget {
     return BlocListener<LocalAuthCubit, LocalAuthState>(
       listener: (context, state) {
         if (state.status.isSubmissionSuccess) {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (_) => const BottomNavbarWrapper(),
-            ),
-          );
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => const BottomNavbarWrapper(),
+              ),
+              (route) => false);
         } else if (state.status.isSubmissionFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
