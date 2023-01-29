@@ -48,7 +48,12 @@ jobs:
           fvm install
       - name: Install flutter dependencies
         run: |
-          fvm flutter pub get
+          fvm flutter pub 
+      - name: Update local.properties
+        run: |
+          echo "flutter.compileSdkVersion: 31" >> android/local.properties
+          echo "flutter.minSdkVersion: 20" >> android/local.properties
+          echo "flutter.targetSdkVersion: 31" >> android/local.properties
       - name: Build APK
         run: |
           fvm flutter build apk
