@@ -1,21 +1,24 @@
 name: E-Nakes CI
 env:
-  ANDROID_SDK_PATH: android_sdk
+  ANDROID_SDK_PATH: ${{ github.workspace }}/android_sdk
 run-name: ${{ github.actor }} is building E-Nakes 🚀
 on: [push]
 jobs:
   e-nakes_ci:
     runs-on: ubuntu-20.04
     steps:
-      - name: Initialize CI
+      - name: Build Info
         run: | 
-         mkdir $ANDROID_SDK_PATH
          echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
          echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
          echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       - name: Check out repository code
         uses: actions/checkout@v3
-      - run: |
+      - name: Initialize CI
+        run: |
+         echo $ANDROID_SDK_PATH
+         mkdir $ANDROID_SDK_PATH
+         ls ${{ github.workspace }}
          echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
          echo "🖥️ The workflow is now ready to test your code on the runner."
       - name: Download and install FVM
