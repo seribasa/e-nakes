@@ -24,7 +24,7 @@ jobs:
          echo "🖥️ The workflow is now ready to test your code on the runner."
       - name: Install Java 11
         run: |
-          apt-get install -y openjdk-11-jdk      
+          sudo apt-get install -y openjdk-11-jdk      
       - name: Download and install FVM
         run: |
           wget -q -O $ANDROID_SDK_PATH/fvm.tar.gz https://github.com/fluttertools/fvm/releases/download/2.4.1/fvm-2.4.1-linux-x64.tar.gz
