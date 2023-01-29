@@ -25,4 +25,11 @@ jobs:
           cp $ANDROID_SDK_PATH/fvm/fvm /usr/local/bin/.
           chmod +x /usr/local/bin/fvm
           fvm --version
+      - name: Download and install sdkmanager
+        run: |
+          wget -q -O $ANDROID_SDK_PATH/sdkmanager.zip https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
+          unzip $ANDROID_SDK_PATH/sdkmanager.zip $
+          mkdir $ANDROID_SDK_PATH/latest
+          mv $ANDROID_SDK_PATH/cmdline-tools/* $ANDROID_SDK_PATH/latest/.
+          $ANDROID_SDK_PATH/latest/bin/sdkmanager --list          
       - run: echo "🍏 This job's status is ${{ job.status }}."
