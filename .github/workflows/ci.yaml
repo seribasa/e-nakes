@@ -52,13 +52,12 @@ jobs:
       - name: Update local.properties
         run: |
           cat ${{ github.workspace }}/android/local.properties
-          cat ${{ github.workspace }}/android/local.properties | grep "flutter." > ${{ github.workspace }}/android/local.properties
-          cat ${{ github.workspace }}/android/local.properties
           echo "" >> ${{ github.workspace }}/android/local.properties
           echo "sdk.dir: $ANDROID_SDK_PATH" >> ${{ github.workspace }}/android/local.properties          
           echo "flutter.compileSdkVersion: 31" >> ${{ github.workspace }}/android/local.properties
           echo "flutter.minSdkVersion: 20" >> ${{ github.workspace }}/android/local.properties
           echo "flutter.targetSdkVersion: 31" >> ${{ github.workspace }}/android/local.properties
+          cat ${{ github.workspace }}/android/local.properties
       - name: Build APK
         run: |
           cat ${{ github.workspace }}/android/local.properties        
