@@ -1,24 +1,36 @@
 name: E-Nakes CI
+env:
+  ANDROID_SDK_PATH: android_sdk
 run-name: ${{ github.actor }} is building E-Nakes 🚀
 on: [push]
 jobs:
   e-nakes_ci:
     runs-on: ubuntu-20.04
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Initialization info
+        run: | 
+         echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+         echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+         echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       - name: Check out repository code
         uses: actions/checkout@v3
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
+      - run: |
+         echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+         echo "🖥️ The workflow is now ready to test your code on the runner."
+      - name: Create android_sdk directory
         run: |
-          ls ${{ github.workspace }}
-      - name: Flutter version 
-        uses: subosito/flutter-action@v2
+          mkdir $ANDROID_SDK_PATH
+      - name: Download FVM
+        uses: wei/wget@v1
         with:
-          flutter-version: '3.0.5'
-          channel: 'stable'
-      - run: flutter --version
+          args: -q -O $ANDROID_SDK_PATH/fvm.tar.gz https://github.com/fluttertools/fvm/releases/download/2.4.1/fvm-2.4.1-linux-x64.tar.gz
+      - name: Extract FVM
+        uses: a7ul/tar-action@v1.1.0
+        id: extract
+        with:
+          command: x
+          cwd: ./$ANDROID_SDK_PATH
+          files: fvm.tar.gz                    
+      - name: Install FVM
+        run: cp ./$ANDROID_SDK_PATH/fvm /usr/local/bin/fvm && chmod +x /usr/local/bin/fvm && fvm --version      
       - run: echo "🍏 This job's status is ${{ job.status }}."
