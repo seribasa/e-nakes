@@ -31,7 +31,7 @@ jobs:
       - name: Download and install sdkmanager
         run: |
           wget -q -O $ANDROID_SDK_PATH/sdkmanager.zip https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
-          unzip $ANDROID_SDK_PATH/sdkmanager.zip $
+          unzip $ANDROID_SDK_PATH/sdkmanager.zip -d $ANDROID_SDK_PATH
           mkdir $ANDROID_SDK_PATH/latest
           mv $ANDROID_SDK_PATH/cmdline-tools/* $ANDROID_SDK_PATH/latest/.
           $ANDROID_SDK_PATH/latest/bin/sdkmanager --list          
