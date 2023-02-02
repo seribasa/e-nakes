@@ -32,6 +32,13 @@ class Unauthenticated extends AuthenticationState {
   String toString() => 'Unauthenticated';
 }
 
+class AuthenticationError extends AuthenticationState {
+  final String message;
+  const AuthenticationError({required this.message});
+  @override
+  String toString() => 'AuthenticationError { $message }';
+}
+
 class ResetPasswordSent extends AuthenticationState {
   @override
   String toString() => 'ResetPasswordSent';

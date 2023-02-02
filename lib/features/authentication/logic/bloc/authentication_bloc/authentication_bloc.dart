@@ -1,5 +1,6 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
-import '../../../data/repositories/auth_repository.dart';
 import '../../../data/models/user.dart';
 import '../../../data/repositories/user_repository.dart';
 import 'package:equatable/equatable.dart';
@@ -41,10 +42,18 @@ class AuthenticationBloc
   }
 
   void _onLoggedOut(LoggedOut event, Emitter<AuthenticationState> emit) async {
-    var _authRepository = AuthenticationRepository();
     emit(Loading());
-    _authRepository.destroyPasscode();
-    _userRepository.signOut();
-    emit(Unauthenticated());
+    await _userRepository.signOut().then((value) {
+      emit(Unauthenticated());
+    }).catchError((error) {
+      log(
+        error.toString(),
+        name: 'Error LoggedOut',
+      );
+      emit(
+        const AuthenticationError(message: 'Gagal logout. Silahkan coba lagi!'),
+      );
+      add(LoggedIn());
+    });
   }
 }
