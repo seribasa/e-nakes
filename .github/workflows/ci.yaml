@@ -72,8 +72,9 @@ jobs:
           echo "storeFile=./e_nakes-keystore.jks" >> android/key.properties          
           echo "${{ secrets.KEYSTORE }}" >> android/app/keystore.asc                             
           gpg -d --passphrase "${{ secrets.KEYSTORE_PASSPHRASE }}" --batch android/app/keystore.asc > android/app/e_nakes-keystore.jks
-      - name: Build APK
+      - name: Build APK and AppBundle
         run: |
           cat ${{ github.workspace }}/android/local.properties        
           fvm flutter build apk
+          fvm flutter build appbundle
       - run: echo "🍏 This job's status is ${{ job.status }}."
