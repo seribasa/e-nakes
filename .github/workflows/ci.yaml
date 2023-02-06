@@ -70,8 +70,8 @@ jobs:
           echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
           echo "keyAlias=upload" >> android/key.properties
           echo "storeFile=./e_nakes-keystore.jks" >> android/key.properties          
-          echo "${{ secrets.KEYSTORE }}" >> android/keystore.asc                             
-          gpg -d --passphrase "${{ secrets.KEYSTORE_PASSPHRASE }}" --batch app/keystore.asc > app/e_nakes-keystore.jks
+          echo "${{ secrets.KEYSTORE }}" >> android/app/keystore.asc                             
+          gpg -d --passphrase "${{ secrets.KEYSTORE_PASSPHRASE }}" --batch android/app/keystore.asc > android/app/e_nakes-keystore.jks
       - name: Build APK
         run: |
           cat ${{ github.workspace }}/android/local.properties        
