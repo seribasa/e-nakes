@@ -48,6 +48,7 @@ class RekamMedisPasienScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             Container(
+                              width: double.infinity,
                               color: Colors.blue,
                               child: const TabBar(
                                 indicatorColor: Colors.white,
@@ -71,15 +72,17 @@ class RekamMedisPasienScreen extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            const Expanded(
+                            Expanded(
                               child: TabBarView(
-                                physics: NeverScrollableScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                 children: [
-                                  TabbarVaksinScreen(),
-                                  TabbarTabelScreen(),
-                                  TabbarGrafikScreen(),
-                                  TabbarDiagnosaScreen(),
-                                  TabbarTindakanScreen(),
+                                  const TabbarVaksinScreen(),
+                                  const TabbarTabelScreen(),
+                                  TabbarGrafikScreen(
+                                    pasien: pasien,
+                                  ),
+                                  const TabbarDiagnosaScreen(),
+                                  const TabbarTindakanScreen(),
                                 ],
                               ),
                             ),

@@ -1,17 +1,30 @@
-import 'package:eimunisasi_nakes/core/widgets/grafik/line_data_lingkar_kepala_boy.dart';
-import 'package:eimunisasi_nakes/core/widgets/grafik/line_data_lingkar_kepala_girl.dart';
-import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pemeriksaan_model.dart';
+// ignore_for_file: use_key_in_widget_constructors
+
+import 'package:eimunisasi_nakes/core/widgets/grafik/line_data_berat_badan.dart';
+import 'package:eimunisasi_nakes/core/widgets/grafik/line_data_lingkar_kepala.dart';
+import 'package:eimunisasi_nakes/core/widgets/grafik/line_data_tinggi_badan.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-class _LineChart extends StatelessWidget {
+import '../../../features/rekam_medis/data/models/pemeriksaan_model.dart';
+
+enum LineChartType {
+  beratBadan,
+  tinggiBadan,
+  lingkarKepala,
+}
+
+class LineChartTemplate extends StatelessWidget {
+  final LineChartType type;
   final double? minX;
   final double? maxX;
   final double? minY;
   final double? maxY;
   final bool? isBoy;
   final List<PemeriksaanModel> listData;
-  const _LineChart({
+  const LineChartTemplate({
+    Key? key,
+    required this.type,
     required this.isShowingMainData,
     required this.minX,
     required this.maxX,
@@ -26,24 +39,44 @@ class _LineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LineChart(
-      sampleData2,
-      swapAnimationDuration: const Duration(milliseconds: 250),
+      sampleData,
+      swapAnimationDuration: const Duration(milliseconds: 100),
     );
   }
 
-  LineChartData get sampleData2 => LineChartData(
-        minX: minX,
+  List<FlSpot> spots({required int lineTo}) {
+    if (type == LineChartType.beratBadan) {
+      return LineDataBodyWeightModel.listDataLine(
+        lineTo: lineTo,
+        isBoy: isBoy ?? true,
+      );
+    } else if (type == LineChartType.tinggiBadan) {
+      return LineDataBodyHeightModel.listDataLine(
+        lineTo: lineTo,
+        isBoy: isBoy ?? true,
+      );
+    } else if (type == LineChartType.lingkarKepala) {
+      return LineDataHeadCircumferenceModel.listDataLine(
+        lineTo: lineTo,
+        isBoy: isBoy ?? true,
+      );
+    }
+    return [];
+  }
+
+  LineChartData get sampleData => LineChartData(
+        minX: 0,
         maxX: maxX,
         maxY: maxY != null ? (maxY! + maxY! * 0.1) : null,
         clipData: FlClipData.all(),
-        lineTouchData: lineTouchData2,
+        lineTouchData: lineTouchData,
         gridData: gridData,
-        titlesData: titlesData2,
+        titlesData: titlesData,
         borderData: borderData,
-        lineBarsData: lineBarsData2,
+        lineBarsData: lineBarsData,
       );
 
-  LineTouchData get lineTouchData2 => LineTouchData(
+  LineTouchData get lineTouchData => LineTouchData(
         touchCallback: (event, res) {
           if (event is FlTapDownEvent) {
             //show modal flutter
@@ -92,7 +125,7 @@ class _LineChart extends StatelessWidget {
         ),
       );
 
-  FlTitlesData get titlesData1 => FlTitlesData(
+  FlTitlesData get titlesData => FlTitlesData(
         bottomTitles: AxisTitles(
           sideTitles: bottomTitles,
         ),
@@ -107,37 +140,27 @@ class _LineChart extends StatelessWidget {
         ),
       );
 
-  FlTitlesData get titlesData2 => FlTitlesData(
-        bottomTitles: AxisTitles(
-          sideTitles: bottomTitles,
-        ),
-        rightTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        topTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        leftTitles: AxisTitles(
-          sideTitles: leftTitles(),
-        ),
-      );
+  List<LineChartBarData> get lineBarsData {
+    List<LineChartBarData> barDataList = [
+      lineChartBarData_1,
+      lineChartBarData_2,
+      lineChartBarData_3,
+      lineChartBarData_4,
+      lineChartBarData_5,
+      lineChartDataPasien,
+    ];
 
-  List<LineChartBarData> get lineBarsData2 => [
-        lineChartBarData_1,
-        lineChartBarData_2,
-        lineChartBarData_3,
-        lineChartBarData_4,
-        lineChartBarData_5,
-        lineChartBarData_6,
-        lineChartBarData_7,
-        lineChartDataPasien,
-      ];
+    if (type != LineChartType.tinggiBadan) {
+      barDataList.addAll([lineChartBarData_6, lineChartBarData_7]);
+    }
+    return barDataList;
+  }
 
   Widget leftTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
       color: Color(0xff75729e),
       fontWeight: FontWeight.bold,
-      fontSize: 12,
+      fontSize: 10,
     );
 
     return Text(value.toInt().toString(),
@@ -146,15 +169,15 @@ class _LineChart extends StatelessWidget {
 
   SideTitles leftTitles() => SideTitles(
         getTitlesWidget: leftTitleWidgets,
-        showTitles: false,
-        interval: 1,
+        showTitles: true,
+        interval: 10,
       );
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
       color: Color(0xff72719b),
       fontWeight: FontWeight.bold,
-      fontSize: 12,
+      fontSize: 10,
     );
 
     return Padding(
@@ -188,9 +211,7 @@ class _LineChart extends StatelessWidget {
         isStrokeCapRound: true,
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
-        spots: (isBoy ?? true)
-            ? LineDataLingkarKepalaBoyModel().listDataLine1()
-            : LineDataLingkarKepalaGirlModel().listDataLine1(),
+        spots: spots(lineTo: 1),
       );
 
   LineChartBarData get lineChartBarData_2 => LineChartBarData(
@@ -201,9 +222,7 @@ class _LineChart extends StatelessWidget {
         isStrokeCapRound: true,
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
-        spots: (isBoy ?? true)
-            ? LineDataLingkarKepalaBoyModel().listDataLine2()
-            : LineDataLingkarKepalaGirlModel().listDataLine2(),
+        spots: spots(lineTo: 2),
       );
 
   LineChartBarData get lineChartBarData_3 => LineChartBarData(
@@ -214,9 +233,7 @@ class _LineChart extends StatelessWidget {
         isStrokeCapRound: true,
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
-        spots: (isBoy ?? true)
-            ? LineDataLingkarKepalaBoyModel().listDataLine3()
-            : LineDataLingkarKepalaGirlModel().listDataLine3(),
+        spots: spots(lineTo: 3),
       );
 
   LineChartBarData get lineChartBarData_4 => LineChartBarData(
@@ -227,9 +244,7 @@ class _LineChart extends StatelessWidget {
         isStrokeCapRound: true,
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
-        spots: (isBoy ?? true)
-            ? LineDataLingkarKepalaBoyModel().listDataLine4()
-            : LineDataLingkarKepalaGirlModel().listDataLine4(),
+        spots: spots(lineTo: 4),
       );
 
   LineChartBarData get lineChartBarData_5 => LineChartBarData(
@@ -240,9 +255,7 @@ class _LineChart extends StatelessWidget {
         isStrokeCapRound: true,
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
-        spots: (isBoy ?? true)
-            ? LineDataLingkarKepalaBoyModel().listDataLine5()
-            : LineDataLingkarKepalaGirlModel().listDataLine5(),
+        spots: spots(lineTo: 5),
       );
 
   LineChartBarData get lineChartBarData_6 => LineChartBarData(
@@ -253,9 +266,7 @@ class _LineChart extends StatelessWidget {
         isStrokeCapRound: true,
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
-        spots: (isBoy ?? true)
-            ? LineDataLingkarKepalaBoyModel().listDataLine6()
-            : LineDataLingkarKepalaGirlModel().listDataLine6(),
+        spots: type == LineChartType.tinggiBadan ? null : spots(lineTo: 6),
       );
 
   LineChartBarData get lineChartBarData_7 => LineChartBarData(
@@ -266,9 +277,7 @@ class _LineChart extends StatelessWidget {
         isStrokeCapRound: true,
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
-        spots: (isBoy ?? true)
-            ? LineDataLingkarKepalaBoyModel().listDataLine7()
-            : LineDataLingkarKepalaGirlModel().listDataLine7(),
+        spots: type == LineChartType.tinggiBadan ? null : spots(lineTo: 7),
       );
 
   LineChartBarData get lineChartDataPasien => LineChartBarData(
@@ -279,89 +288,6 @@ class _LineChart extends StatelessWidget {
         isStrokeCapRound: true,
         dotData: FlDotData(show: true),
         belowBarData: BarAreaData(show: false),
-        spots: (isBoy ?? true)
-            ? LineDataLingkarKepalaBoyModel().listDataPasienLine(listData)
-            : LineDataLingkarKepalaGirlModel().listDataPasienLine(listData),
+        spots: LineDataBodyWeightModel.listDataPasienLine(listData),
       );
-}
-
-class GrafikLingkarKepala extends StatefulWidget {
-  final List<PemeriksaanModel> listData;
-  final bool? isBoy;
-  const GrafikLingkarKepala({
-    Key? key,
-    required this.listData,
-    required this.isBoy,
-  }) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() => GrafikLingkarKepalaState();
-}
-
-class GrafikLingkarKepalaState extends State<GrafikLingkarKepala> {
-  late bool isShowingMainData;
-  late double minX;
-  late double maxX;
-  bool isZoomIn = false;
-
-  @override
-  void initState() {
-    super.initState();
-    isShowingMainData = true;
-    minX = 1;
-    maxX = 5;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(18)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: GestureDetector(
-          onDoubleTap: () {
-            if (isZoomIn) {
-              setState(() {
-                isZoomIn = false;
-                minX = 1;
-                maxX = 5;
-              });
-            } else {
-              setState(() {
-                isZoomIn = true;
-                minX = 1;
-                maxX = 24;
-              });
-            }
-          },
-          onHorizontalDragUpdate: (dragUpdDet) {
-            setState(() {
-              double primDelta = dragUpdDet.primaryDelta ?? 0.0;
-
-              if (primDelta != 0) {
-                if (primDelta.isNegative) {
-                  minX += maxX * 0.005;
-                  maxX += maxX * 0.005;
-                } else {
-                  minX -= maxX * 0.005;
-                  maxX -= maxX * 0.005;
-                }
-              }
-            });
-          },
-          child: _LineChart(
-            isShowingMainData: isShowingMainData,
-            maxX: maxX,
-            minX: minX,
-            maxY: null,
-            minY: null,
-            isBoy: widget.isBoy,
-            listData: widget.listData,
-          ),
-        ),
-      ),
-    );
-  }
 }
