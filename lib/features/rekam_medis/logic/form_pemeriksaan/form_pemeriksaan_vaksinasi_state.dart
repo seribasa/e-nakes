@@ -12,6 +12,8 @@ class FormPemeriksaanVaksinasiState extends Equatable {
   final String? idPasien;
   final String? idOrangTuaPasien;
   final PasienModel? pasien;
+  final String? bulanKe;
+  final String? jenisVaksin;
   const FormPemeriksaanVaksinasiState({
     this.status = FormzStatus.pure,
     this.errorMessage,
@@ -24,6 +26,8 @@ class FormPemeriksaanVaksinasiState extends Equatable {
     this.idPasien,
     this.idOrangTuaPasien,
     this.pasien,
+    this.bulanKe,
+    this.jenisVaksin,
   });
 
   @override
@@ -39,6 +43,8 @@ class FormPemeriksaanVaksinasiState extends Equatable {
         idPasien,
         idOrangTuaPasien,
         pasien,
+        bulanKe,
+        jenisVaksin,
       ];
 
   FormPemeriksaanVaksinasiState copyWith({
@@ -53,6 +59,8 @@ class FormPemeriksaanVaksinasiState extends Equatable {
     String? idPasien,
     String? idOrangTuaPasien,
     PasienModel? pasien,
+    String? bulanKe,
+    String? jenisVaksin,
   }) {
     return FormPemeriksaanVaksinasiState(
       status: status ?? this.status,
@@ -66,6 +74,8 @@ class FormPemeriksaanVaksinasiState extends Equatable {
       idPasien: idPasien ?? this.idPasien,
       idOrangTuaPasien: idOrangTuaPasien ?? this.idOrangTuaPasien,
       pasien: pasien ?? this.pasien,
+      bulanKe: bulanKe ?? this.bulanKe,
+      jenisVaksin: jenisVaksin ?? this.jenisVaksin,
     );
   }
 }

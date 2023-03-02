@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eimunisasi_nakes/core/common/constan.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:eimunisasi_nakes/features/jadwal/data/models/jadwal_model.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pasien_model.dart';
@@ -25,31 +26,36 @@ class VerifikasiPasienScreen extends StatelessWidget {
     final String? dataBarcode = result?.code;
     final String? nama =
         dataBarcode != null ? jsonDecode(dataBarcode)["nama"] : pasien?.nama;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Verifikasi Pasien'),
+    return BlocProvider(
+      create: (context) => FormPemeriksaanVaksinasiCubit(
+        userData: context.read<AuthenticationBloc>().state.user,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _IdentitasPasien(
-                namaAnak: '$nama',
-                umurAnak: pasien?.umur.toString(),
-                namaOrangTua: pasien?.nik,
-                alamat: pasien?.tempatLahir,
-              ),
-              const SizedBox(height: 10),
-              _JenisVaksin(
-                namaVaksin: jadwalPasienModel?.notes,
-              )
-            ],
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Verifikasi Pasien'),
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _IdentitasPasien(
+                  namaAnak: '$nama',
+                  umurAnak: pasien?.umur.toString(),
+                  namaOrangTua: pasien?.nik,
+                  alamat: pasien?.tempatLahir,
+                ),
+                const SizedBox(height: 10),
+                _JenisVaksin(
+                  namaVaksin: jadwalPasienModel?.notes,
+                )
+              ],
+            ),
           ),
         ),
+        bottomNavigationBar: _NextButton(pasien: pasien ?? const PasienModel()),
       ),
-      bottomNavigationBar: _NextButton(pasien: pasien ?? const PasienModel()),
     );
   }
 }
@@ -121,6 +127,90 @@ class _JenisVaksin extends StatelessWidget {
             ],
           ),
         ),
+        const SizedBox(height: 10),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Bulan Kunjungan',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.grey[200],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: BlocBuilder<FormPemeriksaanVaksinasiCubit,
+                        FormPemeriksaanVaksinasiState>(
+                      builder: (context, state) {
+                        return DropdownButton(
+                          underline: const SizedBox(),
+                          value: state.bulanKe != null
+                              ? int.parse(state.bulanKe!)
+                              : null,
+                          items: List.generate(
+                            24,
+                            (index) => DropdownMenuItem(
+                              value: index + 1,
+                              child: Text('${index + 1}'),
+                            ),
+                          ),
+                          onChanged: (value) {
+                            context
+                                .read<FormPemeriksaanVaksinasiCubit>()
+                                .changeMonthOfVisit(value.toString());
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              'Jenis Vaksin',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 5),
+            DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.grey[200],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: BlocBuilder<FormPemeriksaanVaksinasiCubit,
+                    FormPemeriksaanVaksinasiState>(
+                  builder: (context, state) {
+                    return DropdownButton(
+                      value: state.jenisVaksin,
+                      isExpanded: true,
+                      underline: const SizedBox(),
+                      items: List.generate(
+                        Constant.listTypeOfVaccine.length,
+                        (index) => DropdownMenuItem(
+                          value: Constant.listTypeOfVaccine[index],
+                          child: Text(Constant.listTypeOfVaccine[index]),
+                        ),
+                      ),
+                      onChanged: (value) {
+                        context
+                            .read<FormPemeriksaanVaksinasiCubit>()
+                            .changeTypeOfVaccine(value.toString());
+                      },
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -137,6 +227,8 @@ class _NextButton extends StatelessWidget {
       height: 50,
       child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
+          final _formState =
+              context.read<FormPemeriksaanVaksinasiCubit>().state;
           final _user = state is Authenticated ? state.user : null;
           return ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -144,11 +236,21 @@ class _NextButton extends StatelessWidget {
                     borderRadius: BorderRadius.zero)),
             child: const Text("Lanjut"),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return BlocProvider(
-                  create: (context) => FormPemeriksaanVaksinasiCubit(
-                    userData: _user,
-                  )..providePasienData(pasien.nik, _user?.id, pasien),
+              if ((_formState.jenisVaksin == null ||
+                      _formState.jenisVaksin!.isEmpty) &&
+                  (_formState.bulanKe == null || _formState.bulanKe!.isEmpty)) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                        'Jenis Vaksin dan Bulan Kunjungan tidak boleh kosong,'),
+                  ),
+                );
+                return;
+              }
+              Navigator.push(context, MaterialPageRoute(builder: (_) {
+                return BlocProvider.value(
+                  value: context.read<FormPemeriksaanVaksinasiCubit>()
+                    ..providePasienData(pasien.nik, _user?.id, pasien),
                   child: const FormPemeriksaanScreen(),
                 );
               }));

@@ -13,6 +13,7 @@ class PemeriksaanModel extends Equatable {
   final String? idOrangTuaPasien;
   final String? idPasien;
   final String? idDokter;
+  final String? bulanKe;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final DateTime? deletedAt;
@@ -29,6 +30,7 @@ class PemeriksaanModel extends Equatable {
     this.idOrangTuaPasien,
     this.idPasien,
     this.idDokter,
+    this.bulanKe,
     this.createdAt,
     this.updatedAt,
     this.deletedAt,
@@ -47,6 +49,7 @@ class PemeriksaanModel extends Equatable {
         idOrangTuaPasien,
         idPasien,
         idDokter,
+        bulanKe,
         createdAt,
         updatedAt,
         deletedAt
@@ -65,6 +68,7 @@ class PemeriksaanModel extends Equatable {
       idOrangTuaPasien: map['id_orang_tua_pasien'],
       idPasien: map['id_pasien'],
       idDokter: map['id_dokter'],
+      bulanKe: map['bulan_pemeriksaan'],
       createdAt: ((map['created_at'] != null)
           ? (map['created_at'] as Timestamp).toDate()
           : null),
@@ -89,6 +93,7 @@ class PemeriksaanModel extends Equatable {
       'id_pasien': idPasien,
       'id_orang_tua_pasien': idOrangTuaPasien,
       'id_dokter': idDokter,
+      'bulan_pemeriksaan': bulanKe,
       'created_at': createdAt,
       'updated_at': updatedAt,
       'deleted_at': deletedAt,

@@ -58,6 +58,32 @@ class FormPemeriksaanVaksinasiCubit
     ));
   }
 
+  changeTypeOfVaccine(String value) {
+    if (value.isEmpty) {
+      emit(state.copyWith(
+        jenisVaksin: null,
+        errorMessage: 'Jenis vaksin tidak boleh kosong',
+      ));
+      return;
+    }
+    emit(state.copyWith(
+      jenisVaksin: value,
+    ));
+  }
+
+  changeMonthOfVisit(String value) {
+    if (value.isEmpty) {
+      emit(state.copyWith(
+        bulanKe: null,
+        errorMessage: 'Bulan kunjungan tidak boleh kosong',
+      ));
+      return;
+    }
+    emit(state.copyWith(
+      bulanKe: value,
+    ));
+  }
+
   changeTindakan(String value) {
     emit(state.copyWith(
       tindakan: value,
@@ -97,6 +123,8 @@ class FormPemeriksaanVaksinasiCubit
         idPasien: state.idPasien,
         idOrangTuaPasien: state.idOrangTuaPasien,
         idDokter: userData?.id,
+        jenisVaksin: state.jenisVaksin,
+        bulanKe: state.bulanKe,
         createdAt: DateTime.now(),
       );
       await _pemeriksaanRepository.setPemeriksaan(pemeriksaanModel: data);
