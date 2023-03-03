@@ -227,33 +227,37 @@ class _NextButton extends StatelessWidget {
       height: 50,
       child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
-          final _formState =
-              context.read<FormPemeriksaanVaksinasiCubit>().state;
           final _user = state is Authenticated ? state.user : null;
-          return ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero)),
-            child: const Text("Lanjut"),
-            onPressed: () {
-              if ((_formState.jenisVaksin == null ||
-                      _formState.jenisVaksin!.isEmpty) &&
-                  (_formState.bulanKe == null || _formState.bulanKe!.isEmpty)) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                        'Jenis Vaksin dan Bulan Kunjungan tidak boleh kosong,'),
-                  ),
-                );
-                return;
-              }
-              Navigator.push(context, MaterialPageRoute(builder: (_) {
-                return BlocProvider.value(
-                  value: context.read<FormPemeriksaanVaksinasiCubit>()
-                    ..providePasienData(pasien.nik, _user?.id, pasien),
-                  child: const FormPemeriksaanScreen(),
-                );
-              }));
+          return BlocBuilder<FormPemeriksaanVaksinasiCubit,
+              FormPemeriksaanVaksinasiState>(
+            builder: (context, formState) {
+              return ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero)),
+                child: const Text("Lanjut"),
+                onPressed: () {
+                  if ((formState.jenisVaksin == null ||
+                          formState.jenisVaksin!.isEmpty) &&
+                      (formState.bulanKe == null ||
+                          formState.bulanKe!.isEmpty)) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                            'Jenis Vaksin dan Bulan Kunjungan tidak boleh kosong,'),
+                      ),
+                    );
+                    return;
+                  }
+                  Navigator.push(context, MaterialPageRoute(builder: (_) {
+                    return BlocProvider.value(
+                      value: context.read<FormPemeriksaanVaksinasiCubit>()
+                        ..providePasienData(pasien.nik, _user?.id, pasien),
+                      child: const FormPemeriksaanScreen(),
+                    );
+                  }));
+                },
+              );
             },
           );
         },
