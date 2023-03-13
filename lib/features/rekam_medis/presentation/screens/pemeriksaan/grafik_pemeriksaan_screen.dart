@@ -1,6 +1,5 @@
-import 'package:eimunisasi_nakes/core/widgets/grafik/grafik_berat_badan.dart';
-import 'package:eimunisasi_nakes/core/widgets/grafik/grafik_tinggi_badan.dart';
-import 'package:eimunisasi_nakes/core/widgets/grafik/grafik_lingkar_kepala.dart';
+import 'package:eimunisasi_nakes/core/widgets/grafik/grafik_tumbuh_kembang.dart';
+import 'package:eimunisasi_nakes/core/widgets/grafik/line_chart_template.dart';
 import 'package:eimunisasi_nakes/core/widgets/pasien_card.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pemeriksaan_model.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/logic/form_pemeriksaan/form_pemeriksaan_vaksinasi_cubit.dart';
@@ -75,21 +74,24 @@ class GrafikPemeriksaanScreen extends StatelessWidget {
                                 child: TabBarView(
                                   physics: const NeverScrollableScrollPhysics(),
                                   children: [
-                                    GrafikBeratBadan(
+                                    GrafikPertumbuhan(
+                                      type: LineChartType.beratBadan,
                                       listData: data,
                                       isBoy:
                                           _pasien?.jenisKelamin == "Laki-laki"
                                               ? true
                                               : false,
                                     ),
-                                    GrafikTinggiBadan(
+                                    GrafikPertumbuhan(
+                                      type: LineChartType.tinggiBadan,
                                       listData: data,
                                       isBoy:
                                           _pasien?.jenisKelamin == "Laki-laki"
                                               ? true
                                               : false,
                                     ),
-                                    GrafikLingkarKepala(
+                                    GrafikPertumbuhan(
+                                      type: LineChartType.lingkarKepala,
                                       listData: data,
                                       isBoy:
                                           _pasien?.jenisKelamin == "Laki-laki"
