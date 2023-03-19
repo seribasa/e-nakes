@@ -64,6 +64,7 @@ class GrafikPemeriksaanScreen extends StatelessWidget {
                                       : [];
                               PemeriksaanModel pemeriksaanModel =
                                   PemeriksaanModel(
+                                bulanKe: _pemeriksaanBloc.state.bulanKe,
                                 beratBadan: _pemeriksaanBloc.state.beratBadan,
                                 tinggiBadan: _pemeriksaanBloc.state.tinggiBadan,
                                 lingkarKepala:
