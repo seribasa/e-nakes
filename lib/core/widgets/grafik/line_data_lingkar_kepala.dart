@@ -182,9 +182,12 @@ class LineDataHeadCircumferenceModel {
   //method data pasien
   static List<FlSpot> listDataPasienLine(List<PemeriksaanModel> listData) {
     List<FlSpot> list = [];
-    for (int i = 1; i <= listData.length; i++) {
-      list.add(FlSpot(
-          i.toDouble(), listData[i - 1].lingkarKepala?.toDouble() ?? 0.0));
+    for (int i = 0; i < listData.length; i++) {
+      final sumbuX = listData[i].bulanKe;
+      if (sumbuX != null) {
+        list.add(FlSpot(double.parse(sumbuX),
+            listData[i].lingkarKepala?.toDouble() ?? 0.0));
+      }
     }
     return list;
   }

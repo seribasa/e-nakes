@@ -292,10 +292,10 @@ class LineChartTemplate extends StatelessWidget {
         switch (type) {
           case LineChartType.tinggiBadan:
             return LineDataBodyHeightModel.listDataPasienLine(listData);
-          case LineChartType.beratBadan:
-            return LineDataBodyWeightModel.listDataPasienLine(listData);
-          default:
+          case LineChartType.lingkarKepala:
             return LineDataHeadCircumferenceModel.listDataPasienLine(listData);
+          default:
+            return LineDataBodyWeightModel.listDataPasienLine(listData);
         }
       }());
 }

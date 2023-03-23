@@ -17,30 +17,40 @@ class TabbarVaksinScreen extends StatelessWidget {
           scrollDirection: Axis.vertical,
           child: Padding(
             padding: const EdgeInsets.all(20.0),
-            child: DataTable(
-              headingTextStyle: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Nunito',
-                color: Colors.black,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: DataTable(
+                headingTextStyle: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Nunito',
+                  color: Colors.black,
+                ),
+                border: TableBorder.all(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  color: Colors.grey,
+                  width: 1,
+                ),
+                columns: const [
+                  DataColumn(label: Text('Tanggal')),
+                  DataColumn(
+                      label: Text(
+                    'Bulan kunjungan',
+                    overflow: TextOverflow.fade,
+                    maxLines: 2,
+                  )),
+                  DataColumn(label: Text('Vaksin')),
+                ],
+                rows: [
+                  ..._pemeriksaan.map((data) {
+                    return DataRow(cells: [
+                      DataCell(Text(DateFormat('dd/MM/yyyy')
+                          .format(data.createdAt ?? DateTime.now()))),
+                      DataCell(Text(data.bulanKe ?? '')),
+                      DataCell(Text(data.jenisVaksin ?? '')),
+                    ]);
+                  }).toList(),
+                ],
               ),
-              border: TableBorder.all(
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
-                color: Colors.grey,
-                width: 1,
-              ),
-              columns: const [
-                DataColumn(label: Text('Tanggal')),
-                DataColumn(label: Text('Vaksin')),
-              ],
-              rows: [
-                ..._pemeriksaan.map((data) {
-                  return DataRow(cells: [
-                    DataCell(Text(DateFormat('dd/MM/yyyy')
-                        .format(data.createdAt ?? DateTime.now()))),
-                    DataCell(Text(data.jenisVaksin ?? '')),
-                  ]);
-                }).toList(),
-              ],
             ),
           ),
         );
