@@ -281,13 +281,21 @@ class LineChartTemplate extends StatelessWidget {
       );
 
   LineChartBarData get lineChartDataPasien => LineChartBarData(
-        isCurved: true,
-        curveSmoothness: 0,
-        color: Colors.black,
-        barWidth: 3,
-        isStrokeCapRound: true,
-        dotData: FlDotData(show: true),
-        belowBarData: BarAreaData(show: false),
-        spots: LineDataBodyWeightModel.listDataPasienLine(listData),
-      );
+      isCurved: true,
+      curveSmoothness: 0,
+      color: Colors.black,
+      barWidth: 3,
+      isStrokeCapRound: true,
+      dotData: FlDotData(show: true),
+      belowBarData: BarAreaData(show: false),
+      spots: () {
+        switch (type) {
+          case LineChartType.tinggiBadan:
+            return LineDataBodyHeightModel.listDataPasienLine(listData);
+          case LineChartType.beratBadan:
+            return LineDataBodyWeightModel.listDataPasienLine(listData);
+          default:
+            return LineDataHeadCircumferenceModel.listDataPasienLine(listData);
+        }
+      }());
 }

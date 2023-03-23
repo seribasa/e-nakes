@@ -147,7 +147,7 @@ class LineDataBodyHeightModel {
   }
 
   //method data pasien
-  List<FlSpot> listDataPasienLine(List<PemeriksaanModel> listData) {
+  static List<FlSpot> listDataPasienLine(List<PemeriksaanModel> listData) {
     List<FlSpot> list = [];
     for (int i = 1; i <= listData.length; i++) {
       list.add(
