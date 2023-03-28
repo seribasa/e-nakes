@@ -95,6 +95,7 @@ class LineDataBodyWeightModel {
             double.parse(sumbuX), listData[i].beratBadan?.toDouble() ?? 0.0));
       }
     }
+    list.sort((a, b) => a.x.compareTo(b.x));
     return list;
   }
 }
