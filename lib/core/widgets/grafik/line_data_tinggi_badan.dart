@@ -156,6 +156,7 @@ class LineDataBodyHeightModel {
             double.parse(sumbuX), listData[i].tinggiBadan?.toDouble() ?? 0.0));
       }
     }
+    list.sort((a, b) => a.x.compareTo(b.x));
     return list;
   }
 }

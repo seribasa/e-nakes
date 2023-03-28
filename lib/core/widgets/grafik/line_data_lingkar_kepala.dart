@@ -189,6 +189,7 @@ class LineDataHeadCircumferenceModel {
             listData[i].lingkarKepala?.toDouble() ?? 0.0));
       }
     }
+    list.sort((a, b) => a.x.compareTo(b.x));
     return list;
   }
 }
