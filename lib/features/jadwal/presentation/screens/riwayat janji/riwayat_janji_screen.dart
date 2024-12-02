@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class RiwayatJanjiScreen extends StatelessWidget {
-  const RiwayatJanjiScreen({Key? key}) : super(key: key);
+  const RiwayatJanjiScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class RiwayatJanjiScreen extends StatelessWidget {
 }
 
 class _Header extends StatelessWidget {
-  const _Header({Key? key}) : super(key: key);
+  const _Header();
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class _Header extends StatelessWidget {
 
 class _ListDate extends StatelessWidget {
   final void Function(int)? onTap;
-  const _ListDate({Key? key, required this.onTap}) : super(key: key);
+  const _ListDate({required this.onTap});
 
   @override
   Widget build(BuildContext context) {

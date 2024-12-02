@@ -11,8 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RekamMedisPasienScreen extends StatelessWidget {
   final PasienModel pasien;
-  const RekamMedisPasienScreen({Key? key, required this.pasien})
-      : super(key: key);
+  const RekamMedisPasienScreen({super.key, required this.pasien});
 
   @override
   Widget build(BuildContext context) {

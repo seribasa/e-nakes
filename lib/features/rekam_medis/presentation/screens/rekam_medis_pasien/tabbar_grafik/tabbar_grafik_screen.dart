@@ -10,9 +10,9 @@ import '../../../../data/models/pasien_model.dart';
 class TabbarGrafikScreen extends StatelessWidget {
   final PasienModel pasien;
   const TabbarGrafikScreen({
-    Key? key,
+    super.key,
     required this.pasien,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

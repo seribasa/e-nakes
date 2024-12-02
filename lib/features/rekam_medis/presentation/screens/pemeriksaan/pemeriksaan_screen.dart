@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class PemeriksaanScreen extends StatelessWidget {
-  const PemeriksaanScreen({Key? key}) : super(key: key);
+  const PemeriksaanScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class PemeriksaanScreen extends StatelessWidget {
 }
 
 class _ListPasien extends StatelessWidget {
-  const _ListPasien({Key? key}) : super(key: key);
+  const _ListPasien();
 
   @override
   Widget build(BuildContext context) {
@@ -97,11 +97,11 @@ class _ListPasien extends StatelessWidget {
 }
 
 class _SearchBar extends StatelessWidget {
-  const _SearchBar({Key? key}) : super(key: key);
+  const _SearchBar();
 
   @override
   Widget build(BuildContext context) {
-    return SearchBar(
+    return SearchBarPeltops(
       hintText: 'Cari Pasien ...',
       onPressed: () {
         showModalBottomSheet(
@@ -136,7 +136,7 @@ class _SearchBar extends StatelessWidget {
 
 class QRScanButton extends StatelessWidget {
   final void Function()? onTap;
-  const QRScanButton({Key? key, required this.onTap}) : super(key: key);
+  const QRScanButton({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

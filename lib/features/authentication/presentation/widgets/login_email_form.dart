@@ -10,13 +10,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
 class LoginEmailForm extends StatelessWidget {
-  const LoginEmailForm({Key? key}) : super(key: key);
+  const LoginEmailForm({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
-        if (state.status.isSubmissionFailure) {
+        if (state.status.isFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -24,7 +24,7 @@ class LoginEmailForm extends StatelessWidget {
                 content: Text(state.errorMessage ?? 'Otentikasi gagal!'),
               ),
             );
-        } else if (state.status.isSubmissionSuccess) {
+        } else if (state.status.isSuccess) {
           context.read<AuthenticationBloc>().add(LoggedIn());
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const AppView()));
@@ -65,7 +65,7 @@ class _EmailInput extends StatelessWidget {
           decoration: InputDecoration(
             labelText: 'Email',
             helperText: 'contoh: example@mail.com',
-            errorText: state.email.invalid ? 'Format email salah!' : null,
+            errorText: state.email.isNotValid ? 'Format email salah!' : null,
           ),
         );
       },
@@ -87,7 +87,7 @@ class _PasswordInput extends StatelessWidget {
           decoration: InputDecoration(
             labelText: 'Password',
             helperText: '',
-            errorText: state.password.invalid ? 'invalid password' : null,
+            errorText: state.password.isNotValid ? 'invalid password' : null,
           ),
         );
       },
@@ -101,7 +101,7 @@ class _LoginButton extends StatelessWidget {
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        return state.status.isSubmissionInProgress
+        return state.status.isInProgress
             ? const CircularProgressIndicator()
             : SizedBox(
                 width: double.infinity,
@@ -112,7 +112,7 @@ class _LoginButton extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: state.status.isValidated
+                  onPressed: state.status.isSuccess
                       ? () => context.read<LoginCubit>().logInWithCredentials()
                       : null,
                   child: const Text('Masuk'),

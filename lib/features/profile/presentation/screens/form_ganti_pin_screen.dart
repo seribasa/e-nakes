@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GantiPINScreen extends StatelessWidget {
-  const GantiPINScreen({Key? key}) : super(key: key);
+  const GantiPINScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class GantiPINScreen extends StatelessWidget {
 
 class _PinLamaForm extends StatelessWidget {
   final String? initialValue;
-  const _PinLamaForm({Key? key, this.initialValue}) : super(key: key);
+  const _PinLamaForm({this.initialValue});
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,7 @@ class _PinLamaForm extends StatelessWidget {
 
 class _PinBaruForm extends StatelessWidget {
   final String? initialValue;
-  const _PinBaruForm({Key? key, this.initialValue}) : super(key: key);
+  const _PinBaruForm({this.initialValue});
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +82,7 @@ class _PinBaruForm extends StatelessWidget {
 }
 
 class _SaveButton extends StatelessWidget {
-  const _SaveButton({Key? key}) : super(key: key);
+  const _SaveButton();
 
   @override
   Widget build(BuildContext context) {

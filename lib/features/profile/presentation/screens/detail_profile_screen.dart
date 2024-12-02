@@ -13,7 +13,7 @@ import 'package:intl/intl.dart';
 import '../../../../core/widgets/image_picker.dart';
 
 class DetailProfileScreen extends StatelessWidget {
-  const DetailProfileScreen({Key? key}) : super(key: key);
+  const DetailProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -56,15 +56,15 @@ class DetailProfileScreen extends StatelessWidget {
 
 class _ProfilePicture extends StatelessWidget {
   final String? imageUrl;
-  const _ProfilePicture({Key? key, this.imageUrl}) : super(key: key);
+  const _ProfilePicture({this.imageUrl});
 
   @override
   Widget build(BuildContext context) {
-    final _userRepository = UserRepository();
+    final userRepository = UserRepository();
     Future<void> showAndSaveImage() async {
       ModalPickerImage().showPicker(context, (val) {
         if (val != null) {
-          _userRepository
+          userRepository
               .updateUserAvatar(val)
               .then(
                 (value) => ScaffoldMessenger.of(context).showSnackBar(
@@ -159,7 +159,7 @@ class _ProfilePicture extends StatelessWidget {
 
 class _ProfilNakesSection extends StatelessWidget {
   final UserData? user;
-  const _ProfilNakesSection({Key? key, required this.user}) : super(key: key);
+  const _ProfilNakesSection({required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -201,7 +201,7 @@ class _ProfilNakesSection extends StatelessWidget {
 
 class _InformasiAkunSection extends StatelessWidget {
   final UserData? user;
-  const _InformasiAkunSection({Key? key, required this.user}) : super(key: key);
+  const _InformasiAkunSection({required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -238,7 +238,7 @@ class _InformasiAkunSection extends StatelessWidget {
 
 class _NamaForm extends StatelessWidget {
   final String? initialValue;
-  const _NamaForm({Key? key, this.initialValue}) : super(key: key);
+  const _NamaForm({this.initialValue});
 
   @override
   Widget build(BuildContext context) {
@@ -275,7 +275,7 @@ class _NamaForm extends StatelessWidget {
 
 class _TempatLahirForm extends StatelessWidget {
   final String? initialValue;
-  const _TempatLahirForm({Key? key, this.initialValue}) : super(key: key);
+  const _TempatLahirForm({this.initialValue});
 
   @override
   Widget build(BuildContext context) {
@@ -299,7 +299,7 @@ class _TempatLahirForm extends StatelessWidget {
 
 class _TanggalLahirForm extends StatelessWidget {
   final String? initialValue;
-  const _TanggalLahirForm({Key? key, this.initialValue}) : super(key: key);
+  const _TanggalLahirForm({this.initialValue});
 
   @override
   Widget build(BuildContext context) {
@@ -323,7 +323,7 @@ class _TanggalLahirForm extends StatelessWidget {
 
 class _NikForm extends StatelessWidget {
   final String? initialValue;
-  const _NikForm({Key? key, this.initialValue}) : super(key: key);
+  const _NikForm({this.initialValue});
 
   @override
   Widget build(BuildContext context) {
@@ -347,7 +347,7 @@ class _NikForm extends StatelessWidget {
 
 class _NoKartuKeluargaForm extends StatelessWidget {
   final String? initialValue;
-  const _NoKartuKeluargaForm({Key? key, this.initialValue}) : super(key: key);
+  const _NoKartuKeluargaForm({this.initialValue});
 
   @override
   Widget build(BuildContext context) {
@@ -371,7 +371,7 @@ class _NoKartuKeluargaForm extends StatelessWidget {
 
 class _ProfesiForm extends StatelessWidget {
   final String? initialValue;
-  const _ProfesiForm({Key? key, this.initialValue}) : super(key: key);
+  const _ProfesiForm({this.initialValue});
 
   @override
   Widget build(BuildContext context) {
@@ -395,7 +395,7 @@ class _ProfesiForm extends StatelessWidget {
 
 class _JadwalForm extends StatelessWidget {
   final List<JadwalPraktek>? initialValue;
-  const _JadwalForm({Key? key, this.initialValue}) : super(key: key);
+  const _JadwalForm({this.initialValue});
 
   @override
   Widget build(BuildContext context) {
@@ -448,7 +448,7 @@ class _JadwalForm extends StatelessWidget {
 
 class _EmailForm extends StatelessWidget {
   final String? initialValue;
-  const _EmailForm({Key? key, this.initialValue}) : super(key: key);
+  const _EmailForm({this.initialValue});
 
   @override
   Widget build(BuildContext context) {
@@ -472,7 +472,7 @@ class _EmailForm extends StatelessWidget {
 
 class _NomorHPForm extends StatelessWidget {
   final String? initialValue;
-  const _NomorHPForm({Key? key, this.initialValue}) : super(key: key);
+  const _NomorHPForm({this.initialValue});
 
   @override
   Widget build(BuildContext context) {
@@ -495,7 +495,7 @@ class _NomorHPForm extends StatelessWidget {
 }
 
 class _GantiPasscodeButton extends StatelessWidget {
-  const _GantiPasscodeButton({Key? key}) : super(key: key);
+  const _GantiPasscodeButton();
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -526,7 +526,7 @@ class _GantiPasscodeButton extends StatelessWidget {
 }
 
 class _SaveButton extends StatelessWidget {
-  const _SaveButton({Key? key}) : super(key: key);
+  const _SaveButton();
 
   @override
   Widget build(BuildContext context) {
@@ -549,7 +549,7 @@ class _SaveButton extends StatelessWidget {
 }
 
 class _ProfileViewButton extends StatelessWidget {
-  const _ProfileViewButton({Key? key}) : super(key: key);
+  const _ProfileViewButton();
 
   @override
   Widget build(BuildContext context) {

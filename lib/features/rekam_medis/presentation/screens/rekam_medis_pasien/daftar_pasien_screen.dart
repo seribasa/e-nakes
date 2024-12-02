@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DaftarPasienScreen extends StatelessWidget {
-  const DaftarPasienScreen({Key? key}) : super(key: key);
+  const DaftarPasienScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +29,15 @@ class DaftarPasienScreen extends StatelessWidget {
 }
 
 class _SearchBar extends StatelessWidget {
-  const _SearchBar({Key? key}) : super(key: key);
+  const _SearchBar();
 
   @override
   Widget build(BuildContext context) {
-    final _pasienBloc = BlocProvider.of<PasienCubit>(context);
-    return SearchBar(
+    final pasienBloc = BlocProvider.of<PasienCubit>(context);
+    return SearchBarPeltops(
       hintText: 'Cari Pasien (NIK) ...',
       onChanged: (val) {
-        _pasienBloc.getPasienBySearch(val);
+        pasienBloc.getPasienBySearch(val);
       },
       onPressed: () {},
     );
@@ -45,7 +45,7 @@ class _SearchBar extends StatelessWidget {
 }
 
 class _ListPasien extends StatelessWidget {
-  const _ListPasien({Key? key}) : super(key: key);
+  const _ListPasien();
 
   @override
   Widget build(BuildContext context) {

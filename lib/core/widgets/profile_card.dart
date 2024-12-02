@@ -6,8 +6,7 @@ class ProfileCard extends StatelessWidget {
   final String? pekerjaan;
   final String? urlGambar;
   const ProfileCard(
-      {Key? key, this.nama, this.pekerjaan, required this.urlGambar})
-      : super(key: key);
+      {super.key, this.nama, this.pekerjaan, required this.urlGambar});
 
   @override
   Widget build(BuildContext context) {

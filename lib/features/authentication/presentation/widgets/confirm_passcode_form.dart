@@ -5,12 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
 class ConfirmPasscodeForm extends StatelessWidget {
-  const ConfirmPasscodeForm({Key? key}) : super(key: key);
+  const ConfirmPasscodeForm({super.key});
   @override
   Widget build(BuildContext context) {
     return BlocListener<LocalAuthCubit, LocalAuthState>(
       listener: (context, state) {
-        if (state.status.isSubmissionFailure) {
+        if (state.status.isFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -69,13 +69,13 @@ class _NextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<LocalAuthCubit, LocalAuthState>(
       listener: (context, state) {
-        if (state.status.isSubmissionSuccess) {
+        if (state.status.isSuccess) {
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
                 builder: (context) => const BottomNavbarWrapper(),
               ),
               (route) => false);
-        } else if (state.status.isSubmissionFailure) {
+        } else if (state.status.isFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -87,7 +87,7 @@ class _NextButton extends StatelessWidget {
       },
       child: BlocBuilder<LocalAuthCubit, LocalAuthState>(
         builder: (context, state) {
-          return state.status.isSubmissionInProgress
+          return state.status.isInProgress
               ? const CircularProgressIndicator()
               : SizedBox(
                   width: double.infinity,

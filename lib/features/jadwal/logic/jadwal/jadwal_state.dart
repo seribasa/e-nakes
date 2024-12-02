@@ -13,8 +13,7 @@ class JadwalInitial extends JadwalState {}
 class JadwalLoading extends JadwalState {}
 
 class JadwalLoaded extends JadwalState {
-  const JadwalLoaded({List<JadwalPasienModel>? jadwalPasienModel})
-      : super(jadwalPasienModel: jadwalPasienModel);
+  const JadwalLoaded({super.jadwalPasienModel});
 
   @override
   List<Object?> get props => [jadwalPasienModel];

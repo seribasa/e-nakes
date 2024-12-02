@@ -6,12 +6,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
 class PasscodeForm extends StatelessWidget {
-  const PasscodeForm({Key? key}) : super(key: key);
+  const PasscodeForm({super.key});
   @override
   Widget build(BuildContext context) {
     return BlocListener<LocalAuthCubit, LocalAuthState>(
       listener: (context, state) {
-        if (state.status.isSubmissionFailure) {
+        if (state.status.isFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -40,13 +40,13 @@ class PasscodeForm extends StatelessWidget {
 }
 
 class _TextHeader extends StatelessWidget {
-  const _TextHeader({Key? key}) : super(key: key);
+  const _TextHeader();
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LocalAuthCubit, LocalAuthState>(
       builder: (context, state) {
-        return Text(state.savedPasscode.invalid
+        return Text(state.savedPasscode.isNotValid
             ? "Silahkan Atur PIN Anda!"
             : "Silahkan Masukkan PIN Anda!");
       },
@@ -71,11 +71,11 @@ class _PasscodeInput extends StatelessWidget {
               decoration: InputDecoration(
                 labelText: 'PIN',
                 helperText: 'Masukkan 4-digit PIN',
-                errorText: state.passcode.invalid ? 'Format salah!' : null,
+                errorText: state.passcode.isNotValid ? 'Format salah!' : null,
               ),
             ),
             const SizedBox(height: 16),
-            state.savedPasscode.invalid
+            state.savedPasscode.isNotValid
                 ? const Align(
                     alignment: Alignment.topLeft,
                     child: Text(
@@ -91,18 +91,18 @@ class _PasscodeInput extends StatelessWidget {
 }
 
 class _NextButton extends StatelessWidget {
-  const _NextButton({Key? key}) : super(key: key);
+  const _NextButton();
   @override
   Widget build(BuildContext context) {
     return BlocListener<LocalAuthCubit, LocalAuthState>(
       listener: (context, state) {
-        if (state.status.isSubmissionSuccess) {
+        if (state.status.isSuccess) {
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
                 builder: (context) => const BottomNavbarWrapper(),
               ),
               (route) => false);
-        } else if (state.status.isSubmissionFailure) {
+        } else if (state.status.isFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -114,7 +114,7 @@ class _NextButton extends StatelessWidget {
       },
       child: BlocBuilder<LocalAuthCubit, LocalAuthState>(
         builder: (context, state) {
-          return state.status.isSubmissionInProgress
+          return state.status.isInProgress
               ? const CircularProgressIndicator()
               : SizedBox(
                   width: double.infinity,
@@ -126,8 +126,8 @@ class _NextButton extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      if (state.savedPasscode.invalid) {
-                        if (state.passcode.valid) {
+                      if (state.savedPasscode.isNotValid) {
+                        if (state.passcode.isValid) {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (_) => BlocProvider.value(

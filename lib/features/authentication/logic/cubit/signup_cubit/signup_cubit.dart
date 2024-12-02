@@ -20,7 +20,9 @@ class SignUpCubit extends Cubit<SignUpState> {
       status: Formz.validate([
         email,
         state.password,
-      ]),
+      ])
+          ? FormzSubmissionStatus.success
+          : FormzSubmissionStatus.failure,
     ));
   }
 
@@ -31,13 +33,15 @@ class SignUpCubit extends Cubit<SignUpState> {
       status: Formz.validate([
         state.email,
         password,
-      ]),
+      ])
+          ? FormzSubmissionStatus.success
+          : FormzSubmissionStatus.failure,
     ));
   }
 
   Future<void> signUpFormSubmitted() async {
-    if (!state.status.isValidated) return;
-    emit(state.copyWith(status: FormzStatus.submissionInProgress));
+    if (!state.status.isSuccess) return;
+    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
     try {
       final userResult = await _userRepository.signUpWithEmailAndPassword(
         email: state.email.value,
@@ -50,9 +54,9 @@ class SignUpCubit extends Cubit<SignUpState> {
       await _userRepository.insertUserToDatabase(
         user: userModel,
       );
-      emit(state.copyWith(status: FormzStatus.submissionSuccess));
+      emit(state.copyWith(status: FormzSubmissionStatus.success));
     } catch (_) {
-      emit(state.copyWith(status: FormzStatus.submissionFailure));
+      emit(state.copyWith(status: FormzSubmissionStatus.failure));
     }
   }
 }

@@ -4,8 +4,7 @@ import 'package:intl/intl.dart';
 
 class RiwayatJanjiDetailScreen extends StatelessWidget {
   final JadwalPasienModel? jadwalPasienModel;
-  const RiwayatJanjiDetailScreen({Key? key, this.jadwalPasienModel})
-      : super(key: key);
+  const RiwayatJanjiDetailScreen({super.key, this.jadwalPasienModel});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +30,7 @@ class RiwayatJanjiDetailScreen extends StatelessWidget {
 }
 
 class _Header extends StatelessWidget {
-  const _Header({Key? key}) : super(key: key);
+  const _Header();
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +50,7 @@ class _DetailJanjiCard extends StatelessWidget {
   final void Function(int)? onTap;
   final JadwalPasienModel? jadwalPasienModel;
   const _DetailJanjiCard(
-      {Key? key, required this.onTap, this.jadwalPasienModel})
-      : super(key: key);
+      {required this.onTap, this.jadwalPasienModel});
 
   @override
   Widget build(BuildContext context) {

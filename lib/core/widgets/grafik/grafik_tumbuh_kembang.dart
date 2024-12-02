@@ -8,11 +8,11 @@ class GrafikPertumbuhan extends StatefulWidget {
   final List<PemeriksaanModel> listData;
   final bool? isBoy;
   const GrafikPertumbuhan({
-    Key? key,
+    super.key,
     required this.type,
     required this.listData,
     required this.isBoy,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() => GrafikPertumbuhanState();

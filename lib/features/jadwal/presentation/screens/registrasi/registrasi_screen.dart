@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class RegistrasiScreen extends StatelessWidget {
-  const RegistrasiScreen({Key? key}) : super(key: key);
+  const RegistrasiScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class RegistrasiScreen extends StatelessWidget {
 
 class QRScanButton extends StatelessWidget {
   final void Function()? onTap;
-  const QRScanButton({Key? key, required this.onTap}) : super(key: key);
+  const QRScanButton({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +78,7 @@ class QRScanButton extends StatelessWidget {
 }
 
 class _Header extends StatelessWidget {
-  const _Header({Key? key}) : super(key: key);
+  const _Header();
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +96,7 @@ class _Header extends StatelessWidget {
 
 class _ListYears extends StatelessWidget {
   final void Function(int)? onTap;
-  const _ListYears({Key? key, required this.onTap}) : super(key: key);
+  const _ListYears({required this.onTap});
 
   @override
   Widget build(BuildContext context) {

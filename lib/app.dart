@@ -10,9 +10,8 @@ import 'features/authentication/presentation/screens/local_auth/passcode_screen.
 import 'features/authentication/presentation/screens/splash/splash_screen.dart';
 
 class App extends StatelessWidget {
-  const App({Key? key, required UserRepository userRepository})
-      : _userRepository = userRepository,
-        super(key: key);
+  const App({super.key, required UserRepository userRepository})
+      : _userRepository = userRepository;
 
   final UserRepository _userRepository;
   @override
@@ -29,7 +28,7 @@ class App extends StatelessWidget {
 }
 
 class AppView extends StatefulWidget {
-  const AppView({Key? key}) : super(key: key);
+  const AppView({super.key});
 
   @override
   State<AppView> createState() => _AppViewState();

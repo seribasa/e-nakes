@@ -15,11 +15,10 @@ class VerifikasiPasienScreen extends StatelessWidget {
   final PasienModel? pasien;
   final Barcode? result;
   const VerifikasiPasienScreen(
-      {Key? key,
+      {super.key,
       this.result,
       required this.pasien,
-      required this.jadwalPasienModel})
-      : super(key: key);
+      required this.jadwalPasienModel});
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +65,7 @@ class _IdentitasPasien extends StatelessWidget {
   final String? namaOrangTua;
   final String? alamat;
   const _IdentitasPasien(
-      {Key? key, this.namaAnak, this.umurAnak, this.namaOrangTua, this.alamat})
-      : super(key: key);
+      {this.namaAnak, this.umurAnak, this.namaOrangTua, this.alamat});
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +100,7 @@ class _IdentitasPasien extends StatelessWidget {
 
 class _JenisVaksin extends StatelessWidget {
   final String? namaVaksin;
-  const _JenisVaksin({Key? key, this.namaVaksin}) : super(key: key);
+  const _JenisVaksin({this.namaVaksin});
 
   @override
   Widget build(BuildContext context) {
@@ -218,7 +216,7 @@ class _JenisVaksin extends StatelessWidget {
 
 class _NextButton extends StatelessWidget {
   final PasienModel pasien;
-  const _NextButton({Key? key, required this.pasien}) : super(key: key);
+  const _NextButton({required this.pasien});
 
   @override
   Widget build(BuildContext context) {
@@ -227,7 +225,7 @@ class _NextButton extends StatelessWidget {
       height: 50,
       child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
-          final _user = state is Authenticated ? state.user : null;
+          final user = state is Authenticated ? state.user : null;
           return BlocBuilder<FormPemeriksaanVaksinasiCubit,
               FormPemeriksaanVaksinasiState>(
             builder: (context, formState) {
@@ -252,7 +250,7 @@ class _NextButton extends StatelessWidget {
                   Navigator.push(context, MaterialPageRoute(builder: (_) {
                     return BlocProvider.value(
                       value: context.read<FormPemeriksaanVaksinasiCubit>()
-                        ..providePasienData(pasien.nik, _user?.id, pasien),
+                        ..providePasienData(pasien.nik, user?.id, pasien),
                       child: const FormPemeriksaanScreen(),
                     );
                   }));

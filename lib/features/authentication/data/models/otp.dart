@@ -5,7 +5,7 @@ enum OTPValidationError { invalid }
 class OTP extends FormzInput<String, OTPValidationError> {
   const OTP.pure() : super.pure('');
 
-  const OTP.dirty([String value = '']) : super.dirty(value);
+  const OTP.dirty([super.value = '']) : super.dirty();
 
   static final RegExp _otpRegExp = RegExp(r'^\d{6}$');
 

@@ -7,12 +7,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
 class LoginPhoneForm extends StatelessWidget {
-  const LoginPhoneForm({Key? key}) : super(key: key);
+  const LoginPhoneForm({super.key});
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginPhoneCubit, LoginPhoneState>(
       listener: (context, state) {
-        if (state.status.isSubmissionFailure) {
+        if (state.status.isFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -41,7 +41,7 @@ class LoginPhoneForm extends StatelessWidget {
             children: [
               Text(
                 'Selamat Datang',
-                style: Theme.of(context).textTheme.headline5,
+                style: Theme.of(context).textTheme.headlineMedium,
               ),
               const Text("Silahkan Login dengan Nomor Ponsel Anda"),
               const SizedBox(height: 16),
@@ -85,7 +85,7 @@ class _PhoneInput extends StatelessWidget {
                 decoration: InputDecoration(
                   labelText: 'Nomor Ponsel',
                   helperText: 'Contoh: 876543210',
-                  errorText: state.phone.invalid
+                  errorText: state.phone.isNotValid
                       ? 'Format salah! Contoh: 876543210'
                       : null,
                 ),
@@ -103,7 +103,7 @@ class _LoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LoginPhoneCubit, LoginPhoneState>(
       builder: (context, state) {
-        return state.status.isSubmissionInProgress
+        return state.status.isInProgress
             ? const CircularProgressIndicator()
             : SizedBox(
                 width: double.infinity,
@@ -114,7 +114,7 @@ class _LoginButton extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: state.phone.valid
+                  onPressed: state.phone.isValid
                       ? () => context.read<LoginPhoneCubit>().sendOTPCode()
                       : null,
                   child: const Text('Masuk'),
@@ -139,7 +139,7 @@ class _LoginWithEmailButton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            onPressed: state.status.isSubmissionInProgress
+            onPressed: state.status.isInProgress
                 ? null
                 : () => Navigator.pushNamed(context, '/loginEmail'),
             child: const Text('Masuk dengan Email'),

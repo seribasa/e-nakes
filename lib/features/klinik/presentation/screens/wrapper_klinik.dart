@@ -8,7 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
 
 class WrapperKlinik extends StatelessWidget {
-  const WrapperKlinik({Key? key}) : super(key: key);
+  const WrapperKlinik({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +34,10 @@ class WrapperKlinik extends StatelessWidget {
 }
 
 class _KlinikProfileButton extends StatelessWidget {
-  const _KlinikProfileButton({Key? key}) : super(key: key);
+  const _KlinikProfileButton();
   @override
   Widget build(BuildContext context) {
-    final _user = context.read<AuthenticationBloc>().state.user;
+    final user = context.read<AuthenticationBloc>().state.user;
     return BlocBuilder<KlinikBloc, KlinikState>(
       builder: (context, state) {
         return SizedBox(
@@ -55,7 +55,7 @@ class _KlinikProfileButton extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => BlocProvider(
                     create: (context) => KlinikBloc()
-                      ..add(KlinikProfilePressed(clinicId: _user?.clinic?.id)),
+                      ..add(KlinikProfilePressed(clinicId: user?.clinic?.id)),
                     child: const ProfileKlinikScreen(),
                   ),
                 ),
@@ -78,10 +78,10 @@ class _KlinikProfileButton extends StatelessWidget {
 }
 
 class _KlinikKeanggotaanButton extends StatelessWidget {
-  const _KlinikKeanggotaanButton({Key? key}) : super(key: key);
+  const _KlinikKeanggotaanButton();
   @override
   Widget build(BuildContext context) {
-    final _user = context.read<AuthenticationBloc>().state.user;
+    final user = context.read<AuthenticationBloc>().state.user;
     return SizedBox(
       height: 50,
       width: double.infinity,
@@ -97,7 +97,7 @@ class _KlinikKeanggotaanButton extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => BlocProvider(
                 create: (context) => KlinikBloc()
-                  ..add(KlinikKeanggotaanPressed(clinicId: _user?.clinic?.id)),
+                  ..add(KlinikKeanggotaanPressed(clinicId: user?.clinic?.id)),
                 child: const KeanggotaanKlinikScreen(),
               ),
             ),

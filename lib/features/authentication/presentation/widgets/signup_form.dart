@@ -4,16 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
 class SignUpForm extends StatelessWidget {
-  const SignUpForm({Key? key}) : super(key: key);
+  const SignUpForm({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<SignUpCubit, SignUpState>(
       listener: (context, state) {
-        if (state.status.isSubmissionSuccess) {
+        if (state.status.isSuccess) {
           Navigator.of(context).pop();
           Navigator.of(context).pop();
-        } else if (state.status.isSubmissionFailure) {
+        } else if (state.status.isFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -54,7 +54,7 @@ class _EmailInput extends StatelessWidget {
           decoration: InputDecoration(
             labelText: 'Email',
             helperText: 'contoh: example@mail.com',
-            errorText: state.email.invalid ? 'format email salah' : null,
+            errorText: state.email.isNotValid ? 'format email salah' : null,
           ),
         );
       },
@@ -76,7 +76,7 @@ class _PasswordInput extends StatelessWidget {
           decoration: InputDecoration(
             labelText: 'Password',
             helperText: '',
-            errorText: state.password.invalid ? 'invalid password' : null,
+            errorText: state.password.isNotValid ? 'invalid password' : null,
           ),
         );
       },
@@ -90,7 +90,7 @@ class _SignUpButton extends StatelessWidget {
     return BlocBuilder<SignUpCubit, SignUpState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        return state.status.isSubmissionInProgress
+        return state.status.isInProgress
             ? const CircularProgressIndicator()
             : SizedBox(
                 width: double.infinity,
@@ -101,7 +101,7 @@ class _SignUpButton extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: state.status.isValidated
+                  onPressed: state.status.isSuccess
                       ? () => context.read<SignUpCubit>().signUpFormSubmitted()
                       : null,
                   child: const Text('Daftar'),

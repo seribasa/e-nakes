@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class LoadingDialog extends StatelessWidget {
   final String? label;
-  const LoadingDialog({Key? key, this.label}) : super(key: key);
+  const LoadingDialog({super.key, this.label});
 
   @override
   Widget build(BuildContext context) {

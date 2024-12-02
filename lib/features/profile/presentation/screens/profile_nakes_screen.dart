@@ -7,7 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfileNakesScreen extends StatelessWidget {
-  const ProfileNakesScreen({Key? key}) : super(key: key);
+  const ProfileNakesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +92,7 @@ class ProfileNakesScreen extends StatelessWidget {
 
 class _NamaNakes extends StatelessWidget {
   final String? namaNakes;
-  const _NamaNakes({Key? key, required this.namaNakes}) : super(key: key);
+  const _NamaNakes({required this.namaNakes});
 
   @override
   Widget build(BuildContext context) {
@@ -105,8 +105,7 @@ class _NamaNakes extends StatelessWidget {
 
 class _GambarNakes extends StatelessWidget {
   final List<String>? gambarNakesUrl;
-  const _GambarNakes({Key? key, required this.gambarNakesUrl})
-      : super(key: key);
+  const _GambarNakes({required this.gambarNakesUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -122,8 +121,7 @@ class _GambarNakes extends StatelessWidget {
 
 class _KontakCardNakes extends StatelessWidget {
   final String? nomorTelepon;
-  const _KontakCardNakes({Key? key, required this.nomorTelepon})
-      : super(key: key);
+  const _KontakCardNakes({required this.nomorTelepon});
 
   @override
   Widget build(BuildContext context) {
@@ -138,12 +136,12 @@ class _KontakCardNakes extends StatelessWidget {
               color: Theme.of(context).primaryColor,
             ),
             onPressed: () async {
-              final Uri _phoneLaunchUri = Uri(
+              final Uri phoneLaunchUri = Uri(
                 scheme: 'tel',
                 path: nomorTelepon,
               );
-              if (await canLaunchUrl(_phoneLaunchUri)) {
-                await launchUrl(_phoneLaunchUri);
+              if (await canLaunchUrl(phoneLaunchUri)) {
+                await launchUrl(phoneLaunchUri);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -159,12 +157,12 @@ class _KontakCardNakes extends StatelessWidget {
               color: Theme.of(context).primaryColor,
             ),
             onPressed: () async {
-              final Uri _smsLaunchUri = Uri(
+              final Uri smsLaunchUri = Uri(
                 scheme: 'sms',
                 path: nomorTelepon,
               );
-              if (await canLaunchUrl(_smsLaunchUri)) {
-                await launchUrl(_smsLaunchUri);
+              if (await canLaunchUrl(smsLaunchUri)) {
+                await launchUrl(smsLaunchUri);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -183,9 +181,8 @@ class _KontakCardNakes extends StatelessWidget {
 class _TempatPraktekNakes extends StatelessWidget {
   final String? namaTempatPraktek;
   const _TempatPraktekNakes({
-    Key? key,
     required this.namaTempatPraktek,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -212,8 +209,7 @@ class _TempatPraktekNakes extends StatelessWidget {
 class _JadwalNakes extends StatelessWidget {
   final List<JadwalPraktek>? jadwal;
   final List<JadwalPraktek>? jadwalImunisasi;
-  const _JadwalNakes({Key? key, required this.jadwal, this.jadwalImunisasi})
-      : super(key: key);
+  const _JadwalNakes({required this.jadwal, this.jadwalImunisasi});
 
   @override
   Widget build(BuildContext context) {

@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
 class LoginPhoneScreen extends StatelessWidget {
-  const LoginPhoneScreen({Key? key}) : super(key: key);
+  const LoginPhoneScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

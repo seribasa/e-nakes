@@ -18,7 +18,7 @@ class Loading extends AuthenticationState {
 }
 
 class Authenticated extends AuthenticationState {
-  const Authenticated({UserData? user}) : super(user: user);
+  const Authenticated({super.user});
 
   @override
   List<Object?> get props => [user];

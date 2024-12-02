@@ -31,20 +31,20 @@ class FormCalendarActivityCubit extends Cubit<FormCalendarActivityState> {
   }
 
   Future<void> addCalendarActivity() async {
-    emit(state.copyWith(status: FormzStatus.submissionInProgress));
+    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
     try {
       await _calendarRepository.addCalendarActivity(
           calendarModel: CalendarModel(
               uid: userData?.id, date: state.date, activity: state.activity));
-      emit(state.copyWith(status: FormzStatus.submissionSuccess));
+      emit(state.copyWith(status: FormzSubmissionStatus.success));
     } catch (e) {
       emit(state.copyWith(
-          status: FormzStatus.submissionFailure, errorMessage: e.toString()));
+          status: FormzSubmissionStatus.failure, errorMessage: e.toString()));
     }
   }
 
   Future<void> updateCalendarActivity({required String? docId}) async {
-    emit(state.copyWith(status: FormzStatus.submissionInProgress));
+    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
     try {
       await _calendarRepository.updateCalendarActivity(
         calendarModel: CalendarModel(
@@ -54,10 +54,10 @@ class FormCalendarActivityCubit extends Cubit<FormCalendarActivityState> {
         ),
         docId: docId,
       );
-      emit(state.copyWith(status: FormzStatus.submissionSuccess));
+      emit(state.copyWith(status: FormzSubmissionStatus.success));
     } catch (e) {
       emit(state.copyWith(
-          status: FormzStatus.submissionFailure, errorMessage: e.toString()));
+          status: FormzSubmissionStatus.failure, errorMessage: e.toString()));
     }
   }
 
@@ -65,7 +65,7 @@ class FormCalendarActivityCubit extends Cubit<FormCalendarActivityState> {
     emit(state.copyWith(
       activity: '',
       date: DateTime.now(),
-      status: FormzStatus.pure,
+      status: FormzSubmissionStatus.initial,
     ));
   }
 }

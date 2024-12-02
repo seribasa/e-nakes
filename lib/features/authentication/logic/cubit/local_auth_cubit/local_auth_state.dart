@@ -5,14 +5,14 @@ class LocalAuthState extends Equatable {
     this.passcode = const Passcode.pure(),
     this.savedPasscode = const Passcode.pure(),
     this.confirmPasscode = '',
-    this.status = FormzStatus.pure,
+    this.status = FormzSubmissionStatus.initial,
     this.errorMessage,
   });
 
   final Passcode savedPasscode;
   final Passcode passcode;
   final String confirmPasscode;
-  final FormzStatus status;
+  final FormzSubmissionStatus status;
   final String? errorMessage;
 
   @override
@@ -22,7 +22,7 @@ class LocalAuthState extends Equatable {
     Passcode? savedPasscode,
     Passcode? passcode,
     String? confirmPasscode,
-    FormzStatus? status,
+    FormzSubmissionStatus? status,
     String? errorMessage,
   }) {
     return LocalAuthState(

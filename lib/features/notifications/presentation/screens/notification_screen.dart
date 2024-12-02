@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class NotificationScreen extends StatelessWidget {
-  const NotificationScreen({Key? key}) : super(key: key);
+  const NotificationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +28,9 @@ class NotificationScreen extends StatelessWidget {
   }
 }
 
+// ignore: unused_element
 class _ListPesan extends StatelessWidget {
-  const _ListPesan({Key? key}) : super(key: key);
+  const _ListPesan();
 
   @override
   Widget build(BuildContext context) {

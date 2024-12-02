@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QrRegistrasiPemeriksaan extends StatefulWidget {
-  const QrRegistrasiPemeriksaan({Key? key}) : super(key: key);
+  const QrRegistrasiPemeriksaan({super.key});
 
   @override
   State<StatefulWidget> createState() => _QrRegistrasiPemeriksaanState();

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
-class SearchBar extends StatelessWidget {
+class SearchBarPeltops extends StatelessWidget {
   final void Function()? onPressed;
   final void Function(String)? onChanged;
   final String? hintText;
-  const SearchBar(
-      {Key? key, required this.onPressed, this.hintText, this.onChanged})
-      : super(key: key);
+  const SearchBarPeltops(
+      {super.key, required this.onPressed, this.hintText, this.onChanged});
 
   @override
   Widget build(BuildContext context) {
