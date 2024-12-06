@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class WrapperRekamMedis extends StatelessWidget {
-  const WrapperRekamMedis({Key? key}) : super(key: key);
+  const WrapperRekamMedis({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class WrapperRekamMedis extends StatelessWidget {
 }
 
 class _PemeriksaanButton extends StatelessWidget {
-  const _PemeriksaanButton({Key? key}) : super(key: key);
+  const _PemeriksaanButton();
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<KlinikBloc, KlinikState>(
@@ -74,7 +74,7 @@ class _PemeriksaanButton extends StatelessWidget {
 }
 
 class _RekamMedisPasienButton extends StatelessWidget {
-  const _RekamMedisPasienButton({Key? key}) : super(key: key);
+  const _RekamMedisPasienButton();
   @override
   Widget build(BuildContext context) {
     return SizedBox(

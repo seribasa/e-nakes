@@ -7,8 +7,8 @@ import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
 class ResetEmailPasswordScreen extends StatelessWidget {
   const ResetEmailPasswordScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

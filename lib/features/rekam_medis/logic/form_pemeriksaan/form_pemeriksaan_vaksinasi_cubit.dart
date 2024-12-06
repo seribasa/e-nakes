@@ -92,25 +92,25 @@ class FormPemeriksaanVaksinasiCubit
 
   validateForm() {
     emit(state.copyWith(
-      status: FormzStatus.submissionInProgress,
+      status: FormzSubmissionStatus.inProgress,
     ));
     final validate = state.beratBadan != null &&
         state.tinggiBadan != null &&
         state.lingkarKepala != null;
     if (validate) {
       emit(state.copyWith(
-        status: FormzStatus.valid,
+        status: FormzSubmissionStatus.success,
       ));
     } else {
       emit(state.copyWith(
-        status: FormzStatus.invalid,
+        status: FormzSubmissionStatus.failure,
       ));
     }
   }
 
   void savePemeriksaanVaksinasi() async {
     emit(state.copyWith(
-      status: FormzStatus.submissionInProgress,
+      status: FormzSubmissionStatus.inProgress,
     ));
     try {
       final data = PemeriksaanModel(
@@ -129,11 +129,11 @@ class FormPemeriksaanVaksinasiCubit
       );
       await _pemeriksaanRepository.setPemeriksaan(pemeriksaanModel: data);
       emit(state.copyWith(
-        status: FormzStatus.submissionSuccess,
+        status: FormzSubmissionStatus.success,
       ));
     } catch (e) {
       emit(state.copyWith(
-        status: FormzStatus.submissionFailure,
+        status: FormzSubmissionStatus.failure,
         errorMessage: e.toString(),
       ));
     }

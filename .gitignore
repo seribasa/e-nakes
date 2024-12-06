@@ -30,7 +30,6 @@
 .pub-cache/
 .pub/
 /build/
-.fvm/flutter_sdk
 
 # Web related
 lib/generated_plugin_registrant.dart
@@ -51,3 +50,6 @@ android/app/google-services.json
 ios/Runner/GoogleService-Info.plist
 ios/firebase_app_id_file.json
 lib/firebase_options.dart
+
+# FVM Version Cache
+.fvm/

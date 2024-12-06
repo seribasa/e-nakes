@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
 class OTPForm extends StatefulWidget {
-  const OTPForm({Key? key}) : super(key: key);
+  const OTPForm({super.key});
   @override
   _OTPFormState createState() => _OTPFormState();
 }
@@ -64,7 +64,7 @@ class _OTPFormState extends State<OTPForm> {
 
     return BlocListener<LoginPhoneCubit, LoginPhoneState>(
       listener: (context, state) {
-        if (state.status.isSubmissionFailure) {
+        if (state.status.isFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -72,7 +72,7 @@ class _OTPFormState extends State<OTPForm> {
                 content: Text(state.errorMessage ?? 'Authentication Failure'),
               ),
             );
-        } else if (state.status.isSubmissionSuccess) {
+        } else if (state.status.isSuccess) {
           BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const AppView()));
@@ -140,7 +140,7 @@ class _OTPFormState extends State<OTPForm> {
 }
 
 class _OTPCodeInput extends StatelessWidget {
-  const _OTPCodeInput({Key? key}) : super(key: key);
+  const _OTPCodeInput();
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginPhoneCubit, LoginPhoneState>(
@@ -163,12 +163,12 @@ class _OTPCodeInput extends StatelessWidget {
 }
 
 class _LoginButton extends StatelessWidget {
-  const _LoginButton({Key? key}) : super(key: key);
+  const _LoginButton();
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginPhoneCubit, LoginPhoneState>(
       builder: (context, state) {
-        return state.status.isSubmissionInProgress
+        return state.status.isInProgress
             ? const CircularProgressIndicator()
             : SizedBox(
                 width: double.infinity,
@@ -179,7 +179,7 @@ class _LoginButton extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: state.otpCode.valid
+                  onPressed: state.otpCode.isValid
                       ? () => context
                           .read<LoginPhoneCubit>()
                           .logInWithOTP(verId: state.verId!)

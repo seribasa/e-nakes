@@ -40,7 +40,7 @@ class LineChartTemplate extends StatelessWidget {
   Widget build(BuildContext context) {
     return LineChart(
       sampleData,
-      swapAnimationDuration: const Duration(milliseconds: 100),
+      duration: const Duration(milliseconds: 100),
     );
   }
 
@@ -102,7 +102,7 @@ class LineChartTemplate extends StatelessWidget {
         },
         handleBuiltInTouches: true,
         touchTooltipData: LineTouchTooltipData(
-          tooltipBgColor: Colors.white,
+          getTooltipColor: (LineBarSpot touchedBar) => Colors.white,
           fitInsideHorizontally: true,
           tooltipMargin: 0,
           tooltipRoundedRadius: 20,
@@ -181,8 +181,8 @@ class LineChartTemplate extends StatelessWidget {
     );
 
     return Padding(
-        child: Text(value.toInt().toString(), style: style),
-        padding: const EdgeInsets.only(top: 10.0));
+        padding: const EdgeInsets.only(top: 10.0),
+        child: Text(value.toInt().toString(), style: style));
   }
 
   SideTitles get bottomTitles => SideTitles(
@@ -266,7 +266,7 @@ class LineChartTemplate extends StatelessWidget {
         isStrokeCapRound: true,
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
-        spots: type == LineChartType.tinggiBadan ? null : spots(lineTo: 6),
+        spots: type == LineChartType.tinggiBadan ? [] : spots(lineTo: 6),
       );
 
   LineChartBarData get lineChartBarData_7 => LineChartBarData(
@@ -277,7 +277,7 @@ class LineChartTemplate extends StatelessWidget {
         isStrokeCapRound: true,
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
-        spots: type == LineChartType.tinggiBadan ? null : spots(lineTo: 7),
+        spots: type == LineChartType.tinggiBadan ? [] : spots(lineTo: 7),
       );
 
   LineChartBarData get lineChartDataPasien => LineChartBarData(

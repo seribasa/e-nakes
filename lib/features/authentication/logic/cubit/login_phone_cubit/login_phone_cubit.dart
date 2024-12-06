@@ -19,7 +19,9 @@ class LoginPhoneCubit extends Cubit<LoginPhoneState> {
     final phone = Phone.dirty(value);
     emit(state.copyWith(
       phone: phone,
-      status: Formz.validate([phone, state.otpCode, state.countryCode]),
+      status: Formz.validate([phone, state.otpCode, state.countryCode,])
+          ? FormzSubmissionStatus.success
+          : FormzSubmissionStatus.failure,
     ));
   }
 
@@ -27,7 +29,13 @@ class LoginPhoneCubit extends Cubit<LoginPhoneState> {
     final otpCode = OTP.dirty(value);
     emit(state.copyWith(
       otpCode: otpCode,
-      status: Formz.validate([state.phone, otpCode, state.countryCode]),
+      status: Formz.validate([
+        state.phone,
+        otpCode,
+        state.countryCode,
+      ])
+          ? FormzSubmissionStatus.success
+          : FormzSubmissionStatus.failure,
     ));
   }
 
@@ -35,18 +43,24 @@ class LoginPhoneCubit extends Cubit<LoginPhoneState> {
     final countryCode = CountryCode.dirty(value);
     emit(state.copyWith(
       countryCode: countryCode,
-      status: Formz.validate([state.phone, state.otpCode, countryCode]),
+      status: Formz.validate([
+        state.phone,
+        state.otpCode,
+        countryCode,
+      ])
+          ? FormzSubmissionStatus.success
+          : FormzSubmissionStatus.failure,
     ));
   }
 
   void verIdChanged(String value) {
-    emit(state.copyWith(verId: value, status: FormzStatus.pure));
+    emit(state.copyWith(verId: value, status: FormzSubmissionStatus.initial));
   }
 
   Future<void> sendOTPCode() async {
     String phoneNumber = state.phone.value;
-    if (!state.phone.valid) return;
-    emit(state.copyWith(status: FormzStatus.submissionInProgress));
+    if (!state.phone.isValid) return;
+    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
     if (phoneNumber.startsWith('0')) {
       // remove the first character
       phoneNumber = phoneNumber.substring(1);
@@ -55,11 +69,12 @@ class LoginPhoneCubit extends Cubit<LoginPhoneState> {
       await _userRepository.verifyPhoneNumber(
         phone: state.countryCode.value + phoneNumber,
         codeSent: (String verId, int? token) {
-          emit(state.copyWith(status: FormzStatus.pure, verId: verId));
+          emit(state.copyWith(
+              status: FormzSubmissionStatus.initial, verId: verId));
         },
         verificationFailed: (FirebaseAuthException e) {
           emit(state.copyWith(
-              status: FormzStatus.submissionFailure, errorMessage: e.message));
+              status: FormzSubmissionStatus.failure, errorMessage: e.message));
         },
         verificationCompleted: (PhoneAuthCredential credential) async {
           final userResult = await _userRepository.signInWithCredential(
@@ -75,19 +90,19 @@ class LoginPhoneCubit extends Cubit<LoginPhoneState> {
               user: userModel,
             );
           }
-          emit(state.copyWith(status: FormzStatus.submissionSuccess));
+          emit(state.copyWith(status: FormzSubmissionStatus.success));
         },
       );
     } catch (_) {
       emit(state.copyWith(
-        status: FormzStatus.submissionFailure,
+        status: FormzSubmissionStatus.failure,
       ));
     }
   }
 
   Future<void> logInWithOTP({required String verId}) async {
-    if (state.otpCode.invalid) return;
-    emit(state.copyWith(status: FormzStatus.submissionInProgress));
+    if (state.otpCode.isNotValid) return;
+    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
     try {
       final userResult = await _userRepository.signUpWithOTP(
         state.otpCode.value,
@@ -104,10 +119,10 @@ class LoginPhoneCubit extends Cubit<LoginPhoneState> {
           user: userModel,
         );
       }
-      emit(state.copyWith(status: FormzStatus.submissionSuccess));
+      emit(state.copyWith(status: FormzSubmissionStatus.success));
     } on FirebaseAuthException catch (e) {
       emit(state.copyWith(
-          status: FormzStatus.submissionFailure, errorMessage: e.message));
+          status: FormzSubmissionStatus.failure, errorMessage: e.message));
     }
   }
 }

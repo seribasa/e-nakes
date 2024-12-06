@@ -14,7 +14,7 @@ class Passcode extends FormzInput<String, PasscodeValidationError> {
   const Passcode.pure() : super.pure('');
 
   /// {@macro password}
-  const Passcode.dirty([String value = '']) : super.dirty(value);
+  const Passcode.dirty([super.value = '']) : super.dirty();
 
   static final _passcodeRegExp = RegExp(r'^\d{4}$');
 

@@ -5,7 +5,7 @@ enum CountryCodeValidationError { invalid }
 class CountryCode extends FormzInput<String, CountryCodeValidationError> {
   const CountryCode.pure() : super.pure('');
 
-  const CountryCode.dirty([String value = '']) : super.dirty(value);
+  const CountryCode.dirty([super.value = '']) : super.dirty();
 
   static final RegExp _otpRegExp = RegExp(r'^\d{2,3}$');
 

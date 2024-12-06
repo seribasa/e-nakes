@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class WrapperJadwal extends StatelessWidget {
-  const WrapperJadwal({Key? key}) : super(key: key);
+  const WrapperJadwal({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class WrapperJadwal extends StatelessWidget {
 }
 
 class _RiwayatJanjiButton extends StatelessWidget {
-  const _RiwayatJanjiButton({Key? key}) : super(key: key);
+  const _RiwayatJanjiButton();
   @override
   Widget build(BuildContext context) {
     final authProvider = context.read<AuthenticationBloc>();
@@ -68,7 +68,7 @@ class _RiwayatJanjiButton extends StatelessWidget {
 }
 
 class _RegistrasiButton extends StatelessWidget {
-  const _RegistrasiButton({Key? key}) : super(key: key);
+  const _RegistrasiButton();
   @override
   Widget build(BuildContext context) {
     return SizedBox(

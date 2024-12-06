@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class KeanggotaanKlinikScreen extends StatelessWidget {
-  const KeanggotaanKlinikScreen({Key? key}) : super(key: key);
+  const KeanggotaanKlinikScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class KeanggotaanKlinikScreen extends StatelessWidget {
 
 class _RowAnggotaKlinik extends StatelessWidget {
   final List<AnggotaKlinik>? data;
-  const _RowAnggotaKlinik({Key? key, this.data}) : super(key: key);
+  const _RowAnggotaKlinik({this.data});
 
   @override
   Widget build(BuildContext context) {

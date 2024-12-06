@@ -3,13 +3,13 @@ part of 'form_calendar_activity_cubit.dart';
 class FormCalendarActivityState extends Equatable {
   final DateTime? date;
   final String? activity;
-  final FormzStatus status;
+  final FormzSubmissionStatus status;
   final String? errorMessage;
 
   const FormCalendarActivityState({
     this.date,
     this.activity,
-    this.status = FormzStatus.pure,
+    this.status = FormzSubmissionStatus.initial,
     this.errorMessage,
   });
 
@@ -19,7 +19,7 @@ class FormCalendarActivityState extends Equatable {
   FormCalendarActivityState copyWith({
     DateTime? date,
     String? activity,
-    FormzStatus? status,
+    FormzSubmissionStatus? status,
     String? errorMessage,
   }) {
     return FormCalendarActivityState(

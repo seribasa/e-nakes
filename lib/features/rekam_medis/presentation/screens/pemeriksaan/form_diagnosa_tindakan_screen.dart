@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
 class FormDiagnosaTindakanScreen extends StatelessWidget {
-  const FormDiagnosaTindakanScreen({Key? key}) : super(key: key);
+  const FormDiagnosaTindakanScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class FormDiagnosaTindakanScreen extends StatelessWidget {
       body: BlocListener<FormPemeriksaanVaksinasiCubit,
           FormPemeriksaanVaksinasiState>(
         listener: (context, state) {
-          if (state.status == FormzStatus.submissionSuccess) {
+          if (state.status == FormzSubmissionStatus.success) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Berhasil menyimpan pemeriksaan!'),
@@ -29,7 +29,7 @@ class FormDiagnosaTindakanScreen extends StatelessWidget {
                   builder: (context) => const BottomNavbarWrapper()),
               (Route<dynamic> route) => false,
             );
-          } else if (state.status == FormzStatus.submissionFailure) {
+          } else if (state.status == FormzSubmissionStatus.failure) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Terjadi kesalahan!'),
@@ -62,11 +62,11 @@ class FormDiagnosaTindakanScreen extends StatelessWidget {
 }
 
 class _DiagnosaForm extends StatelessWidget {
-  const _DiagnosaForm({Key? key}) : super(key: key);
+  const _DiagnosaForm();
 
   @override
   Widget build(BuildContext context) {
-    final _pemeriksaanBloc =
+    final pemeriksaanBloc =
         BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,7 +83,7 @@ class _DiagnosaForm extends StatelessWidget {
             color: Colors.grey[200],
           ),
           child: TextField(
-            onChanged: (value) => _pemeriksaanBloc.changeDiagnosa(value),
+            onChanged: (value) => pemeriksaanBloc.changeDiagnosa(value),
             minLines: 1,
             maxLines: 10,
             decoration: const InputDecoration(
@@ -98,11 +98,11 @@ class _DiagnosaForm extends StatelessWidget {
 }
 
 class _TindakanForm extends StatelessWidget {
-  const _TindakanForm({Key? key}) : super(key: key);
+  const _TindakanForm();
 
   @override
   Widget build(BuildContext context) {
-    final _pemeriksaanBloc =
+    final pemeriksaanBloc =
         BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,7 +119,7 @@ class _TindakanForm extends StatelessWidget {
             color: Colors.grey[200],
           ),
           child: TextField(
-            onChanged: (value) => _pemeriksaanBloc.changeTindakan(value),
+            onChanged: (value) => pemeriksaanBloc.changeTindakan(value),
             minLines: 1,
             maxLines: 10,
             decoration: const InputDecoration(
@@ -134,11 +134,11 @@ class _TindakanForm extends StatelessWidget {
 }
 
 class _NextButton extends StatelessWidget {
-  const _NextButton({Key? key}) : super(key: key);
+  const _NextButton();
 
   @override
   Widget build(BuildContext context) {
-    final _pemeriksaanBloc =
+    final pemeriksaanBloc =
         BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
     return SizedBox(
       width: double.infinity,
@@ -150,14 +150,14 @@ class _NextButton extends StatelessWidget {
             style: ElevatedButton.styleFrom(
                 shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.zero)),
-            child: state.status == FormzStatus.submissionInProgress
-                ? const CircularProgressIndicator()
-                : const Text("Selesai"),
-            onPressed: state.status == FormzStatus.submissionInProgress
+            onPressed: state.status == FormzSubmissionStatus.inProgress
                 ? null
                 : () {
-                    _pemeriksaanBloc.savePemeriksaanVaksinasi();
+                    pemeriksaanBloc.savePemeriksaanVaksinasi();
                   },
+            child: state.status == FormzSubmissionStatus.inProgress
+                ? const CircularProgressIndicator()
+                : const Text("Selesai"),
           );
         },
       ),

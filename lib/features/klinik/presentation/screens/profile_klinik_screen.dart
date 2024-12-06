@@ -9,7 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/common/method_helper.dart';
 
 class ProfileKlinikScreen extends StatelessWidget {
-  const ProfileKlinikScreen({Key? key}) : super(key: key);
+  const ProfileKlinikScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +65,7 @@ class ProfileKlinikScreen extends StatelessWidget {
 
 class _NamaKlinik extends StatelessWidget {
   final String? namaKlinik;
-  const _NamaKlinik({Key? key, required this.namaKlinik}) : super(key: key);
+  const _NamaKlinik({required this.namaKlinik});
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +77,7 @@ class _NamaKlinik extends StatelessWidget {
 
 class _MottoKlinik extends StatelessWidget {
   final String? mottoKlinik;
-  const _MottoKlinik({Key? key, this.mottoKlinik}) : super(key: key);
+  const _MottoKlinik({this.mottoKlinik});
 
   @override
   Widget build(BuildContext context) {
@@ -87,8 +87,7 @@ class _MottoKlinik extends StatelessWidget {
 
 class _GambarKlinik extends StatelessWidget {
   final List<String>? gambarKlinikUrl;
-  const _GambarKlinik({Key? key, required this.gambarKlinikUrl})
-      : super(key: key);
+  const _GambarKlinik({required this.gambarKlinikUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -109,11 +108,9 @@ class _KontakCardKlinik extends StatelessWidget {
   final String? alamat;
   final String? namaKlinik;
   const _KontakCardKlinik(
-      {Key? key,
-      required this.nomorTelepon,
+      {required this.nomorTelepon,
       required this.namaKlinik,
-      this.alamat})
-      : super(key: key);
+      this.alamat});
 
   @override
   Widget build(BuildContext context) {
@@ -134,12 +131,12 @@ class _KontakCardKlinik extends StatelessWidget {
                   color: Theme.of(context).primaryColor,
                 ),
                 onPressed: () async {
-                  final Uri _phoneLaunchUri = Uri(
+                  final Uri phoneLaunchUri = Uri(
                     scheme: 'tel',
                     path: nomorTelepon,
                   );
-                  if (await canLaunchUrl(_phoneLaunchUri)) {
-                    await launchUrl(_phoneLaunchUri);
+                  if (await canLaunchUrl(phoneLaunchUri)) {
+                    await launchUrl(phoneLaunchUri);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -155,12 +152,12 @@ class _KontakCardKlinik extends StatelessWidget {
                   color: Theme.of(context).primaryColor,
                 ),
                 onPressed: () async {
-                  final Uri _smsLaunchUri = Uri(
+                  final Uri smsLaunchUri = Uri(
                     scheme: 'sms',
                     path: nomorTelepon,
                   );
-                  if (await canLaunchUrl(_smsLaunchUri)) {
-                    await launchUrl(_smsLaunchUri);
+                  if (await canLaunchUrl(smsLaunchUri)) {
+                    await launchUrl(smsLaunchUri);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -195,7 +192,7 @@ class _KontakCardKlinik extends StatelessWidget {
 
 class _JadwalKlinik extends StatelessWidget {
   final Map? jadwal;
-  const _JadwalKlinik({Key? key, required this.jadwal}) : super(key: key);
+  const _JadwalKlinik({required this.jadwal});
 
   @override
   Widget build(BuildContext context) {

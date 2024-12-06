@@ -9,13 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GrafikPemeriksaanScreen extends StatelessWidget {
-  const GrafikPemeriksaanScreen({Key? key}) : super(key: key);
+  const GrafikPemeriksaanScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final _pemeriksaanBloc =
+    final pemeriksaanBloc =
         BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
-    final _pasien = _pemeriksaanBloc.state.pasien;
+    final pasien = pemeriksaanBloc.state.pasien;
     return Scaffold(
       appBar: AppBar(title: const Text('Grafik Pemeriksaan')),
       body: Column(
@@ -23,9 +23,9 @@ class GrafikPemeriksaanScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: PasienCard(
-              nama: _pasien?.nama,
-              umur: _pasien?.umur,
-              jenisKelamin: _pasien?.jenisKelamin,
+              nama: pasien?.nama,
+              umur: pasien?.umur,
+              jenisKelamin: pasien?.jenisKelamin,
             ),
           ),
           BlocBuilder<PemeriksaanCubit, PemeriksaanState>(
@@ -64,11 +64,11 @@ class GrafikPemeriksaanScreen extends StatelessWidget {
                                       : [];
                               PemeriksaanModel pemeriksaanModel =
                                   PemeriksaanModel(
-                                bulanKe: _pemeriksaanBloc.state.bulanKe,
-                                beratBadan: _pemeriksaanBloc.state.beratBadan,
-                                tinggiBadan: _pemeriksaanBloc.state.tinggiBadan,
+                                bulanKe: pemeriksaanBloc.state.bulanKe,
+                                beratBadan: pemeriksaanBloc.state.beratBadan,
+                                tinggiBadan: pemeriksaanBloc.state.tinggiBadan,
                                 lingkarKepala:
-                                    _pemeriksaanBloc.state.lingkarKepala,
+                                    pemeriksaanBloc.state.lingkarKepala,
                               );
                               data.add(pemeriksaanModel);
                               return Expanded(
@@ -79,7 +79,7 @@ class GrafikPemeriksaanScreen extends StatelessWidget {
                                       type: LineChartType.beratBadan,
                                       listData: data,
                                       isBoy:
-                                          _pasien?.jenisKelamin == "Laki-laki"
+                                          pasien?.jenisKelamin == "Laki-laki"
                                               ? true
                                               : false,
                                     ),
@@ -87,7 +87,7 @@ class GrafikPemeriksaanScreen extends StatelessWidget {
                                       type: LineChartType.tinggiBadan,
                                       listData: data,
                                       isBoy:
-                                          _pasien?.jenisKelamin == "Laki-laki"
+                                          pasien?.jenisKelamin == "Laki-laki"
                                               ? true
                                               : false,
                                     ),
@@ -95,7 +95,7 @@ class GrafikPemeriksaanScreen extends StatelessWidget {
                                       type: LineChartType.lingkarKepala,
                                       listData: data,
                                       isBoy:
-                                          _pasien?.jenisKelamin == "Laki-laki"
+                                          pasien?.jenisKelamin == "Laki-laki"
                                               ? true
                                               : false,
                                     ),
@@ -119,11 +119,11 @@ class GrafikPemeriksaanScreen extends StatelessWidget {
 }
 
 class _NextButton extends StatelessWidget {
-  const _NextButton({Key? key}) : super(key: key);
+  const _NextButton();
 
   @override
   Widget build(BuildContext context) {
-    final _pemeriksaanBloc =
+    final pemeriksaanBloc =
         BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
     return SizedBox(
       width: double.infinity,
@@ -136,7 +136,7 @@ class _NextButton extends StatelessWidget {
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return BlocProvider.value(
-              value: _pemeriksaanBloc,
+              value: pemeriksaanBloc,
               child: const FormDiagnosaTindakanScreen(),
             );
           }));

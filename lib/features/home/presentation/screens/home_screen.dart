@@ -11,12 +11,12 @@ import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/wrapp
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' show DateFormat;
 
 import '../../../authentication/data/models/user.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,7 @@ class HomeScreen extends StatelessWidget {
 
 class _HelloHeader extends StatelessWidget {
   final UserData? data;
-  const _HelloHeader({Key? key, required this.data}) : super(key: key);
+  const _HelloHeader({required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -72,12 +72,12 @@ class _HelloHeader extends StatelessWidget {
                 if (data?.phone == '' || data?.phone == null) {
                   return Text(
                     data?.email ?? '',
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: Theme.of(context).textTheme.bodySmall,
                   );
                 } else {
                   return Text(
                     data?.phone ?? '',
-                    style: Theme.of(context).textTheme.caption,
+                    style: Theme.of(context).textTheme.labelSmall,
                   );
                 }
               }
@@ -95,7 +95,7 @@ class _HelloHeader extends StatelessWidget {
 }
 
 class _MenuList extends StatelessWidget {
-  const _MenuList({Key? key}) : super(key: key);
+  const _MenuList();
 
   @override
   Widget build(BuildContext context) {
@@ -169,6 +169,9 @@ class _MenuList extends StatelessWidget {
                           children: [
                             Container(
                               alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  color: Colors.blue[300],
+                                  borderRadius: BorderRadius.circular(20)),
                               child: Padding(
                                 padding: const EdgeInsets.all(30.0),
                                 child: FaIcon(
@@ -177,9 +180,6 @@ class _MenuList extends StatelessWidget {
                                   color: Colors.blue[100],
                                 ),
                               ),
-                              decoration: BoxDecoration(
-                                  color: Colors.blue[300],
-                                  borderRadius: BorderRadius.circular(20)),
                             ),
                             const SizedBox(height: 10),
                             Text(
@@ -201,12 +201,12 @@ class _MenuList extends StatelessWidget {
 }
 
 class _AppoinmentToday extends StatelessWidget {
-  const _AppoinmentToday({Key? key}) : super(key: key);
+  const _AppoinmentToday();
 
   @override
   Widget build(BuildContext context) {
-    final _user = context.read<AuthenticationBloc>().state.user;
-    final _jadwal = context.read<JadwalCubit>().state.jadwalPasienModel;
+    final user = context.read<AuthenticationBloc>().state.user;
+    final jadwal = context.read<JadwalCubit>().state.jadwalPasienModel;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Column(
@@ -224,7 +224,7 @@ class _AppoinmentToday extends StatelessWidget {
                     MaterialPageRoute(
                         builder: (context) => BlocProvider(
                               create: (context) =>
-                                  JadwalCubit(userData: _user)..getAllJadwal(),
+                                  JadwalCubit(userData: user)..getAllJadwal(),
                               child: const RiwayatJanjiScreen(),
                             )),
                   );
@@ -308,7 +308,7 @@ class _AppoinmentToday extends StatelessWidget {
                               ),
                               Text(
                                 DateFormat('dd-MMM-yyyy').format(
-                                    _jadwal?.first.tanggal ?? DateTime.now()),
+                                    jadwal?.first.tanggal ?? DateTime.now()),
                                 style: const TextStyle(color: Colors.white),
                               ),
                             ],

@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
 class LoginEmailScreen extends StatelessWidget {
-  const LoginEmailScreen({Key? key}) : super(key: key);
+  const LoginEmailScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return KeyboardDismisser(

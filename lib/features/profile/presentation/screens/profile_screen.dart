@@ -6,11 +6,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final _userProvider = context.read<AuthenticationBloc>().state.user;
+    final userProvider = context.read<AuthenticationBloc>().state.user;
     return Scaffold(
       body: SafeArea(
           child: Padding(
@@ -18,9 +18,9 @@ class ProfileScreen extends StatelessWidget {
         child: Column(
           children: <Widget>[
             ProfileCard(
-              urlGambar: _userProvider?.photo,
-              nama: _userProvider?.fullName,
-              pekerjaan: _userProvider?.profession,
+              urlGambar: userProvider?.photo,
+              nama: userProvider?.fullName,
+              pekerjaan: userProvider?.profession,
             ),
             const SizedBox(height: 20),
             const _MyProfileButton(),
@@ -49,12 +49,12 @@ class _LogoutButton extends StatelessWidget {
               key: const Key('logout_continue_raisedButton'),
               style: ElevatedButton.styleFrom(
                 elevation: 0,
-                primary: Colors.red[700],
+                backgroundColor: Colors.red[700],
               ),
               onPressed: () =>
                   context.read<AuthenticationBloc>().add(LoggedOut()),
-              child: Row(
-                children: const [
+              child: const Row(
+                children: [
                   FaIcon(FontAwesomeIcons.arrowRightFromBracket),
                   SizedBox(width: 10),
                   Text(
@@ -71,7 +71,8 @@ class _LogoutButton extends StatelessWidget {
 }
 
 class _MyProfileButton extends StatelessWidget {
-  const _MyProfileButton({Key? key}) : super(key: key);
+  const _MyProfileButton();
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -87,8 +88,8 @@ class _MyProfileButton extends StatelessWidget {
             return const DetailProfileScreen();
           }));
         },
-        child: Row(
-          children: const [
+        child: const Row(
+          children: [
             FaIcon(FontAwesomeIcons.userNurse),
             SizedBox(width: 10),
             Text(

@@ -1,7 +1,7 @@
 part of 'form_pemeriksaan_vaksinasi_cubit.dart';
 
 class FormPemeriksaanVaksinasiState extends Equatable {
-  final FormzStatus? status;
+  final FormzSubmissionStatus? status;
   final String? errorMessage;
   final int? beratBadan;
   final int? tinggiBadan;
@@ -15,7 +15,7 @@ class FormPemeriksaanVaksinasiState extends Equatable {
   final String? bulanKe;
   final String? jenisVaksin;
   const FormPemeriksaanVaksinasiState({
-    this.status = FormzStatus.pure,
+    this.status = FormzSubmissionStatus.initial,
     this.errorMessage,
     this.beratBadan,
     this.tinggiBadan,
@@ -48,7 +48,7 @@ class FormPemeriksaanVaksinasiState extends Equatable {
       ];
 
   FormPemeriksaanVaksinasiState copyWith({
-    FormzStatus? status,
+    FormzSubmissionStatus? status,
     String? errorMessage,
     int? beratBadan,
     int? tinggiBadan,

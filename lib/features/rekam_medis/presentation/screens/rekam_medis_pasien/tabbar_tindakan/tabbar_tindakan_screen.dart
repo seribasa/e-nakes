@@ -5,20 +5,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class TabbarTindakanScreen extends StatelessWidget {
-  const TabbarTindakanScreen({Key? key}) : super(key: key);
+  const TabbarTindakanScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PemeriksaanCubit, PemeriksaanState>(
       builder: (context, state) {
-        final List<PemeriksaanModel> _pemeriksaan =
+        final List<PemeriksaanModel> pemeriksaan =
             (state is PemeriksaanLoaded) ? state.pemeriksaan ?? [] : [];
 
         return SingleChildScrollView(
           child: Column(
             children: [
-              ...List.generate(_pemeriksaan.length, (index) {
-                final data = _pemeriksaan[index];
+              ...List.generate(pemeriksaan.length, (index) {
+                final data = pemeriksaan[index];
                 return Card(
                   child: ListTile(
                     title: Text(
