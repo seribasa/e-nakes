@@ -1,69 +1,70 @@
-class Klinik {
-  final String? id;
-  final String? name;
-  final String? motto;
+import 'package:equatable/equatable.dart';
+
+import '../../../authentication/data/models/user.dart';
+
+class ClinicModel extends Equatable {
+  final String? id, name, address, motto, phoneNumber;
   final List<String>? photos;
-  final String? address;
-  final String? phoneNumber;
-  final Map? schedules;
-  final Map<int, String>? listUid;
-  const Klinik({
-    this.photos,
-    this.address,
-    this.phoneNumber,
-    this.schedules,
+  final List<Schedule> schedules;
+
+  const ClinicModel({
     this.id,
     this.name,
-    this.listUid,
+    this.address,
     this.motto,
+    this.phoneNumber,
+    this.photos,
+    this.schedules = const [],
   });
-//  copywith
-  Klinik copyWith({
-    String? id,
-    String? name,
-    String? motto,
-    List<String>? photos,
-    String? address,
-    String? phoneNumber,
-    Map? schedules,
-    Map<int, String>? listUid,
-  }) {
-    return Klinik(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      motto: motto ?? this.motto,
-      photos: photos ?? this.photos,
-      address: address ?? this.address,
-      phoneNumber: phoneNumber ?? this.phoneNumber,
-      schedules: schedules ?? this.schedules,
-      listUid: listUid ?? this.listUid,
+
+  @override
+  List<Object?> get props => [
+    id,
+    name,
+    address,
+    motto,
+    phoneNumber,
+    photos,
+    schedules,
+  ];
+
+  factory ClinicModel.fromSeribase(Map<String, dynamic> data) {
+    return ClinicModel(
+      id: data['id'],
+      name: data['name'],
+      address: data['address'],
+      motto: data['motto'],
+      phoneNumber: data['phone_number'],
+      photos: () {
+        if (data['photos'] == null) {
+          return null;
+        }
+        try {
+          return List<String>.from(data['photos']);
+        } catch (e) {
+          return null;
+        }
+      }(),
+      schedules: () {
+        try {
+          return List<Schedule>.from(
+            data['clinic_schedules'].map((x) => Schedule.fromSeribase(x)),
+          );
+        } catch (e) {
+          return <Schedule>[];
+        }
+      }(),
     );
   }
 
-  factory Klinik.fromJson(Map<String, dynamic>? json) {
-    return Klinik(
-      id: json?['id'],
-      name: json?['nama'],
-      motto: json?['motto'],
-      photos:
-          json?['photos'] != null ? List<String>.from(json?['photos']) : null,
-      address: json?['alamat'],
-      phoneNumber: json?['phone'],
-      schedules: json?['jadwal'],
-      listUid: json?['anggota']?.cast<Map>(),
-    );
-  }
-
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toSeribase() {
     return {
-      'id': id,
-      'name': name,
-      'motto': motto,
-      'photos': photos,
-      'address': address,
-      'phoneNumber': phoneNumber,
-      'schedules': schedules,
-      'listUid': listUid,
+      if (id != null) "id": id,
+      if (name != null) "name": name,
+      if (address != null) "address": address,
+      if (motto != null) "motto": motto,
+      if (phoneNumber != null) "phone_number": phoneNumber,
+      if (photos != null) "photos": photos,
     };
   }
 }

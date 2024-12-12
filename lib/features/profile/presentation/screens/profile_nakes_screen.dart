@@ -207,8 +207,8 @@ class _TempatPraktekNakes extends StatelessWidget {
 }
 
 class _JadwalNakes extends StatelessWidget {
-  final List<JadwalPraktek>? jadwal;
-  final List<JadwalPraktek>? jadwalImunisasi;
+  final List<Schedule>? jadwal;
+  final List<Schedule>? jadwalImunisasi;
   const _JadwalNakes({required this.jadwal, this.jadwalImunisasi});
 
   @override
@@ -230,9 +230,9 @@ class _JadwalNakes extends StatelessWidget {
                 (e) => Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(e.hari ?? ''),
+                    Text(e.day?.name ?? ''),
                     const Divider(thickness: 1),
-                    Text(e.jam ?? ''),
+                    Text("${e.startTime} - ${e.endTime}"),
                   ],
                 ),
               ) ??
@@ -252,9 +252,9 @@ class _JadwalNakes extends StatelessWidget {
                 (e) => Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(e.hari ?? ''),
+                    Text(e.day?.name ?? ''),
                     const Divider(thickness: 1),
-                    Text(e.jam ?? ''),
+                    Text("${e.startTime} - ${e.endTime}"),
                   ],
                 ),
               ) ??

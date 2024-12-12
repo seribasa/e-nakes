@@ -11,8 +11,7 @@ import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/wrapp
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart' show DateFormat;
-
+import 'package:intl/intl.dart';
 import '../../../authentication/data/models/user.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -50,7 +49,7 @@ class HomeScreen extends StatelessWidget {
 }
 
 class _HelloHeader extends StatelessWidget {
-  final UserData? data;
+  final ProfileModel? data;
   const _HelloHeader({required this.data});
 
   @override

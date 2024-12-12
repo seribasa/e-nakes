@@ -1,11 +1,14 @@
+import 'package:eimunisasi_nakes/routers/route_paths/root_route_paths.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../logic/cubit/local_auth_cubit/local_auth_cubit.dart';
-import '../../../bottom_navbar/presentation/screens/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
 class ConfirmPasscodeForm extends StatelessWidget {
   const ConfirmPasscodeForm({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<LocalAuthCubit, LocalAuthState>(
@@ -70,11 +73,7 @@ class _NextButton extends StatelessWidget {
     return BlocListener<LocalAuthCubit, LocalAuthState>(
       listener: (context, state) {
         if (state.status.isSuccess) {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (context) => const BottomNavbarWrapper(),
-              ),
-              (route) => false);
+          context.goNamed(RootRoutePaths.dashboard.name);
         } else if (state.status.isFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
@@ -87,23 +86,21 @@ class _NextButton extends StatelessWidget {
       },
       child: BlocBuilder<LocalAuthCubit, LocalAuthState>(
         builder: (context, state) {
-          return state.status.isInProgress
-              ? const CircularProgressIndicator()
-              : SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    key: const Key('confirmPasscodeForm_next_raisedButton'),
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    onPressed: () {
-                      context.read<LocalAuthCubit>().confirmPasscode();
-                    },
-                    child: const Text('Konfirmasi'),
-                  ),
-                );
+          if (state.status.isInProgress) {
+            return const CircularProgressIndicator();
+          }
+          return ElevatedButton(
+            key: const Key('confirmPasscodeForm_next_raisedButton'),
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            onPressed: () {
+              context.read<LocalAuthCubit>().confirmPasscode();
+            },
+            child: const Text('Konfirmasi'),
+          );
         },
       ),
     );

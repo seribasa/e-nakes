@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:eimunisasi_nakes/core/extension/string_extension.dart';
 import 'package:eimunisasi_nakes/features/klinik/logic/bloc/klinik_bloc/klinik_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/common/method_helper.dart';
+import '../../../authentication/data/models/user.dart';
 
 class ProfileKlinikScreen extends StatelessWidget {
   const ProfileKlinikScreen({super.key});
@@ -191,7 +191,7 @@ class _KontakCardKlinik extends StatelessWidget {
 }
 
 class _JadwalKlinik extends StatelessWidget {
-  final Map? jadwal;
+  final List<Schedule>? jadwal;
   const _JadwalKlinik({required this.jadwal});
 
   @override
@@ -213,15 +213,15 @@ class _JadwalKlinik extends StatelessWidget {
             if (jadwal == null) {
               return const Center(child: Text('Tidak ada jadwal'));
             }
-            final length = jadwal?['hari'].length ?? 0;
+            final length = jadwal?.length  ?? 0;
             List<Widget> list = [];
             for (int i = 0; i < length; i++) {
               list.add(
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(jadwal!['hari'][i]?.toString().capitalize() ?? ''),
-                    Text(jadwal!['waktu'][i] ?? ''),
+                    Text(jadwal?[i].day?.name ?? ''),
+                    Text("${jadwal?[i].time}"),
                   ],
                 ),
               );

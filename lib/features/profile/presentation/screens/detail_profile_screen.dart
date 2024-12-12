@@ -11,6 +11,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/widgets/image_picker.dart';
+import '../../../../injection.dart';
 
 class DetailProfileScreen extends StatelessWidget {
   const DetailProfileScreen({super.key});
@@ -60,7 +61,7 @@ class _ProfilePicture extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userRepository = UserRepository();
+    final userRepository = getIt<UserRepository>();
     Future<void> showAndSaveImage() async {
       ModalPickerImage().showPicker(context, (val) {
         if (val != null) {
@@ -158,7 +159,7 @@ class _ProfilePicture extends StatelessWidget {
 }
 
 class _ProfilNakesSection extends StatelessWidget {
-  final UserData? user;
+  final ProfileModel? user;
   const _ProfilNakesSection({required this.user});
 
   @override
@@ -200,7 +201,7 @@ class _ProfilNakesSection extends StatelessWidget {
 }
 
 class _InformasiAkunSection extends StatelessWidget {
-  final UserData? user;
+  final ProfileModel? user;
   const _InformasiAkunSection({required this.user});
 
   @override
@@ -394,7 +395,7 @@ class _ProfesiForm extends StatelessWidget {
 }
 
 class _JadwalForm extends StatelessWidget {
-  final List<JadwalPraktek>? initialValue;
+  final List<Schedule>? initialValue;
   const _JadwalForm({this.initialValue});
 
   @override
@@ -422,13 +423,13 @@ class _JadwalForm extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          e.hari ?? '',
+                          e.day?.name ?? '',
                           style: const TextStyle(
                             fontSize: 15,
                           ),
                         ),
                         Text(
-                          e.jam ?? '',
+                          e.time,
                           style: const TextStyle(
                             fontSize: 15,
                           ),

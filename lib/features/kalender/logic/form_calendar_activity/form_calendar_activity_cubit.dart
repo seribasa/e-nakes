@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eimunisasi_nakes/features/authentication/data/models/user.dart';
 import 'package:eimunisasi_nakes/features/kalender/data/models/calendar_model.dart';
 import 'package:eimunisasi_nakes/features/kalender/data/repositories/calendar_repository.dart';
@@ -9,7 +9,7 @@ part 'form_calendar_activity_state.dart';
 
 class FormCalendarActivityCubit extends Cubit<FormCalendarActivityState> {
   final CalendarRepository _calendarRepository;
-  final UserData? userData;
+  final ProfileModel? userData;
   FormCalendarActivityCubit({
     CalendarRepository? calendarRepository,
     required this.userData,

@@ -1,4 +1,5 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../data/models/email.dart';
 import '../../../data/repositories/user_repository.dart';
 import 'package:equatable/equatable.dart';
