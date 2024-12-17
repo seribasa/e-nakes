@@ -1,3 +1,5 @@
+import 'package:eimunisasi_nakes/injection.dart';
+
 import '../../../logic/cubit/local_auth_cubit/local_auth_cubit.dart';
 import '../../widgets/passcode_form.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +11,7 @@ class PasscodeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => LocalAuthCubit()..getPasscode(),
+      create: (_) => getIt<LocalAuthCubit>()..getPasscode(),
       child: const Scaffold(
         body: Padding(
           padding: EdgeInsets.all(20.0),
