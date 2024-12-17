@@ -19,6 +19,7 @@ import 'auth_router.dart';
 final router = GoRouter(
   routes: [
     GoRoute(
+      name: RootRoutePaths.root.name,
       path: RootRoutePaths.root.path,
       builder: (context, state) {
         final error = state.uri.queryParameters['error'];

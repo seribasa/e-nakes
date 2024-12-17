@@ -9,10 +9,12 @@ import '../features/authentication/presentation/screens/local_auth/passcode_scre
 class AuthLocalRouter {
   static List<RouteBase> routes = [
     GoRoute(
+      name: AuthRoutePaths.passcode.name,
       path: AuthRoutePaths.passcode.path,
       builder: (_, __) => const PasscodeScreen(),
     ),
     GoRoute(
+      name: AuthRoutePaths.confirmPasscode.name,
       path: AuthRoutePaths.confirmPasscode.path,
       builder: (_, state) {
         return BlocProvider.value(

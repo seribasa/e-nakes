@@ -12,30 +12,17 @@ class PasscodeForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LocalAuthCubit, LocalAuthState>(
-      listener: (context, state) {
-        if (state.status.isFailure) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Text(state.errorMessage ?? 'Gagal'),
-              ),
-            );
-        }
-      },
-      child: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const _TextHeader(),
-              const SizedBox(height: 16),
-              _PasscodeInput(),
-              const SizedBox(height: 16),
-              const _NextButton(),
-            ],
-          ),
+    return Center(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const _TextHeader(),
+            const SizedBox(height: 16),
+            _PasscodeInput(),
+            const SizedBox(height: 16),
+            const _NextButton(),
+          ],
         ),
       ),
     );
@@ -99,6 +86,7 @@ class _NextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<LocalAuthCubit, LocalAuthState>(
+      listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
         if (state.status.isSuccess) {
           context.goNamed(RootRoutePaths.dashboard.name);
