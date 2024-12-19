@@ -53,3 +53,12 @@ lib/firebase_options.dart
 
 # FVM Version Cache
 .fvm/
+
+# injectable
+.injection.config.dart
+
+# generate by build runner
+*.freezed.dart
+*.g.dart
+*.mocks.dart
+*.config.dart

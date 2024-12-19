@@ -1,5 +1,5 @@
-import 'package:bloc/bloc.dart';
 import 'package:eimunisasi_nakes/features/authentication/data/models/user.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../data/models/email.dart';
 import '../../../data/models/password.dart';
 import '../../../data/repositories/user_repository.dart';
@@ -47,8 +47,8 @@ class SignUpCubit extends Cubit<SignUpState> {
         email: state.email.value,
         password: state.password.value,
       );
-      final userModel = UserData(
-        id: userResult.user?.uid,
+      final userModel = ProfileModel(
+        id: userResult.user?.id,
         email: userResult.user?.email,
       );
       await _userRepository.insertUserToDatabase(

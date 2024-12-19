@@ -1,16 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eimunisasi_nakes/features/klinik/data/models/klinik.dart';
 import 'package:equatable/equatable.dart';
 
-/// {@template user}
-/// User model
-///
-/// [User.empty] represents an unauthenticated user.
-/// {@endtemplate}
-class UserData extends Equatable {
-  /// {@macro user}
-  const UserData({
-    required this.id,
+class ProfileModel extends Equatable {
+  const ProfileModel({
+    this.id,
     this.email,
     this.phone,
     this.fullName,
@@ -24,85 +17,70 @@ class UserData extends Equatable {
     this.schedulesImunisasi,
     this.clinic,
   });
-
-  /// The current user's email address.
-  final String? email;
-
-  /// The current user's phone address.
-  final String? phone;
-
-  /// The current user's id.
-  final String? id;
-
-  /// The current user's name (display name).
-  final String? fullName;
-
-  /// Url for the current user's photo.
-  final String? photo;
-
-  final String? nik;
-
-  final String? kartuKeluarga;
-
-  final String? profession;
-
+  final String? id, email, phone,fullName, photo, birthPlace, kartuKeluarga, nik, profession;
   final DateTime? birthDate;
+  final ClinicModel? clinic;
+  final List<Schedule>? schedules, schedulesImunisasi;
 
-  final String? birthPlace;
+  static const String table = 'profiles';
 
-  final Klinik? clinic;
+  static const empty = ProfileModel();
 
-  /// Map<Hari, List<jam>>
-  final List<JadwalPraktek>? schedules;
-  final List<JadwalPraktek>? schedulesImunisasi;
+  bool get isEmpty => this == ProfileModel.empty;
 
-  /// Empty user which represents an unauthenticated user.
-  static const empty = UserData(id: '');
+  bool get isNotEmpty => this != ProfileModel.empty;
 
-  /// Convenience getter to determine whether the current user is empty.
-  bool get isEmpty => this == UserData.empty;
-
-  /// Convenience getter to determine whether the current user is not empty.
-  bool get isNotEmpty => this != UserData.empty;
-
-  factory UserData.fromMap(Map<String, dynamic>? map, String id) {
-    return UserData(
-      id: id,
+  factory ProfileModel.fromSeribase(Map<String, dynamic>? map) {
+    return ProfileModel(
+      id: map?['user_id'],
       email: map?['email'],
-      phone: map?['noTelpon'],
-      fullName: map?['namaLengkap'],
-      photo: map?['photoURL'],
-      birthDate: ((map?['tanggalLahir'] != null)
-          ? (map?['tanggalLahir'] as Timestamp).toDate()
-          : null),
-      birthPlace: map?['tempatLahir'],
-      kartuKeluarga: map?['kartuKeluarga'],
-      nik: map?['nik'],
-      profession: map?['profesi'],
-      schedules: (map?['jadwal'] as List?)
-          ?.map((e) => JadwalPraktek.fromMap(e))
+      phone: map?['phone_number'],
+      fullName: map?['full_name'],
+      photo: map?['avatar_url'],
+      birthDate: map?['date_of_birth'] != null
+          ? (DateTime.parse(map?['date_of_birth']))
+          : null,
+      birthPlace: map?['place_of_birth'],
+      kartuKeluarga: map?['no_kartu_keluarga'],
+      nik: map?['no_induk_kependudukan'],
+      profession: map?['profession'],
+      schedules: (map?['schedules'] as List? ?? [])
+          .map((e) => Schedule.fromSeribase(e))
           .toList(),
-      schedulesImunisasi: (map?['jadwalImunisasi'] as List?)
-          ?.map((e) => JadwalPraktek.fromMap(e))
-          .toList(),
+      schedulesImunisasi: () {
+        try {
+          return (map?['practice_schedules'] as List? ?? [])
+              .map((e) => Schedule.fromSeribase(e))
+              .toList();
+        } catch (e) {
+          return <Schedule>[];
+        }
+      }(),
+      clinic: () {
+        try {
+          return ClinicModel.fromSeribase(map?['clinic']);
+        } catch (e) {
+          return null;
+        }
+      }(),
     );
   }
-  Map<String, dynamic> toMap() {
+
+  Map<String, dynamic> toSeribaseMap() {
     return {
-      'email': email,
-      'noTelpon': phone,
-      'namaLengkap': fullName,
-      'photo': photo,
-      'tanggalLahir': birthDate,
-      'tempatLahir': birthPlace,
-      'kartuKeluarga': kartuKeluarga,
-      'nik': nik,
-      'profesi': profession,
-      'jadwal': schedules,
+      if (email != null) 'email': email,
+      if (phone != null) 'phone_number': phone,
+      if (fullName != null) 'full_name': fullName,
+      if (photo != null) 'avatar_url': photo,
+      if (birthDate != null) 'date_of_birth': birthDate?.toIso8601String(),
+      if (birthPlace != null) 'place_of_birth': birthPlace,
+      if (kartuKeluarga != null) 'no_kartu_keluarga': kartuKeluarga,
+      if (nik != null) 'no_induk_kependudukan': nik,
+      if (profession != null) 'profession': profession,
     };
   }
 
-  UserData copyWith({
+  ProfileModel copyWith({
     String? id,
     String? email,
     String? phone,
@@ -113,11 +91,11 @@ class UserData extends Equatable {
     String? kartuKeluarga,
     String? nik,
     String? profession,
-    List<JadwalPraktek>? schedules,
-    List<JadwalPraktek>? schedulesImunisasi,
-    Klinik? clinic,
+    List<Schedule>? schedules,
+    List<Schedule>? schedulesImunisasi,
+    ClinicModel? clinic,
   }) {
-    return UserData(
+    return ProfileModel(
       id: id ?? this.id,
       email: email ?? this.email,
       phone: phone ?? this.phone,
@@ -152,29 +130,69 @@ class UserData extends Equatable {
       ];
 }
 
-class JadwalPraktek extends Equatable {
-  final String? hari;
-  final String? jam;
+class Schedule extends Equatable {
+  final Day? day;
+  final String? startTime;
+  final String? endTime;
 
-  const JadwalPraktek({
-    this.hari,
-    this.jam,
+  const Schedule({
+    this.day,
+    this.startTime,
+    this.endTime,
   });
 
-  factory JadwalPraktek.fromMap(Map data) {
-    return JadwalPraktek(
-      hari: data['hari'],
-      jam: data['jam'],
+  String get time => () {
+        if (startTime != null && endTime != null) {
+          final startTime = this.startTime?.split(":").getRange(0, 2).join(":");
+          final endTime = this.endTime?.split(":").getRange(0, 2).join(":");
+          return "$startTime - $endTime";
+        }
+        return "";
+      }();
+
+  factory Schedule.fromSeribase(Map<String, dynamic> data) {
+    return Schedule(
+      day: Day.fromSeribase(data['day']),
+      startTime: data['start_time'],
+      endTime: data['end_time'],
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toSeribase() {
     return {
-      "hari": hari,
-      "jam": jam,
+      "day_id": day?.id,
+      "start_time": startTime,
+      "end_time": endTime,
     };
   }
 
   @override
-  List<Object?> get props => [hari, jam];
+  List<Object?> get props => [day, startTime, endTime];
+}
+
+class Day extends Equatable {
+  final int? id;
+  final String? name;
+
+  const Day({
+    this.id,
+    this.name,
+  });
+
+  factory Day.fromSeribase(Map<String, dynamic> data) {
+    return Day(
+      id: data['id'],
+      name: data['name'],
+    );
+  }
+
+  Map<String, dynamic> toSeribase() {
+    return {
+      "id": id,
+      "name": name,
+    };
+  }
+
+  @override
+  List<Object?> get props => [id, name];
 }

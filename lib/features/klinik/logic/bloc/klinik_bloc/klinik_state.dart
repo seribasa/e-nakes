@@ -10,7 +10,7 @@ abstract class KlinikState extends Equatable {
 class KlinikInitial extends KlinikState {}
 
 class KlinikFetchData extends KlinikState {
-  final Klinik? klinik;
+  final ClinicModel? klinik;
   const KlinikFetchData({this.klinik});
   @override
   List<Object> get props => [klinik!];

@@ -9,7 +9,7 @@ class JadwalPasienModel extends Equatable {
   final DateTime? tanggal;
   final PasienModel? anak;
   final OrangtuaModel? orangtua;
-  final UserData? nakes;
+  final ProfileModel? nakes;
   final String? tujuan;
   final String? desc;
   final String? notes;
@@ -30,7 +30,7 @@ class JadwalPasienModel extends Equatable {
     DateTime? tanggal,
     PasienModel? anak,
     OrangtuaModel? orangtua,
-    UserData? nakes,
+    ProfileModel? nakes,
     String? tujuan,
     String? desc,
     String? notes,

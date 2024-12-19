@@ -2,80 +2,77 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:eimunisasi_nakes/features/klinik/data/models/klinik.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:injectable/injectable.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 
 import '../models/user.dart';
 
+@injectable
 class UserRepository {
-  final FirebaseFirestore _firestore;
-  final FirebaseAuth _firebaseAuth;
+  final SupabaseClient _supabaseClient;
 
-  UserRepository({FirebaseAuth? firebaseAuth, FirebaseFirestore? firestore})
-      : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
-        _firestore = firestore ?? FirebaseFirestore.instance;
+  UserRepository(
+    this._supabaseClient,
+  );
 
-  Future<void> logInWithEmailAndPassword(
-      {required String email, required String password}) {
-    return _firebaseAuth.signInWithEmailAndPassword(
+  Stream<AuthState> get onAuthStateChange {
+    return _supabaseClient.auth.onAuthStateChange;
+  }
+
+  Future<AuthResponse> logInWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) {
+    return _supabaseClient.auth.signInWithPassword(
       email: email,
       password: password,
     );
   }
 
-  Future<void> forgetEmailPassword({required String email}) {
-    return _firebaseAuth.sendPasswordResetEmail(
-      email: email,
-    );
-  }
-
-  Future<void> verifyPhoneNumber({
-    required String phone,
-    required void Function(String, int?) codeSent,
-    required void Function(FirebaseAuthException) verificationFailed,
-    required void Function(PhoneAuthCredential) verificationCompleted,
+  Future<void> forgetEmailPassword({
+    required String email,
   }) {
-    return _firebaseAuth.verifyPhoneNumber(
-      phoneNumber: phone,
-      timeout: const Duration(seconds: 60),
-      verificationFailed: verificationFailed,
-      codeSent: codeSent,
-      codeAutoRetrievalTimeout: (String verificationId) {},
-      verificationCompleted: verificationCompleted,
+    return _supabaseClient.auth.resetPasswordForEmail(
+      email,
     );
   }
 
-  // signin with credential
-  Future<UserCredential> signInWithCredential(PhoneAuthCredential credential) {
-    return _firebaseAuth.signInWithCredential(credential);
-  }
-
-  Future<UserCredential> signUpWithOTP(smsCode, verId) async {
-    AuthCredential credential =
-        PhoneAuthProvider.credential(verificationId: verId, smsCode: smsCode);
-    try {
-      return await _firebaseAuth.signInWithCredential(credential);
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<UserCredential> signUpWithEmailAndPassword(
-      {required String email, required String password}) async {
-    return await _firebaseAuth.createUserWithEmailAndPassword(
+  Future<AuthResponse> signUpWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
+    return await _supabaseClient.auth.signUp(
       email: email,
       password: password,
     );
   }
 
   Future<void> insertUserToDatabase({
-    required UserData user,
+    required ProfileModel user,
   }) async {
-    final DocumentReference reference =
-        _firestore.collection('users_medis').doc(user.id);
-    await reference.set(user.toMap());
+    try {
+      await _supabaseClient.auth.updateUser(
+        UserAttributes(
+          email: user.email,
+        ),
+      );
+      final userResult = user.toSeribaseMap();
+      final userId = _supabaseClient.auth.currentUser!.id;
+      return await _supabaseClient
+          .from(ProfileModel.table)
+          .update(
+            userResult,
+          )
+          .eq(
+            'user_id',
+            userId,
+          );
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
   }
 
   Future<bool> isUserExist() async {
@@ -89,65 +86,67 @@ class UserRepository {
   }
 
   Future<void> signOut() async {
-    return _firebaseAuth.signOut();
+    return await _supabaseClient.auth.signOut();
   }
 
   Future<bool> isSignedIn() async {
-    final currentUser = _firebaseAuth.currentUser;
+    final currentUser = _supabaseClient.auth.currentUser;
     return currentUser != null;
   }
 
-  Future<UserData?> getUser() async {
-    final user = await _firestore
-        .collection('users_medis')
-        .doc(_firebaseAuth.currentUser!.uid)
-        .get();
-    if (user.exists) {
-      UserData userResult = UserData.fromMap(user.data(), user.id);
-
-      final klinik = await _firestore
-          .collection('klinik')
-          .doc(user.data()?['clinicID'])
-          .get();
-
-      if (klinik.exists) {
-        userResult = userResult.copyWith(
-          clinic: Klinik.fromJson(
-            klinik.data(),
-          ).copyWith(
-            id: klinik.id,
-          ),
+  Future<ProfileModel?> getUser() async {
+    final user = _supabaseClient.auth.currentUser;
+    final userExpand = await _supabaseClient.from(ProfileModel.table).select().eq(
+          'user_id',
+          user!.id,
         );
-      }
-      return userResult;
+    if (userExpand.isNotEmpty) {
+      final userResult = ProfileModel.fromSeribase(userExpand.first);
+      return userResult.copyWith(
+        email: user.email,
+      );
     } else {
       return null;
     }
   }
 
-  // add new and update avatar
   Future<void> updateUserAvatar(String url) async {
     try {
-      await _firebaseAuth.currentUser?.updatePhotoURL(url);
-      await _firestore
-          .collection('users_medis')
-          .doc(_firebaseAuth.currentUser?.uid)
-          .update({'photoURL': url});
+      if (_supabaseClient.auth.currentUser == null) {
+        throw Exception('User not found');
+      }
+      await _supabaseClient.from(ProfileModel.table).update({'avatar_url': url}).eq(
+        'user_id',
+        _supabaseClient.auth.currentUser!.id,
+      );
     } catch (e) {
       log(e.toString());
       rethrow;
     }
   }
 
-  //Upload Image firebase Storage
-  Future<String> uploadImage(File imageFile) async {
-    final fileName = _firebaseAuth.currentUser?.uid ?? 'user';
+  Future<String> uploadImage(File file) async {
+    try {
+      final id = _supabaseClient.auth.currentUser?.id;
+      await _supabaseClient.storage.from('avatars').upload(
+            '$id',
+            file,
+            fileOptions: const FileOptions(cacheControl: '3600', upsert: true),
+            retryAttempts: 3,
+          );
+      final fullPath =
+          _supabaseClient.storage.from('avatars').getPublicUrl('$id');
+      await CachedNetworkImage.evictFromCache(fullPath);
+      return fullPath;
+    } catch (e) {
+      rethrow;
+    }
+  }
 
-    firebase_storage.Reference ref =
-        firebase_storage.FirebaseStorage.instance.ref().child(fileName);
-
-    final result = await ref.putFile(imageFile);
-    final fileUrl = await result.ref.getDownloadURL();
-    return fileUrl;
+  Future<bool> logInWithSeribaseOauth() async {
+    return await _supabaseClient.auth.signInWithOAuth(
+      supabase.OAuthProvider.keycloak,
+      scopes: 'openid',
+    );
   }
 }

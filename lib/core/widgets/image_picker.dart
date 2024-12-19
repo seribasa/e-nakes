@@ -2,11 +2,12 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:eimunisasi_nakes/features/authentication/data/repositories/user_repository.dart';
+import 'package:eimunisasi_nakes/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ModalPickerImage {
-  final UserRepository _userRepository = UserRepository();
+  final UserRepository _userRepository = getIt<UserRepository>();
 
   Future<String> uploadFirebase(context, File image) async =>
       await _userRepository.uploadImage(image);

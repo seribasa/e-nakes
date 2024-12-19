@@ -1,50 +1,30 @@
 import 'package:eimunisasi_nakes/firebase_options.dart';
+import 'package:flutter/foundation.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'app.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'features/authentication/data/repositories/user_repository.dart';
+import 'core/utils/bloc_observer.dart';
+import 'injection.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Supabase.initialize(
+    url: 'https://enakes-base-staging.peltops.com',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICJyb2xlIjogImFub24iLAogICJpc3MiOiAic3VwYWJhc2UiLAogICJpYXQiOiAxNzMwOTM0MDAwLAogICJleHAiOiAxODg4NzAwNDAwCn0.EP8axDBmHdO6MCtq-5xHaiRe31-OVaRR3GQObhBhJ74',
+  );
+
+  if (kDebugMode) {
+    Bloc.observer = AppBlocObserver();
+  }
+  await configureDependencies();
   await Firebase.initializeApp(
     name: "E-Imunisasi-Nakes",
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  Bloc.observer = AppBlocObserver();
-  runApp(App(userRepository: UserRepository()));
-}
-
-class AppBlocObserver extends BlocObserver {
-  @override
-  void onCreate(BlocBase bloc) {
-    super.onCreate(bloc);
-    debugPrint('onCreate -- ${bloc.runtimeType}');
-  }
-
-  @override
-  void onChange(BlocBase bloc, Change change) {
-    super.onChange(bloc, change);
-    debugPrint('onChange -- ${bloc.runtimeType}, $change');
-  }
-
-  @override
-  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
-    debugPrint('onError -- ${bloc.runtimeType}, $error');
-    super.onError(bloc, error, stackTrace);
-  }
-
-  @override
-  void onClose(BlocBase bloc) {
-    super.onClose(bloc);
-    debugPrint('onClose -- ${bloc.runtimeType}');
-  }
-
-  @override
-  void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    debugPrint(transition.toString());
-  }
+  runApp(App());
 }

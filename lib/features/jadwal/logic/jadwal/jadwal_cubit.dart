@@ -1,14 +1,14 @@
-import 'package:bloc/bloc.dart';
 import 'package:eimunisasi_nakes/features/authentication/data/models/user.dart';
 import 'package:eimunisasi_nakes/features/jadwal/data/models/jadwal_model.dart';
 import 'package:eimunisasi_nakes/features/jadwal/data/repositories/jadwal_repository.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'jadwal_state.dart';
 
 class JadwalCubit extends Cubit<JadwalState> {
   final JadwalRepository _jadwalRepository;
-  final UserData? userData;
+  final ProfileModel? userData;
   JadwalCubit({
     JadwalRepository? jadwalRepository,
     required this.userData,

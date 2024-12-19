@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eimunisasi_nakes/features/authentication/data/models/user.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pasien_model.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pemeriksaan_model.dart';
@@ -11,7 +11,7 @@ part 'form_pemeriksaan_vaksinasi_state.dart';
 class FormPemeriksaanVaksinasiCubit
     extends Cubit<FormPemeriksaanVaksinasiState> {
   final PemeriksaanRepository _pemeriksaanRepository;
-  final UserData? userData;
+  final ProfileModel? userData;
   FormPemeriksaanVaksinasiCubit({
     PemeriksaanRepository? pemeriksaanRepository,
     required this.userData,

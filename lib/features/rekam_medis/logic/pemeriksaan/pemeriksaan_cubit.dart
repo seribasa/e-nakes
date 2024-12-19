@@ -1,7 +1,7 @@
-import 'package:bloc/bloc.dart';
 import 'package:eimunisasi_nakes/features/authentication/data/models/user.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/data/repositories/pemeriksaan_repository.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/pemeriksaan_model.dart';
 
@@ -9,7 +9,7 @@ part 'pemeriksaan_state.dart';
 
 class PemeriksaanCubit extends Cubit<PemeriksaanState> {
   final PemeriksaanRepository _pemeriksaanRepository;
-  final UserData? userData;
+  final ProfileModel? userData;
   PemeriksaanCubit({
     PemeriksaanRepository? pemeriksaanRepository,
     required this.userData,
