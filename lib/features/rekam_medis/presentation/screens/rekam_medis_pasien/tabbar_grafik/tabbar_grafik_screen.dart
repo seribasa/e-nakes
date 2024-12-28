@@ -8,7 +8,7 @@ import '../../../../../../core/widgets/grafik/line_chart_template.dart';
 import '../../../../data/models/pasien_model.dart';
 
 class TabbarGrafikScreen extends StatelessWidget {
-  final PasienModel pasien;
+  final PasienModel? pasien;
   const TabbarGrafikScreen({
     super.key,
     required this.pasien,
@@ -46,17 +46,17 @@ class TabbarGrafikScreen extends StatelessWidget {
                     GrafikPertumbuhan(
                       type: LineChartType.beratBadan,
                       listData: data,
-                      isBoy: pasien.jenisKelamin == "Laki-laki" ? true : false,
+                      isBoy: pasien?.jenisKelamin == "Laki-laki" ? true : false,
                     ),
                     GrafikPertumbuhan(
                       type: LineChartType.tinggiBadan,
                       listData: data,
-                      isBoy: pasien.jenisKelamin == "Laki-laki" ? true : false,
+                      isBoy: pasien?.jenisKelamin == "Laki-laki" ? true : false,
                     ),
                     GrafikPertumbuhan(
                       type: LineChartType.lingkarKepala,
                       listData: data,
-                      isBoy: pasien.jenisKelamin == "Laki-laki" ? true : false,
+                      isBoy: pasien?.jenisKelamin == "Laki-laki" ? true : false,
                     ),
                   ],
                 ),

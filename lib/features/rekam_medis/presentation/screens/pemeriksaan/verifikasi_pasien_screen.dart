@@ -47,7 +47,7 @@ class VerifikasiPasienScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 _JenisVaksin(
-                  namaVaksin: jadwalPasienModel?.notes,
+                  namaVaksin: jadwalPasienModel?.note,
                 )
               ],
             ),

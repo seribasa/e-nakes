@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../../../injection.dart';
+
 class WrapperRekamMedis extends StatelessWidget {
   const WrapperRekamMedis({super.key});
 
@@ -52,7 +54,7 @@ class _PemeriksaanButton extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                     builder: (context) => BlocProvider(
-                          create: (context) => PasienCubit()..getPasien(),
+                          create: (context) => getIt<PasienCubit>()..getPasien(),
                           child: const PemeriksaanScreen(),
                         )),
               );
@@ -91,7 +93,7 @@ class _RekamMedisPasienButton extends StatelessWidget {
           Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (context) => BlocProvider(
-                      create: (context) => PasienCubit()..getPasien(),
+                      create: (context) => getIt<PasienCubit>()..getPasien(),
                       child: const DaftarPasienScreen(),
                     )),
           );

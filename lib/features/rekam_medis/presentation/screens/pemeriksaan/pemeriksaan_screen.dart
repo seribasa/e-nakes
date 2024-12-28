@@ -51,7 +51,7 @@ class _ListPasien extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         } else if (state is PasienLoaded) {
-          if (state.pasien.isEmpty) {
+          if (state.patientPagination?.data == null) {
             return const Center(
               child: Text('Tidak ada pasien'),
             );
@@ -62,25 +62,29 @@ class _ListPasien extends StatelessWidget {
                 builder: (context, auth) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: List.generate(state.pasien.length, (index) {
-                      final pasien = state.pasien[index];
-                      return ListTile(
-                        title: Text(
-                          '${pasien.nama}',
-                          style: const TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                        subtitle: Text('${pasien.nik}'),
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
+                    children: List.generate(
+                      state.patientPagination?.data?.length ?? 0,
+                      (index) {
+                        final pasien = state.patientPagination?.data?[index];
+                        return ListTile(
+                          title: Text(
+                            '${pasien?.nama}',
+                            style: const TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                          subtitle: Text('${pasien?.nik}'),
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
                                 builder: (context) => VerifikasiPasienScreen(
-                                      pasien: pasien,
-                                      jadwalPasienModel: null,
-                                    )),
-                          );
-                        },
-                      );
-                    }),
+                                  pasien: pasien,
+                                  jadwalPasienModel: null,
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
                   );
                 },
               ),
@@ -136,6 +140,7 @@ class _SearchBar extends StatelessWidget {
 
 class QRScanButton extends StatelessWidget {
   final void Function()? onTap;
+
   const QRScanButton({super.key, required this.onTap});
 
   @override

@@ -1,120 +1,143 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eimunisasi_nakes/features/jadwal/data/models/jadwal_model.dart';
-import 'package:eimunisasi_nakes/features/rekam_medis/data/repositories/pasien_repository.dart';
+import 'package:injectable/injectable.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../../core/models/pagination_model.dart';
+
+@injectable
 class JadwalRepository {
-  final FirebaseFirestore _firestore;
+  final SupabaseClient _supabase;
 
-  JadwalRepository({FirebaseFirestore? firestore})
-      : _firestore = firestore ?? FirebaseFirestore.instance;
+  JadwalRepository(
+    this._supabase,
+  );
 
-  final String collection = 'appointments';
-  final String collectionPasien = 'children';
-  final _pasienRepository = PasienRepository();
+  final String table = 'appointments';
 
-  Future<List<JadwalPasienModel>?> getJadwalActivity(
-      {required String? uid}) async {
-    List<JadwalPasienModel>? result = [];
-    final jadwalPasien = await _firestore
-        .collection(collection)
-        .where('medic_id', isEqualTo: uid)
-        .get();
-    for (var element in jadwalPasien.docs) {
-      JadwalPasienModel dataJadwal = JadwalPasienModel.fromMap(
-        element.data(),
-        element.id,
-      );
-      final pasien = await _pasienRepository.getPasienByID(
-        searchQuery: element.data()['patient_id'],
-      );
-      final orangtua = await _pasienRepository.getOrangtuaByID(
-        searchQuery: element.data()['parent_id'],
-      );
-      dataJadwal = dataJadwal.copyWith(
-        anak: pasien,
-        orangtua: orangtua,
-      );
-      result.add(dataJadwal);
-    }
-    return result;
-  }
-
-  Future<JadwalPasienModel?> getJadwalActivityById(
-      {required String? id}) async {
-    final jadwalPasien = await _firestore.collection(collection).doc(id).get();
-    JadwalPasienModel dataJadwal = JadwalPasienModel.fromMap(
-      jadwalPasien.data() ?? {},
-      jadwalPasien.id,
-    );
-    final pasien = await _pasienRepository.getPasienByID(
-      searchQuery: jadwalPasien.data()?['patient_id'],
-    );
-    final orangtua = await _pasienRepository.getOrangtuaByID(
-      searchQuery: jadwalPasien.data()?['parent_id'],
-    );
-    dataJadwal = dataJadwal.copyWith(
-      anak: pasien,
-      orangtua: orangtua,
-    );
-
-    return dataJadwal;
-  }
-
-  Future<List<JadwalPasienModel>?> getSpecificJadwalActivity(
-      {required String? uid, required DateTime date}) async {
-    List<JadwalPasienModel>? result;
-    final jadwalPasien = await _firestore
-        .collection(collection)
-        .where('medic_id', isEqualTo: uid)
-        .where(
-          'appointment_date',
-          isGreaterThanOrEqualTo: Timestamp.fromDate(date),
-          isLessThan: Timestamp.fromDate(
-            date.add(const Duration(days: 1)),
-          ),
-        )
-        .get();
-    if (jadwalPasien.docs.isNotEmpty) {
-      result = [];
-      for (var element in jadwalPasien.docs) {
-        JadwalPasienModel dataJadwal = JadwalPasienModel.fromMap(
-          element.data(),
-          element.id,
-        );
-        final pasien = await _pasienRepository.getPasienByID(
-          searchQuery: element.data()['patient_id'],
-        );
-        final orangtua = await _pasienRepository.getOrangtuaByID(
-          searchQuery: element.data()['parent_id'],
-        );
-        dataJadwal = dataJadwal.copyWith(
-          anak: pasien,
-          orangtua: orangtua,
-        );
-        result.add(dataJadwal);
-      }
-    }
-    return result;
-  }
-
-  Future<void> addJadwalActivity({
-    required JadwalPasienModel jadwalPasienModel,
+  Future<BasePagination<JadwalPasienModel>?> getAppointments({
+    int? page,
+    int? perPage,
+    String? search,
+    DateTime? date,
   }) async {
-    final DocumentReference reference = _firestore.collection(collection).doc();
-    await reference.set(jadwalPasienModel.toMap());
+    try {
+      final userId = _supabase.auth.currentUser?.id;
+      final queryParameters = {
+        if (userId != null) 'user_id': userId,
+        if (page != null) 'page': page.toString(),
+        if (perPage != null) 'page_size': perPage.toString(),
+        if (date != null) 'date': date.toIso8601String(),
+      };
+
+      final fetch = await _supabase.functions.invoke(
+        'appointments',
+        queryParameters: queryParameters,
+        method: HttpMethod.get,
+      );
+
+      if (fetch.status != 200) {
+        throw Exception('Failed to get appointments');
+      }
+
+      final data = fetch.data;
+      final result = BasePagination<JadwalPasienModel>(
+        data: data['data']?.map<JadwalPasienModel>((e) {
+          return JadwalPasienModel.fromSeribase(e);
+        }).toList(),
+        metadata: () {
+          final metadata = data['metadata'];
+          if (metadata == null) return null;
+          return MetadataPaginationModel.fromMap(metadata);
+        }(),
+      );
+
+      return result;
+    } catch (e) {
+      rethrow;
+    }
   }
 
-  Future<void> updateJadwalActivity(
-      {required JadwalPasienModel jadwalPasienModel,
-      required String? docId}) async {
-    final DocumentReference reference =
-        _firestore.collection(collection).doc(docId);
-    await reference.update(jadwalPasienModel.toMap());
+  Future<JadwalPasienModel?> getAppointment({
+    String? id,
+  }) async {
+    try {
+      final fetch = await _supabase.functions.invoke(
+        'appointments/$id',
+        method: HttpMethod.get,
+      );
+
+      if (fetch.status == 404) {
+        return null;
+      }
+
+      if (fetch.status != 200) {
+        throw Exception('Failed to get appointment for id: $id');
+      }
+
+      final data = fetch.data;
+      final result = JadwalPasienModel.fromSeribase(data['data']);
+
+      return result;
+    } catch (e) {
+      rethrow;
+    }
   }
 
-  Future<void> deleteJadwalActivity({required String docId}) async {
-    final DocumentReference reference =
-        _firestore.collection(collection).doc(docId);
-    await reference.delete();
+  Future<JadwalPasienModel> addAppointment({
+    required JadwalPasienModel model,
+  }) async {
+    try {
+      final fetch = await _supabase.functions.invoke('appointment',
+          method: HttpMethod.post, body: model.toSeribase());
+
+      if (fetch.status != 200) {
+        throw Exception('Failed to add appointment');
+      }
+
+      final data = fetch.data;
+      final result = JadwalPasienModel.fromSeribase(data['data']);
+      return result;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<JadwalPasienModel> updateAppointment({
+    required JadwalPasienModel model,
+    required String? appointmentId,
+  }) async {
+    try {
+      final fetch = await _supabase.functions.invoke(
+          'appointment/$appointmentId',
+          method: HttpMethod.put,
+          body: model.toSeribase());
+
+      if (fetch.status != 200) {
+        throw Exception('Failed to update appointment');
+      }
+
+      final data = fetch.data;
+      final result = JadwalPasienModel.fromSeribase(data['data']);
+      return result;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> deleteAppointment({
+    required String appointmentId,
+  }) async {
+    try {
+      final fetch = await _supabase.functions.invoke(
+        'appointment/$appointmentId',
+        method: HttpMethod.delete,
+      );
+
+      if (fetch.status != 200) {
+        throw Exception('Failed to delete appointment');
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
 }

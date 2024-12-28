@@ -8,6 +8,7 @@ import 'package:eimunisasi_nakes/features/kalender/logic/form_calendar_activity/
 import 'package:eimunisasi_nakes/features/kalender/presentation/screens/kalender_screen.dart';
 import 'package:eimunisasi_nakes/features/klinik/presentation/screens/wrapper_klinik.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/wrapper_rekam_medis.dart';
+import 'package:eimunisasi_nakes/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -204,8 +205,7 @@ class _AppoinmentToday extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.read<AuthenticationBloc>().state.user;
-    final jadwal = context.read<JadwalCubit>().state.jadwalPasienModel;
+    final jadwal = context.read<JadwalCubit>().state.paginationAppointment?.data;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Column(
@@ -222,8 +222,7 @@ class _AppoinmentToday extends StatelessWidget {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                         builder: (context) => BlocProvider(
-                              create: (context) =>
-                                  JadwalCubit(userData: user)..getAllJadwal(),
+                              create: (context) =>getIt<JadwalCubit>()..getAllJadwal(),
                               child: const RiwayatJanjiScreen(),
                             )),
                   );
@@ -257,7 +256,7 @@ class _AppoinmentToday extends StatelessWidget {
                             return CircleAvatar(
                               radius: 20,
                               backgroundImage: CachedNetworkImageProvider(
-                                state.jadwalPasienModel?.first.anak?.photoUrl ??
+                                state.paginationAppointment?.data?.first.child?.photoURL ??
                                     'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
                               ),
                             );
@@ -273,7 +272,7 @@ class _AppoinmentToday extends StatelessWidget {
                                   child: LinearProgressIndicator());
                             }
                             return Text(
-                              state.jadwalPasienModel?.first.anak?.nama ??
+                              state.paginationAppointment?.data?.first.child?.nama ??
                                   'Tidak ada pasien',
                               style: const TextStyle(
                                 color: Colors.white,
@@ -307,7 +306,7 @@ class _AppoinmentToday extends StatelessWidget {
                               ),
                               Text(
                                 DateFormat('dd-MMM-yyyy').format(
-                                    jadwal?.first.tanggal ?? DateTime.now()),
+                                    jadwal?.first.date ?? DateTime.now()),
                                 style: const TextStyle(color: Colors.white),
                               ),
                             ],
@@ -326,7 +325,7 @@ class _AppoinmentToday extends StatelessWidget {
                                 builder: (context, state) {
                                   return Text(
                                     DateFormat('HH:mm').format(
-                                      state.jadwalPasienModel?.first.tanggal ??
+                                      state.paginationAppointment?.data?.first.date ??
                                           DateTime.now(),
                                     ),
                                     style: const TextStyle(color: Colors.white),
