@@ -46,6 +46,8 @@ jobs:
       - name: Install flutter dependencies
         run: |
           fvm flutter pub get
+      - name: Generate code
+        run: fvm flutter pub run build_runner build --delete-conflicting-outputs
       - name: Update local.properties
         run: |
           ls -al ${{ github.workspace }}/android/local.properties
@@ -56,9 +58,9 @@ jobs:
           cat ${{ github.workspace }}/android/local.properties
           echo "" >> ${{ github.workspace }}/android/local.properties
           echo "sdk.dir=$ANDROID_SDK_PATH" >> ${{ github.workspace }}/android/local.properties          
-          echo "flutter.compileSdkVersion=31" >> ${{ github.workspace }}/android/local.properties
-          echo "flutter.minSdkVersion=20" >> ${{ github.workspace }}/android/local.properties
-          echo "flutter.targetSdkVersion=31" >> ${{ github.workspace }}/android/local.properties
+          echo "flutter.compileSdkVersion=34" >> ${{ github.workspace }}/android/local.properties
+          echo "flutter.minSdkVersion=32" >> ${{ github.workspace }}/android/local.properties
+          echo "flutter.targetSdkVersion=34" >> ${{ github.workspace }}/android/local.properties
           cat ${{ github.workspace }}/android/local.properties
       - name: Create key.properties
         run: |
@@ -75,3 +77,8 @@ jobs:
           fvm flutter build apk
           fvm flutter build appbundle
       - run: echo "🍏 This job's status is ${{ job.status }}."
+      - name: Upload apk
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk
+          path: build/app/outputs/flutter-apk/app-release.apk
