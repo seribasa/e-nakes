@@ -1,10 +1,8 @@
-import 'package:eimunisasi_nakes/features/jadwal/logic/jadwal/jadwal_cubit.dart';
 import 'package:eimunisasi_nakes/features/jadwal/presentation/screens/registrasi/registrasi_screen.dart';
-import 'package:eimunisasi_nakes/features/jadwal/presentation/screens/riwayat%20janji/riwayat_janji_screen.dart';
-import 'package:eimunisasi_nakes/injection.dart';
+import 'package:eimunisasi_nakes/routers/appointment_router.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 class WrapperJadwal extends StatelessWidget {
   const WrapperJadwal({super.key});
@@ -43,14 +41,7 @@ class _RiwayatJanjiButton extends StatelessWidget {
           ),
         ),
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => BlocProvider(
-                create: (context) => getIt<JadwalCubit>()..getAllJadwal(),
-                child: const RiwayatJanjiScreen(),
-              ),
-            ),
-          );
+          context.pushNamed(AppointmentRouter.historiesRoute.name);
         },
         child: Row(
           children: const [

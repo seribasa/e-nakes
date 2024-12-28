@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../../injection.dart';
 import '../../../data/models/jadwal_model.dart';
 
 class RiwayatJanjiScreen extends StatelessWidget {
@@ -12,19 +13,23 @@ class RiwayatJanjiScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Riwayat Janji'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            const _Header(),
-            Expanded(
-              child: _ListDate(onTap: (index) => debugPrint(index.toString())),
-            ),
-          ],
+    return BlocProvider(
+      create: (context) => getIt<JadwalCubit>()..getAllJadwal(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Riwayat Janji'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              const _Header(),
+              Expanded(
+                child:
+                    _ListDate(onTap: (index) => debugPrint(index.toString())),
+              ),
+            ],
+          ),
         ),
       ),
     );

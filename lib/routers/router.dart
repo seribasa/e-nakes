@@ -1,7 +1,9 @@
-
-
 import 'package:eimunisasi_nakes/core/widgets/error.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
+import 'package:eimunisasi_nakes/routers/appointment_router.dart';
+import 'package:eimunisasi_nakes/routers/calendar_router.dart';
+import 'package:eimunisasi_nakes/routers/clinic_router.dart';
+import 'package:eimunisasi_nakes/routers/medical_record_router.dart';
 import 'package:eimunisasi_nakes/routers/route_paths/auth_route_paths.dart';
 import 'package:eimunisasi_nakes/routers/route_paths/root_route_paths.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +32,7 @@ final router = GoRouter(
           WidgetsBinding.instance.addPostFrameCallback(
             (_) {
               ScaffoldMessenger.of(context).showSnackBar(
-                 SnackBar(
+                SnackBar(
                   content: Text('Error: $error'),
                 ),
               );
@@ -56,7 +58,7 @@ final router = GoRouter(
             } else if (state is Authenticated) {
               return const PasscodeScreen();
             } else if (state is Unauthenticated) {
-                return const LoginSeribaseOauthScreen();
+              return const LoginSeribaseOauthScreen();
             } else if (state is AuthenticationError) {
               return const LoginSeribaseOauthScreen();
             }
@@ -88,10 +90,15 @@ final router = GoRouter(
       },
     ),
     GoRoute(
-      name: RootRoutePaths.dashboard.name,
-      path: RootRoutePaths.dashboard.path,
-      builder: (_, __) => BottomNavbarWrapper(),
-    ),
+        name: RootRoutePaths.dashboard.name,
+        path: RootRoutePaths.dashboard.path,
+        builder: (_, __) => BottomNavbarWrapper(),
+        routes: [
+          ...AppointmentRouter.routes,
+          ...CalendarRouter.routes,
+          ...ClinicRouter.routes,
+          ...MedicalRecordRouter.routes,
+        ]),
     GoRoute(
       name: RootRoutePaths.error.name,
       path: RootRoutePaths.error.path,
