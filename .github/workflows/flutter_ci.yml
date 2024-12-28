@@ -47,6 +47,14 @@ jobs:
       - name: Run tests
         run: flutter test --coverage
 
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+          flags: unittests
+          verbose: true
+          
       - name: Configure Keystore
         run: |
           echo "debugStoreFile=keystore/debug_keystore" >> key.properties
