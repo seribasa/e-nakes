@@ -1,9 +1,9 @@
-import 'package:eimunisasi_nakes/core/models/orang_tua_model.dart';
+import 'package:eimunisasi_nakes/core/models/parent_model.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pasien_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:eimunisasi_nakes/features/jadwal/data/repositories/jadwal_repository.dart';
-import 'package:eimunisasi_nakes/features/jadwal/data/models/jadwal_model.dart';
+import 'package:eimunisasi_nakes/features/appointment/data/repositories/appointment_repository.dart';
+import 'package:eimunisasi_nakes/features/appointment/data/models/appointment_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MockSupabaseClient extends Mock implements SupabaseClient {}
@@ -19,7 +19,7 @@ void main() {
   late MockSupabaseClient mockSupabaseClient;
   late MockGoTrueClient mockGoTrueClient;
   late MockUser mockSupabaseUser;
-  late JadwalRepository jadwalRepository;
+  late AppointmentRepository jadwalRepository;
 
   setUp(() {
     mockSupabaseClient = MockSupabaseClient();
@@ -28,7 +28,7 @@ void main() {
     mockSupabaseFunctions = MockFunctionsClient();
     mockGoTrueClient = MockGoTrueClient();
     mockSupabaseUser = MockUser();
-    jadwalRepository = JadwalRepository(mockSupabaseClient);
+    jadwalRepository = AppointmentRepository(mockSupabaseClient);
     when(() => mockSupabaseUser.id).thenReturn('1');
     when(() => mockGoTrueClient.currentUser).thenReturn(mockSupabaseUser);
     when(() => mockSupabaseClient.auth).thenReturn(mockGoTrueClient);
@@ -36,11 +36,11 @@ void main() {
   });
 
   group('JadwalRepository', () {
-    final jadwalModel = JadwalPasienModel(
+    final jadwalModel = PatientAppointmentModel(
       id: '1',
       date: DateTime(2023, 10, 10),
-      child: PasienModel(id: 'child1'),
-      parent: OrangtuaModel(id: 'parent1'),
+      child: PatientModel(id: 'child1'),
+      parent: ParentModel(id: 'parent1'),
       note: 'note',
       purpose: 'purpose',
       startTime: '08:00',

@@ -1,6 +1,6 @@
 import 'package:eimunisasi_nakes/core/widgets/search_bar_widget.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
-import 'package:eimunisasi_nakes/features/jadwal/presentation/screens/registrasi/qrcode_screen.dart';
+import 'package:eimunisasi_nakes/features/appointment/presentation/screens/registrasi/qrcode_screen.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/logic/pasien/pasien_cubit.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/pemeriksaan/verifikasi_pasien_screen.dart';
 import 'package:flutter/material.dart';

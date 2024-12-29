@@ -8,7 +8,7 @@ import '../../../../../../core/widgets/grafik/line_chart_template.dart';
 import '../../../../data/models/pasien_model.dart';
 
 class TabbarGrafikScreen extends StatelessWidget {
-  final PasienModel? pasien;
+  final PatientModel? pasien;
   const TabbarGrafikScreen({
     super.key,
     required this.pasien,

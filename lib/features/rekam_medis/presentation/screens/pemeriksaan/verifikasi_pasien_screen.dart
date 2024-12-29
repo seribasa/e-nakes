@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:eimunisasi_nakes/core/common/constan.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
-import 'package:eimunisasi_nakes/features/jadwal/data/models/jadwal_model.dart';
+import 'package:eimunisasi_nakes/features/appointment/data/models/appointment_model.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pasien_model.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/logic/form_pemeriksaan/form_pemeriksaan_vaksinasi_cubit.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/pemeriksaan/form_pemeriksaan_screen.dart';
@@ -11,8 +11,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class VerifikasiPasienScreen extends StatelessWidget {
-  final JadwalPasienModel? jadwalPasienModel;
-  final PasienModel? pasien;
+  final PatientAppointmentModel? jadwalPasienModel;
+  final PatientModel? pasien;
   final Barcode? result;
   const VerifikasiPasienScreen(
       {super.key,
@@ -53,7 +53,7 @@ class VerifikasiPasienScreen extends StatelessWidget {
             ),
           ),
         ),
-        bottomNavigationBar: _NextButton(pasien: pasien ?? const PasienModel()),
+        bottomNavigationBar: _NextButton(pasien: pasien ?? const PatientModel()),
       ),
     );
   }
@@ -215,7 +215,7 @@ class _JenisVaksin extends StatelessWidget {
 }
 
 class _NextButton extends StatelessWidget {
-  final PasienModel pasien;
+  final PatientModel pasien;
   const _NextButton({required this.pasien});
 
   @override

@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
-import 'package:eimunisasi_nakes/features/jadwal/logic/jadwal/jadwal_cubit.dart';
-import 'package:eimunisasi_nakes/features/jadwal/presentation/screens/riwayat%20janji/riwayat_janji_screen.dart';
+import 'package:eimunisasi_nakes/features/appointment/logic/appointment_cubit/appointment_cubit.dart';
 import 'package:eimunisasi_nakes/injection.dart';
 import 'package:eimunisasi_nakes/routers/medical_record_router.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,7 @@ import 'package:intl/intl.dart';
 import '../../../../routers/appointment_router.dart';
 import '../../../../routers/calendar_router.dart';
 import '../../../../routers/clinic_router.dart';
+import '../../../appointment/presentation/screens/appointment_history/appointment_screen.dart';
 import '../../../authentication/data/models/user.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -30,7 +30,7 @@ class HomeScreen extends StatelessWidget {
                     _HelloHeader(
                       data: state.user,
                     ),
-                    BlocBuilder<JadwalCubit, JadwalState>(
+                    BlocBuilder<AppointmentCubit, AppointmentState>(
                       builder: (context, stateJadwal) {
                         return const _AppoinmentToday();
                       },
@@ -186,7 +186,7 @@ class _AppoinmentToday extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final jadwal =
-        context.read<JadwalCubit>().state.paginationAppointment?.data;
+        context.read<AppointmentCubit>().state.paginationAppointment?.data;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Column(
@@ -204,7 +204,7 @@ class _AppoinmentToday extends StatelessWidget {
                     MaterialPageRoute(
                         builder: (context) => BlocProvider(
                               create: (context) =>
-                                  getIt<JadwalCubit>()..getAllJadwal(),
+                                  getIt<AppointmentCubit>()..getAllJadwal(),
                               child: const RiwayatJanjiScreen(),
                             )),
                   );
@@ -233,7 +233,7 @@ class _AppoinmentToday extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       children: [
-                        BlocBuilder<JadwalCubit, JadwalState>(
+                        BlocBuilder<AppointmentCubit, AppointmentState>(
                           builder: (context, state) {
                             return CircleAvatar(
                               radius: 20,
@@ -248,9 +248,9 @@ class _AppoinmentToday extends StatelessWidget {
                         const SizedBox(
                           width: 20,
                         ),
-                        BlocBuilder<JadwalCubit, JadwalState>(
+                        BlocBuilder<AppointmentCubit, AppointmentState>(
                           builder: (context, state) {
-                            if (state is JadwalLoading) {
+                            if (state is AppointmentLoading) {
                               return const Expanded(
                                   child: LinearProgressIndicator());
                             }
@@ -305,7 +305,7 @@ class _AppoinmentToday extends StatelessWidget {
                               const SizedBox(
                                 width: 10,
                               ),
-                              BlocBuilder<JadwalCubit, JadwalState>(
+                              BlocBuilder<AppointmentCubit, AppointmentState>(
                                 builder: (context, state) {
                                   return Text(
                                     DateFormat('HH:mm').format(

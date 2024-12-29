@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class PasienModel extends Equatable {
+class PatientModel extends Equatable {
   final String? id;
   final String? parentId;
   final String? nama;
@@ -20,7 +20,7 @@ class PasienModel extends Equatable {
     return '${years.floor()} tahun, ${months.floor()} bulan';
   }
 
-  const PasienModel({
+  const PatientModel({
     this.id,
     this.parentId,
     this.nik,
@@ -32,8 +32,8 @@ class PasienModel extends Equatable {
     this.photoURL,
   });
 
-  factory PasienModel.fromSeribase(Map<String, dynamic> data) {
-    return PasienModel(
+  factory PatientModel.fromSeribase(Map<String, dynamic> data) {
+    return PatientModel(
       id: data['id'],
       parentId: data['parent_id'],
       nama: data['name'],
@@ -66,7 +66,7 @@ class PasienModel extends Equatable {
     };
   }
 
-  PasienModel copyWith({
+  PatientModel copyWith({
     String? id,
     String? parentId,
     String? nama,
@@ -77,7 +77,7 @@ class PasienModel extends Equatable {
     String? golDarah,
     String? photoURL,
   }) {
-    return PasienModel(
+    return PatientModel(
       id: id ?? this.id,
       parentId: parentId ?? this.parentId,
       nama: nama ?? this.nama,

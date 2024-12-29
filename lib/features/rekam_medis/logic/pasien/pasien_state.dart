@@ -1,7 +1,7 @@
 part of 'pasien_cubit.dart';
 
 abstract class PasienState extends Equatable {
-  final BasePagination<PasienModel>? patientPagination;
+  final BasePagination<PatientModel>? patientPagination;
   final String? searchQuery;
 
   const PasienState({this.patientPagination, this.searchQuery});

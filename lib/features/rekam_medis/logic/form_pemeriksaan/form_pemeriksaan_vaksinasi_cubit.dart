@@ -20,7 +20,7 @@ class FormPemeriksaanVaksinasiCubit
         super(const FormPemeriksaanVaksinasiState());
 
   providePasienData(
-      String? idPasien, String? idOrangTuaPasien, PasienModel pasien) {
+      String? idPasien, String? idOrangTuaPasien, PatientModel pasien) {
     emit(state.copyWith(
       idPasien: idPasien,
       idOrangTuaPasien: idOrangTuaPasien,

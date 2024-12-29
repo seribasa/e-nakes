@@ -1,12 +1,12 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:eimunisasi_nakes/core/models/pagination_model.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pasien_model.dart';
-import 'package:eimunisasi_nakes/features/rekam_medis/data/repositories/pasien_repository.dart';
+import 'package:eimunisasi_nakes/features/rekam_medis/data/repositories/patient_repository.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/logic/pasien/pasien_cubit.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockPasienRepository extends Mock implements PasienRepository {}
+class MockPasienRepository extends Mock implements PatientRepository {}
 
 void main() {
   late PasienCubit pasienCubit;
@@ -22,8 +22,8 @@ void main() {
   });
 
   group('PasienCubit - getPasien', () {
-    final tPagination = BasePagination<PasienModel>(
-      data: [PasienModel()],
+    final tPagination = BasePagination<PatientModel>(
+      data: [PatientModel()],
       metadata: MetadataPaginationModel(
         page: 1,
         perPage: 10,
@@ -75,8 +75,8 @@ void main() {
   });
 
   group('PasienCubit - getPasienBySearch', () {
-    final tPagination = BasePagination<PasienModel>(
-      data: [PasienModel()],
+    final tPagination = BasePagination<PatientModel>(
+      data: [PatientModel()],
       metadata: MetadataPaginationModel(
         page: 1,
         perPage: 10,

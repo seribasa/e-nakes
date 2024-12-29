@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 
-class OrangtuaModel extends Equatable {
+class ParentModel extends Equatable {
   final String? id;
   final String? nama;
   final String? email;
   final String? noHp;
 
-  const OrangtuaModel({
+  const ParentModel({
     this.id,
     this.nama,
     this.email,
@@ -16,8 +16,8 @@ class OrangtuaModel extends Equatable {
   @override
   List<Object?> get props => [id, nama, email, noHp];
 
-  factory OrangtuaModel.fromMap(Map<String, dynamic>? map, String docId) {
-    return OrangtuaModel(
+  factory ParentModel.fromMap(Map<String, dynamic>? map, String docId) {
+    return ParentModel(
       id: docId,
       nama: map?['momName'],
       email: map?['email'],
@@ -25,8 +25,8 @@ class OrangtuaModel extends Equatable {
     );
   }
 
-  factory OrangtuaModel.fromSeribase(Map<String, dynamic> map) {
-    return OrangtuaModel(
+  factory ParentModel.fromSeribase(Map<String, dynamic> map) {
+    return ParentModel(
       id: map['id'],
       nama: map['name'],
       email: map['email'],

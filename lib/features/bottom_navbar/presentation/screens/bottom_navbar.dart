@@ -1,6 +1,6 @@
 import 'package:eimunisasi_nakes/features/bottom_navbar/logic/buttom_navbar/bottom_navbar_cubit.dart';
 import 'package:eimunisasi_nakes/features/home/presentation/screens/home_screen.dart';
-import 'package:eimunisasi_nakes/features/jadwal/logic/jadwal/jadwal_cubit.dart';
+import 'package:eimunisasi_nakes/features/appointment/logic/appointment_cubit/appointment_cubit.dart';
 import 'package:eimunisasi_nakes/features/notifications/presentation/screens/notification_screen.dart';
 import 'package:eimunisasi_nakes/features/profile/presentation/screens/profile_screen.dart';
 import 'package:eimunisasi_nakes/injection.dart';
@@ -34,7 +34,7 @@ class BottomNavbarWrapper extends StatelessWidget {
                   builder: (contextNavbar, stateNavbar) {
                     if (stateNavbar is BottomNavbarHome) {
                       return BlocProvider(
-                        create: (context) => getIt<JadwalCubit>()..getJadwalToday(),
+                        create: (context) => getIt<AppointmentCubit>()..getJadwalToday(),
                         child: const HomeScreen(),
                       );
                     } else if (stateNavbar is BottomNavbarProfile) {

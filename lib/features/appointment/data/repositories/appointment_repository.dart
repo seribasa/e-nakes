@@ -1,20 +1,20 @@
-import 'package:eimunisasi_nakes/features/jadwal/data/models/jadwal_model.dart';
+import 'package:eimunisasi_nakes/features/appointment/data/models/appointment_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/models/pagination_model.dart';
 
 @injectable
-class JadwalRepository {
+class AppointmentRepository {
   final SupabaseClient _supabase;
 
-  JadwalRepository(
+  AppointmentRepository(
     this._supabase,
   );
 
   final String table = 'appointments';
 
-  Future<BasePagination<JadwalPasienModel>?> getAppointments({
+  Future<BasePagination<PatientAppointmentModel>?> getAppointments({
     int? page,
     int? perPage,
     String? search,
@@ -40,9 +40,9 @@ class JadwalRepository {
       }
 
       final data = fetch.data;
-      final result = BasePagination<JadwalPasienModel>(
-        data: data['data']?.map<JadwalPasienModel>((e) {
-          return JadwalPasienModel.fromSeribase(e);
+      final result = BasePagination<PatientAppointmentModel>(
+        data: data['data']?.map<PatientAppointmentModel>((e) {
+          return PatientAppointmentModel.fromSeribase(e);
         }).toList(),
         metadata: () {
           final metadata = data['metadata'];
@@ -57,7 +57,7 @@ class JadwalRepository {
     }
   }
 
-  Future<JadwalPasienModel?> getAppointment({
+  Future<PatientAppointmentModel?> getAppointment({
     String? id,
   }) async {
     try {
@@ -75,7 +75,7 @@ class JadwalRepository {
       }
 
       final data = fetch.data;
-      final result = JadwalPasienModel.fromSeribase(data['data']);
+      final result = PatientAppointmentModel.fromSeribase(data['data']);
 
       return result;
     } catch (e) {
@@ -83,8 +83,8 @@ class JadwalRepository {
     }
   }
 
-  Future<JadwalPasienModel> addAppointment({
-    required JadwalPasienModel model,
+  Future<PatientAppointmentModel> addAppointment({
+    required PatientAppointmentModel model,
   }) async {
     try {
       final fetch = await _supabase.functions.invoke('appointment',
@@ -95,15 +95,15 @@ class JadwalRepository {
       }
 
       final data = fetch.data;
-      final result = JadwalPasienModel.fromSeribase(data['data']);
+      final result = PatientAppointmentModel.fromSeribase(data['data']);
       return result;
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<JadwalPasienModel> updateAppointment({
-    required JadwalPasienModel model,
+  Future<PatientAppointmentModel> updateAppointment({
+    required PatientAppointmentModel model,
     required String? appointmentId,
   }) async {
     try {
@@ -117,7 +117,7 @@ class JadwalRepository {
       }
 
       final data = fetch.data;
-      final result = JadwalPasienModel.fromSeribase(data['data']);
+      final result = PatientAppointmentModel.fromSeribase(data['data']);
       return result;
     } catch (e) {
       rethrow;

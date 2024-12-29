@@ -1,4 +1,4 @@
-import 'package:eimunisasi_nakes/core/models/orang_tua_model.dart';
+import 'package:eimunisasi_nakes/core/models/parent_model.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pasien_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -6,38 +6,38 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../core/models/pagination_model.dart';
 
 @injectable
-class PasienRepository {
+class PatientRepository {
   final SupabaseClient _supabaseClient;
 
-  PasienRepository(
-  this._supabaseClient,
+  PatientRepository(
+    this._supabaseClient,
   );
 
-  Future<OrangtuaModel?> getParentByID({
+  Future<ParentModel?> getParentByID({
     required String id,
   }) async {
     try {
       final fetch = await _supabaseClient.functions.invoke('parents/$id');
 
-      return OrangtuaModel.fromSeribase(fetch.data);
+      return ParentModel.fromSeribase(fetch.data);
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<PasienModel?> getPatient({
+  Future<PatientModel?> getPatient({
     required String id,
   }) async {
     try {
       final fetch = await _supabaseClient.functions.invoke('patients/$id');
 
-      return PasienModel.fromSeribase(fetch.data);
+      return PatientModel.fromSeribase(fetch.data?['data']);
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<BasePagination<PasienModel>?> getPatients({
+  Future<BasePagination<PatientModel>?> getPatients({
     int? perPage,
     int? page,
     String? id,
@@ -62,9 +62,9 @@ class PasienRepository {
       }
 
       final data = fetch.data;
-      final result = BasePagination<PasienModel>(
-        data: data['data']?.map<PasienModel>((e) {
-          return PasienModel.fromSeribase(e);
+      final result = BasePagination<PatientModel>(
+        data: data['data']?.map<PatientModel>((e) {
+          return PatientModel.fromSeribase(e);
         }).toList(),
         metadata: () {
           final metadata = data['metadata'];

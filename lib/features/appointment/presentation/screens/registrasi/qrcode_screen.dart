@@ -1,10 +1,9 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:eimunisasi_nakes/features/jadwal/data/repositories/jadwal_repository.dart';
+import 'package:eimunisasi_nakes/features/appointment/data/repositories/appointment_repository.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/pemeriksaan/verifikasi_pasien_screen.dart';
 import 'package:eimunisasi_nakes/injection.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -134,7 +133,7 @@ class _QrRegistrasiPemeriksaanState extends State<QrRegistrasiPemeriksaan> {
   }
 
   void _onQRViewCreated(QRViewController controller) {
-    final jadwalRepository = getIt<JadwalRepository>();
+    final jadwalRepository = getIt<AppointmentRepository>();
     setState(() {
       this.controller = controller;
     });

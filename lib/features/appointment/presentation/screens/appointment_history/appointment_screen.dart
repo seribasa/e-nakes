@@ -1,12 +1,12 @@
 import 'package:eimunisasi_nakes/core/widgets/error.dart';
-import 'package:eimunisasi_nakes/features/jadwal/logic/jadwal/jadwal_cubit.dart';
-import 'package:eimunisasi_nakes/features/jadwal/presentation/screens/riwayat%20janji/riwayat_janji_detail_screen.dart';
+import 'package:eimunisasi_nakes/features/appointment/logic/appointment_cubit/appointment_cubit.dart';
+import 'package:eimunisasi_nakes/features/appointment/presentation/screens/appointment_history/appointment_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../injection.dart';
-import '../../../data/models/jadwal_model.dart';
+import '../../../data/models/appointment_model.dart';
 
 class RiwayatJanjiScreen extends StatelessWidget {
   const RiwayatJanjiScreen({super.key});
@@ -14,7 +14,7 @@ class RiwayatJanjiScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<JadwalCubit>()..getAllJadwal(),
+      create: (context) => getIt<AppointmentCubit>()..getAllJadwal(),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Riwayat Janji'),
@@ -60,9 +60,9 @@ class _ListDate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<JadwalCubit, JadwalState>(
+    return BlocBuilder<AppointmentCubit, AppointmentState>(
       builder: (context, state) {
-        if (state is JadwalLoaded) {
+        if (state is AppointmentLoaded) {
           if (state.paginationAppointment?.data?.isEmpty ?? true) {
             return const Center(
               child: Text('Tidak ada janji'),
@@ -85,7 +85,7 @@ class _ListDate extends StatelessWidget {
                     ),
                   ),
                   children: [
-                    for (final appointment in data ?? <JadwalPasienModel>[])
+                    for (final appointment in data ?? <PatientAppointmentModel>[])
                       if (DateFormat('dd-MM-yyyy')
                               .format(appointment.date ?? DateTime.now()) ==
                           DateFormat('dd-MM-yyyy')
@@ -114,17 +114,17 @@ class _ListDate extends StatelessWidget {
             },
           );
         }
-        if (state is JadwalLoading) {
+        if (state is AppointmentLoading) {
           return const Center(
             child: CircularProgressIndicator(),
           );
         }
-        if (state is JadwalError) {
+        if (state is AppointmentError) {
           return ErrorContainer(
             title: state.message,
             message: 'Coba lagi',
             onRefresh: () {
-              BlocProvider.of<JadwalCubit>(context).getAllJadwal();
+              BlocProvider.of<AppointmentCubit>(context).getAllJadwal();
             },
           );
         }

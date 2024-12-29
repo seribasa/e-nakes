@@ -1,11 +1,11 @@
-import 'package:eimunisasi_nakes/features/jadwal/presentation/screens/registrasi/registrasi_screen.dart';
+import 'package:eimunisasi_nakes/features/appointment/presentation/screens/registrasi/registrasi_screen.dart';
 import 'package:eimunisasi_nakes/routers/appointment_router.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
-class WrapperJadwal extends StatelessWidget {
-  const WrapperJadwal({super.key});
+class WrapperAppointmentScreen extends StatelessWidget {
+  const WrapperAppointmentScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,7 @@
 import 'package:eimunisasi_nakes/core/models/pagination_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pasien_model.dart';
-import 'package:eimunisasi_nakes/features/rekam_medis/data/repositories/pasien_repository.dart';
+import 'package:eimunisasi_nakes/features/rekam_medis/data/repositories/patient_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 
@@ -9,7 +9,7 @@ part 'pasien_state.dart';
 
 @injectable
 class PasienCubit extends Cubit<PasienState> {
-  final PasienRepository _pasienRepository;
+  final PatientRepository _pasienRepository;
 
   PasienCubit(this._pasienRepository) : super(PasienInitial());
 
@@ -24,7 +24,7 @@ class PasienCubit extends Cubit<PasienState> {
         emit(PasienLoaded(patientPagination: result));
         return;
       }
-      final pagination = BasePagination<PasienModel>(
+      final pagination = BasePagination<PatientModel>(
         data: [
           ...?state.patientPagination?.data,
           ...?result?.data,

@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RekamMedisPasienScreen extends StatelessWidget {
-  final PasienModel? pasien;
+  final PatientModel? pasien;
 
   const RekamMedisPasienScreen({super.key, required this.pasien});
 

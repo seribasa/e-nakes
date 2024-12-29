@@ -1,11 +1,11 @@
 import 'package:eimunisasi_nakes/core/widgets/error.dart';
-import 'package:eimunisasi_nakes/features/jadwal/data/models/jadwal_model.dart';
+import 'package:eimunisasi_nakes/features/appointment/data/models/appointment_model.dart';
 import 'package:eimunisasi_nakes/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-import '../../../logic/jadwal/jadwal_cubit.dart';
+import '../../../logic/appointment_cubit/appointment_cubit.dart';
 
 class RiwayatJanjiDetailScreen extends StatelessWidget {
   final String id;
@@ -18,7 +18,7 @@ class RiwayatJanjiDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<JadwalCubit>()..getSelectedDetail(id),
+      create: (context) => getIt<AppointmentCubit>()..getSelectedDetail(id),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Riwayat Janji'),
@@ -29,23 +29,23 @@ class RiwayatJanjiDetailScreen extends StatelessWidget {
             children: [
               const _Header(),
               Expanded(
-                child: BlocBuilder<JadwalCubit, JadwalState>(
+                child: BlocBuilder<AppointmentCubit, AppointmentState>(
                   builder: (context, state) {
-                    if (state is JadwalLoading) {
+                    if (state is AppointmentLoading) {
                       return const Center(child: CircularProgressIndicator());
                     }
-                    if (state is JadwalLoaded) {
+                    if (state is AppointmentLoaded) {
                       return _DetailJanjiCard(
                         onTap: (index) => debugPrint(index.toString()),
                         jadwalPasienModel: state.selectedAppointment,
                       );
                     }
-                    if (state is JadwalError) {
+                    if (state is AppointmentError) {
                       return ErrorContainer(
                         title: state.message,
                         message: 'Coba lagi',
                         onRefresh: () {
-                          context.read<JadwalCubit>().getSelectedDetail(id);
+                          context.read<AppointmentCubit>().getSelectedDetail(id);
                         },
                       );
                     }
@@ -81,7 +81,7 @@ class _Header extends StatelessWidget {
 
 class _DetailJanjiCard extends StatelessWidget {
   final void Function(int)? onTap;
-  final JadwalPasienModel? jadwalPasienModel;
+  final PatientAppointmentModel? jadwalPasienModel;
 
   const _DetailJanjiCard({required this.onTap, this.jadwalPasienModel});
 

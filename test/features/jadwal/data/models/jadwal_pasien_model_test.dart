@@ -1,14 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:eimunisasi_nakes/features/jadwal/data/models/jadwal_model.dart';
+import 'package:eimunisasi_nakes/features/appointment/data/models/appointment_model.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pasien_model.dart';
-import 'package:eimunisasi_nakes/core/models/orang_tua_model.dart';
+import 'package:eimunisasi_nakes/core/models/parent_model.dart';
 
 void main() {
   group('JadwalPasienModel', () {
-    final parent = OrangtuaModel(id: 'parent1');
-    final child = PasienModel(id: 'child1');
+    final parent = ParentModel(id: 'parent1');
+    final child = PatientModel(id: 'child1');
     final date = DateTime(2023, 10, 10);
-    final jadwal = JadwalPasienModel(
+    final jadwal = PatientAppointmentModel(
       id: '1',
       date: date,
       child: child,
@@ -40,7 +40,7 @@ void main() {
         'start_time': '08:00',
         'end_time': '10:00',
       };
-      final jadwalFromMap = JadwalPasienModel.fromSeribase(map);
+      final jadwalFromMap = PatientAppointmentModel.fromSeribase(map);
       expect(jadwalFromMap.id, '1');
       expect(jadwalFromMap.date, date);
     });
@@ -54,7 +54,7 @@ void main() {
     });
 
     test('time returns empty string if startTime or endTime is null', () {
-      final jadwalWithNullTime = JadwalPasienModel(
+      final jadwalWithNullTime = PatientAppointmentModel(
         id: '1',
         date: date,
         child: child,

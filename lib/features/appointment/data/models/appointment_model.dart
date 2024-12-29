@@ -1,12 +1,12 @@
-import 'package:eimunisasi_nakes/core/models/orang_tua_model.dart';
+import 'package:eimunisasi_nakes/core/models/parent_model.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pasien_model.dart';
 import 'package:equatable/equatable.dart';
 
-class JadwalPasienModel extends Equatable {
+class PatientAppointmentModel extends Equatable {
   final String? id;
   final DateTime? date;
-  final PasienModel? child;
-  final OrangtuaModel? parent;
+  final PatientModel? child;
+  final ParentModel? parent;
   final String? purpose;
   final String? note;
   final String? startTime;
@@ -22,7 +22,7 @@ class JadwalPasienModel extends Equatable {
   }();
 
 
-  const JadwalPasienModel({
+  const PatientAppointmentModel({
     this.id,
     this.date,
     this.child,
@@ -35,17 +35,17 @@ class JadwalPasienModel extends Equatable {
 
   static const String tableName = 'appointments';
 
-  JadwalPasienModel copyWith({
+  PatientAppointmentModel copyWith({
     String? id,
     DateTime? date,
-    PasienModel? child,
-    OrangtuaModel? parent,
+    PatientModel? child,
+    ParentModel? parent,
     String? note,
     String? purpose,
     String? startTime,
     String? endTime,
   }) {
-    return JadwalPasienModel(
+    return PatientAppointmentModel(
       id: id ?? this.id,
       date: date ?? this.date,
       child: child ?? this.child,
@@ -69,10 +69,10 @@ class JadwalPasienModel extends Equatable {
     endTime,
   ];
 
-  factory JadwalPasienModel.fromSeribase(
+  factory PatientAppointmentModel.fromSeribase(
       Map<String, dynamic> map,
       ) {
-    return JadwalPasienModel(
+    return PatientAppointmentModel(
       id: map['id'],
       date: () {
         try {
@@ -83,10 +83,10 @@ class JadwalPasienModel extends Equatable {
         }
       }(),
       child: map['child'] != null
-          ? PasienModel.fromSeribase(map['child'])
+          ? PatientModel.fromSeribase(map['child'])
           : null,
       parent: map['parent'] != null
-          ? OrangtuaModel.fromSeribase(map['parent'])
+          ? ParentModel.fromSeribase(map['parent'])
           : null,
       note: map['note'],
       purpose: map['purpose'],

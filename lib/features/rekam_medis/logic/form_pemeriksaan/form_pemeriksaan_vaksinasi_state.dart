@@ -11,7 +11,7 @@ class FormPemeriksaanVaksinasiState extends Equatable {
   final String? tindakan;
   final String? idPasien;
   final String? idOrangTuaPasien;
-  final PasienModel? pasien;
+  final PatientModel? pasien;
   final String? bulanKe;
   final String? jenisVaksin;
   const FormPemeriksaanVaksinasiState({
@@ -58,7 +58,7 @@ class FormPemeriksaanVaksinasiState extends Equatable {
     String? tindakan,
     String? idPasien,
     String? idOrangTuaPasien,
-    PasienModel? pasien,
+    PatientModel? pasien,
     String? bulanKe,
     String? jenisVaksin,
   }) {

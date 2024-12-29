@@ -1,9 +1,9 @@
-import 'package:eimunisasi_nakes/features/jadwal/presentation/screens/wrapper_jadwal.dart';
+import 'package:eimunisasi_nakes/features/appointment/presentation/screens/wrapper_appointment_screen.dart';
 import 'package:eimunisasi_nakes/routers/route_paths/root_route_paths.dart';
 import 'package:go_router/go_router.dart';
 
-import '../features/jadwal/presentation/screens/riwayat janji/riwayat_janji_detail_screen.dart';
-import '../features/jadwal/presentation/screens/riwayat janji/riwayat_janji_screen.dart';
+import '../features/appointment/presentation/screens/appointment_history/appointment_detail_screen.dart';
+import '../features/appointment/presentation/screens/appointment_history/appointment_screen.dart';
 import 'models/route_model.dart';
 
 class AppointmentRouter {
@@ -29,7 +29,7 @@ class AppointmentRouter {
     GoRoute(
       name: wrapperRoute.name,
       path: wrapperRoute.path,
-      builder: (_, __) => const WrapperJadwal(),
+      builder: (_, __) => const WrapperAppointmentScreen(),
     ),
     GoRoute(
       name: historiesRoute.name,
