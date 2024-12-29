@@ -14,14 +14,40 @@ import 'package:formz/formz.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
-class KalenderScreen extends StatefulWidget {
+class KalenderScreen extends StatelessWidget {
   const KalenderScreen({super.key});
 
   @override
-  State<KalenderScreen> createState() => _KalenderScreenState();
+  Widget build(BuildContext context) {
+    final user = () {
+      final state = context.read<AuthenticationBloc>().state;
+      if (state is Authenticated) {
+        return state.user;
+      }
+      null;
+    }();
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => CalendarCubit(userData: user)..getAllCalendar(),
+        ),
+        BlocProvider(
+          create: (context) => FormCalendarActivityCubit(userData: user),
+        ),
+      ],
+      child: const _KalenderScaffold(),
+    );
+  }
 }
 
-class _KalenderScreenState extends State<KalenderScreen> {
+class _KalenderScaffold extends StatefulWidget {
+  const _KalenderScaffold();
+
+  @override
+  State<_KalenderScaffold> createState() => __KalenderScaffoldState();
+}
+
+class __KalenderScaffoldState extends State<_KalenderScaffold> {
   List<CalendarModel>? allEvents;
 
   CalendarFormat _calendarFormat = CalendarFormat.month;
@@ -207,8 +233,7 @@ class _KalenderScreenState extends State<KalenderScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Daftar aktivitas : ${DateFormat('dd MMMM yyyy')
-                                        .format(selectedDate ?? DateTime.now())}',
+                                'Daftar aktivitas : ${DateFormat('dd MMMM yyyy').format(selectedDate ?? DateTime.now())}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 15,
@@ -265,6 +290,7 @@ class _KalenderScreenState extends State<KalenderScreen> {
 class _DataTableActivity extends StatelessWidget {
   final List<CalendarModel>? events;
   final DateTime? onPageChangeDate;
+
   const _DataTableActivity(
       {required this.events, required this.onPageChangeDate});
 
@@ -362,6 +388,7 @@ class _DataTableActivity extends StatelessWidget {
 
 class _PopUpMenuActivity extends StatelessWidget {
   final CalendarModel event;
+
   const _PopUpMenuActivity({required this.event});
 
   @override

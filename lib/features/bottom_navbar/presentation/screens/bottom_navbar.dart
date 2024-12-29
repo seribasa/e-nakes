@@ -3,6 +3,7 @@ import 'package:eimunisasi_nakes/features/home/presentation/screens/home_screen.
 import 'package:eimunisasi_nakes/features/jadwal/logic/jadwal/jadwal_cubit.dart';
 import 'package:eimunisasi_nakes/features/notifications/presentation/screens/notification_screen.dart';
 import 'package:eimunisasi_nakes/features/profile/presentation/screens/profile_screen.dart';
+import 'package:eimunisasi_nakes/injection.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
@@ -33,8 +34,7 @@ class BottomNavbarWrapper extends StatelessWidget {
                   builder: (contextNavbar, stateNavbar) {
                     if (stateNavbar is BottomNavbarHome) {
                       return BlocProvider(
-                        create: (context) =>
-                            JadwalCubit(userData: state.user)..getJadwalToday(),
+                        create: (context) => getIt<JadwalCubit>()..getJadwalToday(),
                         child: const HomeScreen(),
                       );
                     } else if (stateNavbar is BottomNavbarProfile) {

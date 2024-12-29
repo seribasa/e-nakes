@@ -24,4 +24,13 @@ class OrangtuaModel extends Equatable {
       noHp: map?['noHpIbu'],
     );
   }
+
+  factory OrangtuaModel.fromSeribase(Map<String, dynamic> map) {
+    return OrangtuaModel(
+      id: map['id'],
+      nama: map['name'],
+      email: map['email'],
+      noHp: map['phone_number'],
+    );
+  }
 }

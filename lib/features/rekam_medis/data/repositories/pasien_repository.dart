@@ -1,59 +1,81 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eimunisasi_nakes/core/models/orang_tua_model.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pasien_model.dart';
+import 'package:injectable/injectable.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../../core/models/pagination_model.dart';
+
+@injectable
 class PasienRepository {
-  final FirebaseFirestore _firestore;
+  final SupabaseClient _supabaseClient;
 
-  PasienRepository({FirebaseFirestore? firestore})
-      : _firestore = firestore ?? FirebaseFirestore.instance;
+  PasienRepository(
+  this._supabaseClient,
+  );
 
-  Future<List<PasienModel>?> getPasienByNIK(
-      {required String searchQuery}) async {
-    List<PasienModel>? result = [];
-    final getData = await _firestore
-        .collection('children')
-        .where('nik', isEqualTo: searchQuery)
-        .get();
-    for (var element in getData.docs) {
-      result.add(PasienModel.fromMap(element.data(), element.id));
-    }
-    return result;
-  }
+  Future<OrangtuaModel?> getParentByID({
+    required String id,
+  }) async {
+    try {
+      final fetch = await _supabaseClient.functions.invoke('parents/$id');
 
-  Future<PasienModel?> getPasienByID({required String searchQuery}) async {
-    final getData =
-        await _firestore.collection('children').doc(searchQuery).get();
-    if (getData.exists) {
-      return PasienModel.fromMap(getData.data()!, getData.id);
-    } else {
-      return null;
+      return OrangtuaModel.fromSeribase(fetch.data);
+    } catch (e) {
+      rethrow;
     }
   }
 
-  Future<OrangtuaModel?> getOrangtuaByID({required String searchQuery}) async {
-    final getData = await _firestore.collection('users').doc(searchQuery).get();
-    if (getData.exists) {
-      final result = OrangtuaModel.fromMap(getData.data(), getData.id);
-      return result;
-    } else {
-      return null;
+  Future<PasienModel?> getPatient({
+    required String id,
+  }) async {
+    try {
+      final fetch = await _supabaseClient.functions.invoke('patients/$id');
+
+      return PasienModel.fromSeribase(fetch.data);
+    } catch (e) {
+      rethrow;
     }
   }
 
-  Future<List<PasienModel>?> getPasienLimited({int? limit}) async {
-    List<PasienModel>? result = [];
-    final getData =
-        await _firestore.collection('children').limit(limit ?? 10).get();
-    for (var element in getData.docs) {
-      if (element.data()['nama'] != null) {
-        result.add(PasienModel.fromMap(element.data(), element.id));
-      } else {
-        element.data().forEach((key, value) {
-          result.add(PasienModel.fromMap(value, element.id));
-        });
+  Future<BasePagination<PasienModel>?> getPatients({
+    int? perPage,
+    int? page,
+    String? id,
+    String? nik,
+  }) async {
+    try {
+      final queryParameters = {
+        if (id != null) 'id': id,
+        if (nik != null) 'nik': nik,
+        if (page != null) 'page': page.toString(),
+        if (perPage != null) 'page_size': perPage.toString(),
+      };
+
+      final fetch = await _supabaseClient.functions.invoke(
+        'patients',
+        queryParameters: queryParameters,
+        method: HttpMethod.get,
+      );
+
+      if (fetch.status != 200) {
+        throw Exception('Failed to get appointments');
       }
+
+      final data = fetch.data;
+      final result = BasePagination<PasienModel>(
+        data: data['data']?.map<PasienModel>((e) {
+          return PasienModel.fromSeribase(e);
+        }).toList(),
+        metadata: () {
+          final metadata = data['metadata'];
+          if (metadata == null) return null;
+          return MetadataPaginationModel.fromMap(metadata);
+        }(),
+      );
+
+      return result;
+    } catch (e) {
+      rethrow;
     }
-    return result;
   }
 }

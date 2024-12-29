@@ -1,10 +1,8 @@
-import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
-import 'package:eimunisasi_nakes/features/jadwal/logic/jadwal/jadwal_cubit.dart';
 import 'package:eimunisasi_nakes/features/jadwal/presentation/screens/registrasi/registrasi_screen.dart';
-import 'package:eimunisasi_nakes/features/jadwal/presentation/screens/riwayat%20janji/riwayat_janji_screen.dart';
+import 'package:eimunisasi_nakes/routers/appointment_router.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 class WrapperJadwal extends StatelessWidget {
   const WrapperJadwal({super.key});
@@ -29,9 +27,9 @@ class WrapperJadwal extends StatelessWidget {
 
 class _RiwayatJanjiButton extends StatelessWidget {
   const _RiwayatJanjiButton();
+
   @override
   Widget build(BuildContext context) {
-    final authProvider = context.read<AuthenticationBloc>();
     return SizedBox(
       height: 50,
       width: double.infinity,
@@ -43,15 +41,7 @@ class _RiwayatJanjiButton extends StatelessWidget {
           ),
         ),
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) => BlocProvider(
-                      create: (context) =>
-                          JadwalCubit(userData: authProvider.state.user)
-                            ..getAllJadwal(),
-                      child: const RiwayatJanjiScreen(),
-                    )),
-          );
+          context.pushNamed(AppointmentRouter.historiesRoute.name);
         },
         child: Row(
           children: const [
@@ -69,6 +59,7 @@ class _RiwayatJanjiButton extends StatelessWidget {
 
 class _RegistrasiButton extends StatelessWidget {
   const _RegistrasiButton();
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(

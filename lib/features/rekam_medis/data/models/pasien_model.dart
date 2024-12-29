@@ -1,84 +1,105 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class PasienModel extends Equatable {
   final String? id;
+  final String? parentId;
   final String? nama;
   final String? nik;
   final String? tempatLahir;
-  final String? jenisKelamin;
   final DateTime? tanggalLahir;
-  final String? golonganDarah;
-  final String? photoUrl;
+  final String? jenisKelamin;
+  final String? golDarah;
+  final String? photoURL;
 
   String get umur {
-    if (tanggalLahir != null) {
-      final now = DateTime.now();
-      final totalHari = now.difference(tanggalLahir!).inDays;
-      if (totalHari / 365 > 1) {
-        final tahun = (totalHari / 365).floor();
-        final bulan = ((totalHari % 365) / 30).floor();
-        final hari = ((totalHari % 365) % 30).floor();
-        return '$tahun tahun${bulan < 0 ? ' $bulan bulan' : ''} $hari hari';
-      }
-      if (totalHari / 30 > 1) {
-        final bulan = (totalHari / 30).floor();
-        final hari = ((totalHari % 30)).floor();
-        return '$bulan bulan $hari hari';
-      }
-      return '$totalHari hari';
-    } else {
-      return "0";
-    }
+    if (tanggalLahir == null) return 'Umur belum diisi';
+
+    final diff = DateTime.now().difference(tanggalLahir ?? DateTime.now());
+    final years = diff.inDays / 365;
+    final months = (diff.inDays % 365) / 30;
+    return '${years.floor()} tahun, ${months.floor()} bulan';
   }
 
   const PasienModel({
     this.id,
-    this.nama,
+    this.parentId,
     this.nik,
-    this.jenisKelamin,
-    this.tanggalLahir,
     this.tempatLahir,
-    this.golonganDarah,
-    this.photoUrl,
+    this.jenisKelamin,
+    this.golDarah,
+    this.nama,
+    this.tanggalLahir,
+    this.photoURL,
   });
 
-  @override
-  List<Object?> get props => [
-        id,
-        nama,
-        nik,
-        jenisKelamin,
-        tanggalLahir,
-        tempatLahir,
-        golonganDarah,
-        photoUrl,
-      ];
-
-  factory PasienModel.fromMap(Map<String, dynamic> map, String docId) {
+  factory PasienModel.fromSeribase(Map<String, dynamic> data) {
     return PasienModel(
-      id: docId,
-      nama: map['nama'],
-      nik: map['nik'],
-      jenisKelamin: map['jenis_kelamin'],
-      tanggalLahir: ((map['tanggal_lahir'] != null)
-          ? (map['tanggal_lahir'] as Timestamp).toDate()
-          : null),
-      tempatLahir: map['tempat_lahir'],
-      golonganDarah: map['golongan_darah'],
-      photoUrl: map['photo_url'],
+      id: data['id'],
+      parentId: data['parent_id'],
+      nama: data['name'],
+      nik: data['nik'] ?? '',
+      tempatLahir: data['place_of_birth'] ?? '',
+      tanggalLahir: () {
+        try {
+          return DateTime.parse(data['date_of_birth']);
+        } catch (e) {
+          return null;
+        }
+      }(),
+      jenisKelamin: data['gender'] ?? '',
+      golDarah: data['blood_type'] ?? '',
+      photoURL: data['avatar_url'] ?? '',
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toSeribaseMap() {
     return {
-      'nama': nama,
-      'nik': nik,
-      'jenis_kelamin': jenisKelamin,
-      'tanggal_lahir': tanggalLahir,
-      'tempat_lahir': tempatLahir,
-      'gol_darah': golonganDarah,
-      'photo_url': photoUrl,
+      if (parentId?.isNotEmpty ?? false) 'parent_id': parentId,
+      if (nama?.isNotEmpty ?? false) 'name': nama,
+      if (nik?.isNotEmpty ?? false) 'nik': nik,
+      if (tempatLahir?.isNotEmpty ?? false) 'place_of_birth': tempatLahir,
+      if (tanggalLahir != null)
+        'date_of_birth': tanggalLahir?.toIso8601String(),
+      if (jenisKelamin?.isNotEmpty ?? false) 'gender': jenisKelamin,
+      if (golDarah?.isNotEmpty ?? false) 'blood_type': golDarah,
+      if (photoURL?.isNotEmpty ?? false) 'avatar_url': photoURL,
     };
   }
+
+  PasienModel copyWith({
+    String? id,
+    String? parentId,
+    String? nama,
+    String? nik,
+    String? tempatLahir,
+    DateTime? tanggalLahir,
+    String? jenisKelamin,
+    String? golDarah,
+    String? photoURL,
+  }) {
+    return PasienModel(
+      id: id ?? this.id,
+      parentId: parentId ?? this.parentId,
+      nama: nama ?? this.nama,
+      nik: nik ?? this.nik,
+      tempatLahir: tempatLahir ?? this.tempatLahir,
+      tanggalLahir: tanggalLahir ?? this.tanggalLahir,
+      jenisKelamin: jenisKelamin ?? this.jenisKelamin,
+      golDarah: golDarah ?? this.golDarah,
+      photoURL: photoURL ?? this.photoURL,
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+    id,
+    parentId,
+    nama,
+    nik,
+    tempatLahir,
+    tanggalLahir,
+    jenisKelamin,
+    golDarah,
+    photoURL,
+  ];
 }

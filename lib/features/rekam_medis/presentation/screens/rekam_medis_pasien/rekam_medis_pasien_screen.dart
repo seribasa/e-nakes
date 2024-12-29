@@ -10,7 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RekamMedisPasienScreen extends StatelessWidget {
-  final PasienModel pasien;
+  final PasienModel? pasien;
+
   const RekamMedisPasienScreen({super.key, required this.pasien});
 
   @override
@@ -36,57 +37,58 @@ class RekamMedisPasienScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: PasienCard(
-                      nama: pasien.nama,
-                      umur: pasien.umur,
-                      jenisKelamin: pasien.jenisKelamin,
+                      nama: pasien?.nama,
+                      umur: pasien?.umur,
+                      jenisKelamin: pasien?.jenisKelamin,
                     ),
                   ),
                   Expanded(
                     child: DefaultTabController(
-                        length: 5,
-                        child: Column(
-                          children: [
-                            Container(
-                              width: double.infinity,
-                              color: Colors.blue,
-                              child: const TabBar(
-                                indicatorColor: Colors.white,
-                                isScrollable: true,
-                                tabs: [
-                                  Tab(
-                                    text: 'Vaksin',
-                                  ),
-                                  Tab(
-                                    text: 'Tabel',
-                                  ),
-                                  Tab(
-                                    text: 'Grafik',
-                                  ),
-                                  Tab(
-                                    text: 'Diagnosa',
-                                  ),
-                                  Tab(
-                                    text: 'Tindakan',
-                                  ),
-                                ],
-                              ),
+                      length: 5,
+                      child: Column(
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            color: Colors.blue,
+                            child: const TabBar(
+                              indicatorColor: Colors.white,
+                              isScrollable: true,
+                              tabs: [
+                                Tab(
+                                  text: 'Vaksin',
+                                ),
+                                Tab(
+                                  text: 'Tabel',
+                                ),
+                                Tab(
+                                  text: 'Grafik',
+                                ),
+                                Tab(
+                                  text: 'Diagnosa',
+                                ),
+                                Tab(
+                                  text: 'Tindakan',
+                                ),
+                              ],
                             ),
-                            Expanded(
-                              child: TabBarView(
-                                physics: const NeverScrollableScrollPhysics(),
-                                children: [
-                                  const TabbarVaksinScreen(),
-                                  const TabbarTabelScreen(),
-                                  TabbarGrafikScreen(
-                                    pasien: pasien,
-                                  ),
-                                  const TabbarDiagnosaScreen(),
-                                  const TabbarTindakanScreen(),
-                                ],
-                              ),
+                          ),
+                          Expanded(
+                            child: TabBarView(
+                              physics: const NeverScrollableScrollPhysics(),
+                              children: [
+                                const TabbarVaksinScreen(),
+                                const TabbarTabelScreen(),
+                                TabbarGrafikScreen(
+                                  pasien: pasien,
+                                ),
+                                const TabbarDiagnosaScreen(),
+                                const TabbarTindakanScreen(),
+                              ],
                             ),
-                          ],
-                        )),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               );
