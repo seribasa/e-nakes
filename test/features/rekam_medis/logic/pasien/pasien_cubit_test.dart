@@ -1,20 +1,20 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:eimunisasi_nakes/core/models/pagination_model.dart';
-import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pasien_model.dart';
-import 'package:eimunisasi_nakes/features/rekam_medis/data/repositories/patient_repository.dart';
-import 'package:eimunisasi_nakes/features/rekam_medis/logic/pasien/pasien_cubit.dart';
+import 'package:eimunisasi_nakes/features/medical_record/data/models/patient_model.dart';
+import 'package:eimunisasi_nakes/features/medical_record/data/repositories/patient_repository.dart';
+import 'package:eimunisasi_nakes/features/medical_record/logic/patient_cubit/patient_cubit.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockPasienRepository extends Mock implements PatientRepository {}
 
 void main() {
-  late PasienCubit pasienCubit;
+  late PatientCubit pasienCubit;
   late MockPasienRepository mockRepository;
 
   setUp(() {
     mockRepository = MockPasienRepository();
-    pasienCubit = PasienCubit(mockRepository);
+    pasienCubit = PatientCubit(mockRepository);
   });
 
   tearDown(() {
@@ -31,7 +31,7 @@ void main() {
       ),
     );
 
-    blocTest<PasienCubit, PasienState>(
+    blocTest<PatientCubit, PatientState>(
       'emits [PasienLoading, PasienLoaded] when getPasien is successful',
       build: () {
         when(() => mockRepository.getPatients(page: 1, perPage: 10))
@@ -40,12 +40,12 @@ void main() {
       },
       act: (cubit) => cubit.getPasien(page: 1, perPage: 10),
       expect: () => [
-        isA<PasienLoading>(),
-        isA<PasienLoaded>(),
+        isA<PatientLoading>(),
+        isA<PatientLoaded>(),
       ],
     );
 
-    blocTest<PasienCubit, PasienState>(
+    blocTest<PatientCubit, PatientState>(
       'emits [PasienLoading, PasienError] when getPasien fails',
       build: () {
         when(() => mockRepository.getPatients(page: 1, perPage: 10))
@@ -54,12 +54,12 @@ void main() {
       },
       act: (cubit) => cubit.getPasien(page: 1, perPage: 10),
       expect: () => [
-        isA<PasienLoading>(),
-        isA<PasienError>(),
+        isA<PatientLoading>(),
+        isA<PatientError>(),
       ],
     );
 
-    blocTest<PasienCubit, PasienState>(
+    blocTest<PatientCubit, PatientState>(
       'emits [PasienLoading, PasienLoaded] when getPasienBySearch is successful',
       build: () {
         when(() => mockRepository.getPatients(nik: 'search'))
@@ -68,8 +68,8 @@ void main() {
       },
       act: (cubit) => cubit.getPasienBySearch('search'),
       expect: () => [
-        isA<PasienLoading>(),
-        isA<PasienLoaded>(),
+        isA<PatientLoading>(),
+        isA<PatientLoaded>(),
       ],
     );
   });
@@ -84,7 +84,7 @@ void main() {
       ),
     );
 
-    blocTest<PasienCubit, PasienState>(
+    blocTest<PatientCubit, PatientState>(
       'emits [PasienLoading, PasienLoaded] when getPasienBySearch is successful',
       build: () {
         when(() => mockRepository.getPatients(nik: 'search'))
@@ -93,12 +93,12 @@ void main() {
       },
       act: (cubit) => cubit.getPasienBySearch('search'),
       expect: () => [
-        isA<PasienLoading>(),
-        isA<PasienLoaded>(),
+        isA<PatientLoading>(),
+        isA<PatientLoaded>(),
       ],
     );
 
-    blocTest<PasienCubit, PasienState>(
+    blocTest<PatientCubit, PatientState>(
       'emits [PasienLoading, PasienError] when getPasienBySearch fails',
       build: () {
         when(() => mockRepository.getPatients(nik: 'search'))
@@ -107,8 +107,8 @@ void main() {
       },
       act: (cubit) => cubit.getPasienBySearch('search'),
       expect: () => [
-        isA<PasienLoading>(),
-        isA<PasienError>(),
+        isA<PatientLoading>(),
+        isA<PatientError>(),
       ],
     );
   });

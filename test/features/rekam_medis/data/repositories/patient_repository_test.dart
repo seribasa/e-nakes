@@ -1,7 +1,7 @@
 import 'package:eimunisasi_nakes/core/models/parent_model.dart';
 import 'package:eimunisasi_nakes/core/models/pagination_model.dart';
-import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pasien_model.dart';
-import 'package:eimunisasi_nakes/features/rekam_medis/data/repositories/patient_repository.dart';
+import 'package:eimunisasi_nakes/features/medical_record/data/models/patient_model.dart';
+import 'package:eimunisasi_nakes/features/medical_record/data/repositories/patient_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

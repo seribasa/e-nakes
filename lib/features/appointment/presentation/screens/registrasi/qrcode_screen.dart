@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:eimunisasi_nakes/features/appointment/data/repositories/appointment_repository.dart';
-import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/pemeriksaan/verifikasi_pasien_screen.dart';
+import 'package:eimunisasi_nakes/features/medical_record/presentation/screens/pemeriksaan/verifikasi_pasien_screen.dart';
 import 'package:eimunisasi_nakes/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';

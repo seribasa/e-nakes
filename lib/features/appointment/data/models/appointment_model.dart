@@ -1,5 +1,5 @@
 import 'package:eimunisasi_nakes/core/models/parent_model.dart';
-import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pasien_model.dart';
+import 'package:eimunisasi_nakes/features/medical_record/data/models/patient_model.dart';
 import 'package:equatable/equatable.dart';
 
 class PatientAppointmentModel extends Equatable {
