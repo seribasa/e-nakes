@@ -1,11 +1,11 @@
 import 'package:eimunisasi_nakes/core/widgets/pasien_card.dart';
 import 'package:eimunisasi_nakes/features/medical_record/data/models/patient_model.dart';
 import 'package:eimunisasi_nakes/features/medical_record/logic/checkup_cubit/checkup_cubit.dart';
-import 'package:eimunisasi_nakes/features/medical_record/presentation/screens/rekam_medis_pasien/tabbar_diagnosa/tabbar_diagnosa_screen.dart';
-import 'package:eimunisasi_nakes/features/medical_record/presentation/screens/rekam_medis_pasien/tabbar_grafik/tabbar_grafik_screen.dart';
-import 'package:eimunisasi_nakes/features/medical_record/presentation/screens/rekam_medis_pasien/tabbar_tabel/tabbar_tabel_screen.dart';
-import 'package:eimunisasi_nakes/features/medical_record/presentation/screens/rekam_medis_pasien/tabbar_tindakan/tabbar_tindakan_screen.dart';
-import 'package:eimunisasi_nakes/features/medical_record/presentation/screens/rekam_medis_pasien/tabbar_vaksin/tabbar_vaksin_screen.dart';
+import 'package:eimunisasi_nakes/features/medical_record/presentation/screens/patient_medical_record/tabbar_diagnosa/tabbar_diagnosa_screen.dart';
+import 'package:eimunisasi_nakes/features/medical_record/presentation/screens/patient_medical_record/tabbar_grafik/tabbar_grafik_screen.dart';
+import 'package:eimunisasi_nakes/features/medical_record/presentation/screens/patient_medical_record/tabbar_tabel/tabbar_tabel_screen.dart';
+import 'package:eimunisasi_nakes/features/medical_record/presentation/screens/patient_medical_record/tabbar_tindakan/tabbar_tindakan_screen.dart';
+import 'package:eimunisasi_nakes/features/medical_record/presentation/screens/patient_medical_record/tabbar_vaksin/tabbar_vaksin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

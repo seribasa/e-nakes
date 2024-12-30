@@ -1,81 +1,36 @@
 part of 'checkup_form_cubit.dart';
 
-class FormPemeriksaanVaksinasiState extends Equatable {
+class CheckupFormState extends Equatable {
   final FormzSubmissionStatus? status;
   final String? errorMessage;
-  final int? beratBadan;
-  final int? tinggiBadan;
-  final int? lingkarKepala;
-  final String? riwayatKeluhan;
-  final String? diagnosa;
-  final String? tindakan;
-  final String? idPasien;
-  final String? idOrangTuaPasien;
-  final PatientModel? pasien;
-  final String? bulanKe;
-  final String? jenisVaksin;
-  const FormPemeriksaanVaksinasiState({
+  final CheckupModel checkup;
+  final PatientModel? patient;
+  const CheckupFormState({
     this.status = FormzSubmissionStatus.initial,
     this.errorMessage,
-    this.beratBadan,
-    this.tinggiBadan,
-    this.lingkarKepala,
-    this.riwayatKeluhan,
-    this.diagnosa,
-    this.tindakan,
-    this.idPasien,
-    this.idOrangTuaPasien,
-    this.pasien,
-    this.bulanKe,
-    this.jenisVaksin,
+    this.checkup = const CheckupModel(),
+    this.patient,
   });
 
   @override
   List<Object?> get props => [
         status,
         errorMessage,
-        beratBadan,
-        tinggiBadan,
-        lingkarKepala,
-        riwayatKeluhan,
-        diagnosa,
-        tindakan,
-        idPasien,
-        idOrangTuaPasien,
-        pasien,
-        bulanKe,
-        jenisVaksin,
+        checkup,
+        patient,
       ];
 
-  FormPemeriksaanVaksinasiState copyWith({
+  CheckupFormState copyWith({
     FormzSubmissionStatus? status,
     String? errorMessage,
-    int? beratBadan,
-    int? tinggiBadan,
-    int? lingkarKepala,
-    String? riwayatKeluhan,
-    String? diagnosa,
-    String? tindakan,
-    String? idPasien,
-    String? idOrangTuaPasien,
-    PatientModel? pasien,
-    String? bulanKe,
-    String? jenisVaksin,
+    CheckupModel? checkup,
+    PatientModel? patient,
   }) {
-    return FormPemeriksaanVaksinasiState(
+    return CheckupFormState(
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
-      beratBadan: beratBadan ?? this.beratBadan,
-      tinggiBadan: tinggiBadan ?? this.tinggiBadan,
-      lingkarKepala: lingkarKepala ?? this.lingkarKepala,
-      riwayatKeluhan: riwayatKeluhan ?? this.riwayatKeluhan,
-      diagnosa: diagnosa ?? this.diagnosa,
-      tindakan: tindakan ?? this.tindakan,
-      idPasien: idPasien ?? this.idPasien,
-      idOrangTuaPasien: idOrangTuaPasien ?? this.idOrangTuaPasien,
-      pasien: pasien ?? this.pasien,
-      bulanKe: bulanKe ?? this.bulanKe,
-      jenisVaksin: jenisVaksin ?? this.jenisVaksin,
+      checkup: checkup ?? this.checkup,
+      patient: patient ?? this.patient,
     );
   }
 }

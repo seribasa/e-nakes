@@ -54,7 +54,6 @@ class CheckupModel extends Equatable {
         deletedAt
       ];
 
-
   factory CheckupModel.fromSeribase(Map<String, dynamic> map) {
     return CheckupModel(
       weight: map['weight'],
@@ -110,7 +109,6 @@ class CheckupModel extends Equatable {
     };
   }
 
-
   CheckupModel copyWith({
     int? weight,
     int? height,
@@ -123,6 +121,7 @@ class CheckupModel extends Equatable {
     String? parentId,
     String? patientId,
     String? healthWorkerId,
+    String? month,
     DateTime? createdAt,
     DateTime? updatedAt,
     DateTime? deletedAt,
@@ -139,6 +138,7 @@ class CheckupModel extends Equatable {
       parentId: parentId ?? this.parentId,
       patientId: patientId ?? this.patientId,
       healthWorkerId: healthWorkerId ?? this.healthWorkerId,
+      month: month ?? this.month,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       deletedAt: deletedAt ?? this.deletedAt,

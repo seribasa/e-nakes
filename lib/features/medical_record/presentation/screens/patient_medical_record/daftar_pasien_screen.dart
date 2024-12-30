@@ -2,7 +2,7 @@ import 'package:eimunisasi_nakes/core/widgets/search_bar_widget.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:eimunisasi_nakes/features/medical_record/logic/patient_cubit/patient_cubit.dart';
 import 'package:eimunisasi_nakes/features/medical_record/logic/checkup_cubit/checkup_cubit.dart';
-import 'package:eimunisasi_nakes/features/medical_record/presentation/screens/rekam_medis_pasien/rekam_medis_pasien_screen.dart';
+import 'package:eimunisasi_nakes/features/medical_record/presentation/screens/patient_medical_record/rekam_medis_pasien_screen.dart';
 import 'package:eimunisasi_nakes/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,17 +12,20 @@ class DaftarPasienScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Daftar Pasien'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: const [
-            _SearchBar(),
-            Expanded(child: _ListPasien()),
-          ],
+    return BlocProvider<PatientCubit>(
+      create: (context) => getIt<PatientCubit>()..getPasien(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Daftar Pasien'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: const [
+              _SearchBar(),
+              Expanded(child: _ListPasien()),
+            ],
+          ),
         ),
       ),
     );

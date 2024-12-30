@@ -9,118 +9,98 @@ import 'package:injectable/injectable.dart';
 part 'checkup_form_state.dart';
 
 @injectable
-class FormPemeriksaanVaksinasiCubit
-    extends Cubit<FormPemeriksaanVaksinasiState> {
+class CheckupFormCubit extends Cubit<CheckupFormState> {
   final CheckupRepository _pemeriksaanRepository;
-  
-  FormPemeriksaanVaksinasiCubit(this._pemeriksaanRepository)
-      : super(FormPemeriksaanVaksinasiState());
 
-  providePasienData(
-      String? idPasien, String? idOrangTuaPasien, PatientModel pasien) {
+  CheckupFormCubit(this._pemeriksaanRepository) : super(CheckupFormState());
+
+  selectedPatient(PatientModel? patient) {
     emit(state.copyWith(
-      idPasien: idPasien,
-      idOrangTuaPasien: idOrangTuaPasien,
-      pasien: pasien,
+      patient: patient,
     ));
   }
 
-  changeBeratBadan(int value) {
+  changeWeight(int value) {
     emit(state.copyWith(
-      beratBadan: value,
-    ));
+        checkup: state.checkup.copyWith(
+      weight: value,
+    )));
   }
 
-  changeTinggiBadan(int value) {
+  changeHeight(int value) {
     emit(state.copyWith(
-      tinggiBadan: value,
-    ));
+        checkup: state.checkup.copyWith(
+      height: value,
+    )));
   }
 
-  changeLingkarKepala(int value) {
+  changeHeadCircumference(int value) {
     emit(state.copyWith(
-      lingkarKepala: value,
-    ));
+        checkup: state.checkup.copyWith(
+      headCircumference: value,
+    )));
   }
 
-  changeRiwayatKeluhan(String value) {
+  changeComplaint(String value) {
     emit(state.copyWith(
-      riwayatKeluhan: value,
-    ));
+        checkup: state.checkup.copyWith(
+      complaint: value,
+    )));
   }
 
-  changeDiagnosa(String value) {
+  changeDiagnosis(String value) {
     emit(state.copyWith(
-      diagnosa: value,
-    ));
+        checkup: state.checkup.copyWith(
+      diagnosis: value,
+    )));
   }
 
   changeTypeOfVaccine(String value) {
     if (value.isEmpty) {
       emit(state.copyWith(
-        jenisVaksin: null,
         errorMessage: 'Jenis vaksin tidak boleh kosong',
       ));
       return;
     }
     emit(state.copyWith(
-      jenisVaksin: value,
-    ));
+        checkup: state.checkup.copyWith(
+      vaccineType: value,
+    )));
   }
 
   changeMonthOfVisit(String value) {
     if (value.isEmpty) {
       emit(state.copyWith(
-        bulanKe: null,
+        checkup: state.checkup.copyWith(
+          month: value,
+        ),
         errorMessage: 'Bulan kunjungan tidak boleh kosong',
       ));
       return;
     }
     emit(state.copyWith(
-      bulanKe: value,
+      checkup: state.checkup.copyWith(
+        month: value,
+      ),
     ));
   }
 
-  changeTindakan(String value) {
+  changeAction(String value) {
     emit(state.copyWith(
-      tindakan: value,
+      checkup: state.checkup.copyWith(
+        action: value,
+      ),
     ));
   }
 
-  validateForm() {
-    emit(state.copyWith(
-      status: FormzSubmissionStatus.inProgress,
-    ));
-    final validate = state.beratBadan != null &&
-        state.tinggiBadan != null &&
-        state.lingkarKepala != null;
-    if (validate) {
-      emit(state.copyWith(
-        status: FormzSubmissionStatus.success,
-      ));
-    } else {
-      emit(state.copyWith(
-        status: FormzSubmissionStatus.failure,
-      ));
-    }
-  }
-
-  void savePemeriksaanVaksinasi() async {
+  void submit() async {
     emit(state.copyWith(
       status: FormzSubmissionStatus.inProgress,
     ));
     try {
-      final data = CheckupModel(
-        weight: state.beratBadan,
-        height: state.tinggiBadan,
-        headCircumference: state.lingkarKepala,
-        complaint: state.riwayatKeluhan,
-        diagnosis: state.diagnosa,
-        action: state.tindakan,
-        patientId: state.idPasien,
-        parentId: state.idOrangTuaPasien,
-        vaccineType: state.jenisVaksin,
-        month: state.bulanKe,
+      final data = state.checkup.copyWith(
+        patientId: state.patient?.id,
+        parentId: state.patient?.parentId,
         createdAt: DateTime.now(),
       );
       await _pemeriksaanRepository.setCheckup(checkupModel: data);

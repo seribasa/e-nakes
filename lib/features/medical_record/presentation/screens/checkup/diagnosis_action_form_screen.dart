@@ -1,12 +1,13 @@
 import 'package:eimunisasi_nakes/core/widgets/pasien_card.dart';
-import 'package:eimunisasi_nakes/features/bottom_navbar/presentation/screens/bottom_navbar.dart';
 import 'package:eimunisasi_nakes/features/medical_record/logic/checkup_form_cubit/checkup_form_cubit.dart';
+import 'package:eimunisasi_nakes/routers/route_paths/root_route_paths.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:go_router/go_router.dart';
 
-class FormDiagnosaTindakanScreen extends StatelessWidget {
-  const FormDiagnosaTindakanScreen({super.key});
+class DiagnosisActionFormScreen extends StatelessWidget {
+  const DiagnosisActionFormScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +15,7 @@ class FormDiagnosaTindakanScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Form diagnosa dan tindakan'),
       ),
-      body: BlocListener<FormPemeriksaanVaksinasiCubit,
-          FormPemeriksaanVaksinasiState>(
+      body: BlocListener<CheckupFormCubit, CheckupFormState>(
         listener: (context, state) {
           if (state.status == FormzSubmissionStatus.success) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -23,11 +23,8 @@ class FormDiagnosaTindakanScreen extends StatelessWidget {
                 content: Text('Berhasil menyimpan pemeriksaan!'),
               ),
             );
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const BottomNavbarWrapper()),
-              (Route<dynamic> route) => false,
+            context.pushReplacementNamed(
+              RootRoutePaths.dashboard.name,
             );
           } else if (state.status == FormzSubmissionStatus.failure) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -66,8 +63,7 @@ class _DiagnosaForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pemeriksaanBloc =
-        BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
+    final pemeriksaanBloc = BlocProvider.of<CheckupFormCubit>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -83,7 +79,7 @@ class _DiagnosaForm extends StatelessWidget {
             color: Colors.grey[200],
           ),
           child: TextField(
-            onChanged: (value) => pemeriksaanBloc.changeDiagnosa(value),
+            onChanged: (value) => pemeriksaanBloc.changeDiagnosis(value),
             minLines: 1,
             maxLines: 10,
             decoration: const InputDecoration(
@@ -102,8 +98,7 @@ class _TindakanForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pemeriksaanBloc =
-        BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
+    final pemeriksaanBloc = BlocProvider.of<CheckupFormCubit>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -119,7 +114,7 @@ class _TindakanForm extends StatelessWidget {
             color: Colors.grey[200],
           ),
           child: TextField(
-            onChanged: (value) => pemeriksaanBloc.changeTindakan(value),
+            onChanged: (value) => pemeriksaanBloc.changeAction(value),
             minLines: 1,
             maxLines: 10,
             decoration: const InputDecoration(
@@ -138,13 +133,11 @@ class _NextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pemeriksaanBloc =
-        BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
+    final pemeriksaanBloc = BlocProvider.of<CheckupFormCubit>(context);
     return SizedBox(
       width: double.infinity,
       height: 50,
-      child: BlocBuilder<FormPemeriksaanVaksinasiCubit,
-          FormPemeriksaanVaksinasiState>(
+      child: BlocBuilder<CheckupFormCubit, CheckupFormState>(
         builder: (context, state) {
           return ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -153,7 +146,7 @@ class _NextButton extends StatelessWidget {
             onPressed: state.status == FormzSubmissionStatus.inProgress
                 ? null
                 : () {
-                    pemeriksaanBloc.savePemeriksaanVaksinasi();
+                    pemeriksaanBloc.submit();
                   },
             child: state.status == FormzSubmissionStatus.inProgress
                 ? const CircularProgressIndicator()

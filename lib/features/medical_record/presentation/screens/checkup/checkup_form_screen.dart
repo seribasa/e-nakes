@@ -1,29 +1,25 @@
 import 'package:eimunisasi_nakes/core/widgets/custom_text_field.dart';
 import 'package:eimunisasi_nakes/core/widgets/pasien_card.dart';
-import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:eimunisasi_nakes/features/medical_record/logic/checkup_form_cubit/checkup_form_cubit.dart';
-import 'package:eimunisasi_nakes/features/medical_record/logic/checkup_cubit/checkup_cubit.dart';
-import 'package:eimunisasi_nakes/features/medical_record/presentation/screens/pemeriksaan/grafik_pemeriksaan_screen.dart';
-import 'package:eimunisasi_nakes/injection.dart';
+import 'package:eimunisasi_nakes/routers/medical_record_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:go_router/go_router.dart';
 
 class FormPemeriksaanScreen extends StatelessWidget {
   const FormPemeriksaanScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final pemeriksaanBloc =
-        BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
-    final pasien = pemeriksaanBloc.state.pasien;
+    final pemeriksaanBloc = BlocProvider.of<CheckupFormCubit>(context);
+    final pasien = pemeriksaanBloc.state.patient;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Form Pemeriksaan Pasien'),
       ),
-      body: BlocListener<FormPemeriksaanVaksinasiCubit,
-          FormPemeriksaanVaksinasiState>(
+      body: BlocListener<CheckupFormCubit, CheckupFormState>(
         listener: (context, state) {
           if (state.status == FormzSubmissionStatus.failure) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -63,10 +59,8 @@ class _BeratBadanForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pemeriksaanBloc =
-        BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
-    return BlocBuilder<FormPemeriksaanVaksinasiCubit,
-        FormPemeriksaanVaksinasiState>(
+    final pemeriksaanBloc = BlocProvider.of<CheckupFormCubit>(context);
+    return BlocBuilder<CheckupFormCubit, CheckupFormState>(
       builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,22 +70,22 @@ class _BeratBadanForm extends StatelessWidget {
                 const Expanded(flex: 3, child: Text('Berat Badan')),
                 const SizedBox(width: 5),
                 Expanded(
-                    flex: 2,
-                    child: MyTextFormField(
-                      keyboardType: TextInputType.number,
-                      hintText: '10',
-                      onChanged: (value) {
-                        pemeriksaanBloc.changeBeratBadan(int.parse(value));
-                      },
-                    )),
+                  flex: 2,
+                  child: MyTextFormField(
+                    keyboardType: TextInputType.number,
+                    hintText: '10',
+                    onChanged: (value) {
+                      pemeriksaanBloc.changeWeight(int.parse(value));
+                    },
+                  ),
+                ),
                 const SizedBox(width: 5),
                 const Expanded(flex: 1, child: Text('kg')),
               ],
             ),
             () {
-              if (pemeriksaanBloc.state.status ==
-                  FormzSubmissionStatus.failure) {
-                if (pemeriksaanBloc.state.beratBadan == null) {
+              if (state.status == FormzSubmissionStatus.failure) {
+                if (state.checkup.weight == null) {
                   return Container(
                     padding: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
@@ -119,10 +113,8 @@ class TinggiBadanForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pemeriksaanBloc =
-        BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
-    return BlocBuilder<FormPemeriksaanVaksinasiCubit,
-        FormPemeriksaanVaksinasiState>(
+    final pemeriksaanBloc = BlocProvider.of<CheckupFormCubit>(context);
+    return BlocBuilder<CheckupFormCubit, CheckupFormState>(
       builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,22 +124,22 @@ class TinggiBadanForm extends StatelessWidget {
                 const Expanded(flex: 3, child: Text('Tinggi Badan')),
                 const SizedBox(width: 5),
                 Expanded(
-                    flex: 2,
-                    child: MyTextFormField(
-                      keyboardType: TextInputType.number,
-                      hintText: '50',
-                      onChanged: (value) {
-                        pemeriksaanBloc.changeTinggiBadan(int.parse(value));
-                      },
-                    )),
+                  flex: 2,
+                  child: MyTextFormField(
+                    keyboardType: TextInputType.number,
+                    hintText: '50',
+                    onChanged: (value) {
+                      pemeriksaanBloc.changeHeight(int.parse(value));
+                    },
+                  ),
+                ),
                 const SizedBox(width: 5),
                 const Expanded(flex: 1, child: Text('cm')),
               ],
             ),
             () {
-              if (pemeriksaanBloc.state.status ==
-                  FormzSubmissionStatus.failure) {
-                if (pemeriksaanBloc.state.tinggiBadan == null) {
+              if (state.status == FormzSubmissionStatus.failure) {
+                if (state.checkup.height == null) {
                   return Container(
                     padding: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
@@ -175,10 +167,8 @@ class LingkarKepalaForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pemeriksaanBloc =
-        BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
-    return BlocBuilder<FormPemeriksaanVaksinasiCubit,
-        FormPemeriksaanVaksinasiState>(
+    final pemeriksaanBloc = BlocProvider.of<CheckupFormCubit>(context);
+    return BlocBuilder<CheckupFormCubit, CheckupFormState>(
       builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -193,7 +183,8 @@ class LingkarKepalaForm extends StatelessWidget {
                       keyboardType: TextInputType.number,
                       hintText: '15',
                       onChanged: (value) {
-                        pemeriksaanBloc.changeLingkarKepala(int.parse(value));
+                        pemeriksaanBloc
+                            .changeHeadCircumference(int.parse(value));
                       },
                     )),
                 const SizedBox(width: 5),
@@ -201,9 +192,8 @@ class LingkarKepalaForm extends StatelessWidget {
               ],
             ),
             () {
-              if (pemeriksaanBloc.state.status ==
-                  FormzSubmissionStatus.failure) {
-                if (pemeriksaanBloc.state.lingkarKepala == null) {
+              if (state.status == FormzSubmissionStatus.failure) {
+                if (state.checkup.headCircumference == null) {
                   return Container(
                     padding: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
@@ -254,8 +244,7 @@ class _RiwayatKeluhan extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pemeriksaanBloc =
-        BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
+    final pemeriksaanBloc = BlocProvider.of<CheckupFormCubit>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -271,7 +260,7 @@ class _RiwayatKeluhan extends StatelessWidget {
             color: Colors.grey[200],
           ),
           child: TextField(
-            onChanged: (value) => pemeriksaanBloc.changeRiwayatKeluhan(value),
+            onChanged: (value) => pemeriksaanBloc.changeComplaint(value),
             minLines: 1,
             maxLines: 10,
             decoration: const InputDecoration(
@@ -290,39 +279,37 @@ class _NextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pemeriksaanBloc =
-        BlocProvider.of<FormPemeriksaanVaksinasiCubit>(context);
-    final pasien = pemeriksaanBloc.state.pasien;
-    return SizedBox(
-      width: double.infinity,
-      height: 50,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            shape:
-                const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
-        child: const Text("Simpan dan Lanjutkan"),
-        onPressed: () {
-          pemeriksaanBloc.validateForm();
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-              builder: (context, auth) {
-                return MultiBlocProvider(
-                  providers: [
-                    BlocProvider.value(
-                      value: pemeriksaanBloc,
-                    ),
-                    BlocProvider(
-                      create: (context) => getIt<CheckupCubit>()
-                        ..getCheckupByPatientId(pasien?.nik),
-                    ),
-                  ],
-                  child: const GrafikPemeriksaanScreen(),
-                );
-              },
-            );
-          }));
-        },
-      ),
+    final pemeriksaanBloc = BlocProvider.of<CheckupFormCubit>(context);
+    return BlocBuilder<CheckupFormCubit, CheckupFormState>(
+      buildWhen: (prev, curr) {
+        return prev.checkup != curr.checkup;
+      },
+      builder: (context, state) {
+        final isValidForm = state.checkup.weight != null &&
+            state.checkup.weight != null &&
+            state.checkup.headCircumference != null;
+
+        return ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            minimumSize: Size(
+              double.infinity,
+              50,
+            ),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.zero,
+            ),
+          ),
+          onPressed: !isValidForm
+              ? null
+              : () {
+                  context.goNamed(
+                    MedicalRecordRouter.checkupChartRoute.name,
+                    extra: pemeriksaanBloc,
+                  );
+                },
+          child: const Text("Simpan dan Lanjutkan"),
+        );
+      },
     );
   }
 }

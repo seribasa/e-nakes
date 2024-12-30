@@ -1,38 +1,45 @@
 import 'package:eimunisasi_nakes/core/widgets/search_bar_widget.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
-import 'package:eimunisasi_nakes/features/appointment/presentation/screens/registrasi/qrcode_screen.dart';
 import 'package:eimunisasi_nakes/features/medical_record/logic/patient_cubit/patient_cubit.dart';
-import 'package:eimunisasi_nakes/features/medical_record/presentation/screens/pemeriksaan/verifikasi_pasien_screen.dart';
+import 'package:eimunisasi_nakes/features/medical_record/presentation/screens/checkup/patient_verification_screen.dart';
+import 'package:eimunisasi_nakes/routers/medical_record_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
-class PemeriksaanScreen extends StatelessWidget {
-  const PemeriksaanScreen({super.key});
+import '../../../../../injection.dart';
+
+class CheckupScreen extends StatelessWidget {
+  const CheckupScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Pemeriksaan Pasien'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: [
-            QRScanButton(
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const QrRegistrasiPemeriksaan()));
-              },
-            ),
-            const SizedBox(height: 10),
-            const _SearchBar(),
-            const SizedBox(height: 10),
-            const Expanded(
-              child: _ListPasien(),
-            ),
-          ],
+    return BlocProvider<PatientCubit>(
+      create: (context) => getIt<PatientCubit>()..getPasien(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Pemeriksaan Pasien'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              QRScanButton(
+                onTap: () {
+                  context.goNamed(
+                    MedicalRecordRouter.checkupScanRoute.name,
+                  );
+                },
+              ),
+              const SizedBox(height: 10),
+              const _SearchBar(),
+              const SizedBox(height: 10),
+              const Expanded(
+                child: _ListPasien(),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -73,12 +80,10 @@ class _ListPasien extends StatelessWidget {
                           ),
                           subtitle: Text('${pasien?.nik}'),
                           onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => VerifikasiPasienScreen(
-                                  pasien: pasien,
-                                  jadwalPasienModel: null,
-                                ),
+                            context.goNamed(
+                              MedicalRecordRouter.checkupVerificationRoute.name,
+                              extra: PatientVerificationScreenExtra(
+                                patient: pasien,
                               ),
                             );
                           },

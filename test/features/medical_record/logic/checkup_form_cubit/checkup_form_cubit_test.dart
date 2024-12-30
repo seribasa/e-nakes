@@ -10,12 +10,12 @@ import 'package:mocktail/mocktail.dart';
 class MockCheckupRepository extends Mock implements CheckupRepository {}
 
 void main() {
-  late FormPemeriksaanVaksinasiCubit cubit;
+  late CheckupFormCubit cubit;
   late MockCheckupRepository mockRepository;
 
   setUp(() {
     mockRepository = MockCheckupRepository();
-    cubit = FormPemeriksaanVaksinasiCubit(mockRepository);
+    cubit = CheckupFormCubit(mockRepository);
   });
 
   setUpAll(() {
@@ -30,32 +30,30 @@ void main() {
     final patientModel = PatientModel();
 
     test('initial state should be empty', () {
-      expect(cubit.state, FormPemeriksaanVaksinasiState());
+      expect(cubit.state, CheckupFormState());
     });
 
-    blocTest<FormPemeriksaanVaksinasiCubit, FormPemeriksaanVaksinasiState>(
+    blocTest<CheckupFormCubit, CheckupFormState>(
       'providePasienData emits correct state',
       build: () => cubit,
-      act: (cubit) => cubit.providePasienData('123', '456', patientModel),
+      act: (cubit) => cubit.selectedPatient(patientModel),
       expect: () => [
-        FormPemeriksaanVaksinasiState(
-          idPasien: '123',
-          idOrangTuaPasien: '456',
-          pasien: patientModel,
+        CheckupFormState(
+          patient: patientModel,
         ),
       ],
     );
 
-    blocTest<FormPemeriksaanVaksinasiCubit, FormPemeriksaanVaksinasiState>(
+    blocTest<CheckupFormCubit, CheckupFormState>(
       'changeBeratBadan emits correct state',
       build: () => cubit,
-      act: (cubit) => cubit.changeBeratBadan(50),
+      act: (cubit) => cubit.changeWeight(50),
       expect: () => [
-        FormPemeriksaanVaksinasiState(beratBadan: 50),
+        CheckupFormState(checkup: CheckupModel(weight: 50)),
       ],
     );
 
-    blocTest<FormPemeriksaanVaksinasiCubit, FormPemeriksaanVaksinasiState>(
+    blocTest<CheckupFormCubit, CheckupFormState>(
       'savePemeriksaanVaksinasi success emits correct states',
       build: () {
         when(() => mockRepository.setCheckup(
@@ -65,34 +63,44 @@ void main() {
         return cubit;
       },
       act: (cubit) {
-        cubit.changeBeratBadan(50);
-        cubit.changeTinggiBadan(160);
-        cubit.changeLingkarKepala(35);
-        return cubit.savePemeriksaanVaksinasi();
+        cubit.changeWeight(50);
+        cubit.changeHeight(160);
+        cubit.changeHeadCircumference(35);
+        return cubit.submit();
       },
       expect: () => [
-        FormPemeriksaanVaksinasiState(
-          beratBadan: 50,
+        CheckupFormState(
+          checkup: CheckupModel(
+            weight: 50,
+          ),
         ),
-        FormPemeriksaanVaksinasiState(
-          beratBadan: 50,
-          tinggiBadan: 160,
+        CheckupFormState(
+          checkup: CheckupModel(
+            weight: 50,
+            height: 160,
+          ),
         ),
-        FormPemeriksaanVaksinasiState(
-          beratBadan: 50,
-          tinggiBadan: 160,
-          lingkarKepala: 35,
+        CheckupFormState(
+          checkup: CheckupModel(
+            weight: 50,
+            height: 160,
+            headCircumference: 35,
+          ),
         ),
-        FormPemeriksaanVaksinasiState(
-          beratBadan: 50,
-          tinggiBadan: 160,
-          lingkarKepala: 35,
+        CheckupFormState(
+          checkup: CheckupModel(
+            weight: 50,
+            height: 160,
+            headCircumference: 35,
+          ),
           status: FormzSubmissionStatus.inProgress,
         ),
-        FormPemeriksaanVaksinasiState(
-          beratBadan: 50,
-          tinggiBadan: 160,
-          lingkarKepala: 35,
+        CheckupFormState(
+          checkup: CheckupModel(
+            weight: 50,
+            height: 160,
+            headCircumference: 35,
+          ),
           status: FormzSubmissionStatus.success,
         ),
       ],

@@ -1,33 +1,44 @@
 import 'dart:convert';
 
 import 'package:eimunisasi_nakes/core/common/constan.dart';
-import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:eimunisasi_nakes/features/appointment/data/models/appointment_model.dart';
 import 'package:eimunisasi_nakes/features/medical_record/data/models/patient_model.dart';
 import 'package:eimunisasi_nakes/features/medical_record/logic/checkup_form_cubit/checkup_form_cubit.dart';
-import 'package:eimunisasi_nakes/features/medical_record/presentation/screens/pemeriksaan/form_pemeriksaan_screen.dart';
 import 'package:eimunisasi_nakes/injection.dart';
+import 'package:eimunisasi_nakes/routers/medical_record_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-class VerifikasiPasienScreen extends StatelessWidget {
-  final PatientAppointmentModel? jadwalPasienModel;
-  final PatientModel? pasien;
+class PatientVerificationScreenExtra {
+  final PatientModel? patient;
+  final PatientAppointmentModel? appointment;
+
+  const PatientVerificationScreenExtra({
+    this.appointment,
+    this.patient,
+  });
+}
+
+class PatientVerificationScreen extends StatelessWidget {
+  final PatientAppointmentModel? appointment;
+  final PatientModel? patient;
   final Barcode? result;
-  const VerifikasiPasienScreen(
-      {super.key,
-      this.result,
-      required this.pasien,
-      required this.jadwalPasienModel});
+  const PatientVerificationScreen({
+    super.key,
+    this.result,
+    required this.patient,
+    required this.appointment,
+  });
 
   @override
   Widget build(BuildContext context) {
     final String? dataBarcode = result?.code;
     final String? nama =
-        dataBarcode != null ? jsonDecode(dataBarcode)["nama"] : pasien?.nama;
+        dataBarcode != null ? jsonDecode(dataBarcode)["nama"] : patient?.nama;
     return BlocProvider(
-      create: (context) => getIt<FormPemeriksaanVaksinasiCubit>(),
+      create: (context) => getIt<CheckupFormCubit>()..selectedPatient(patient),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Verifikasi Pasien'),
@@ -40,19 +51,19 @@ class VerifikasiPasienScreen extends StatelessWidget {
               children: [
                 _IdentitasPasien(
                   namaAnak: '$nama',
-                  umurAnak: pasien?.umur.toString(),
-                  namaOrangTua: pasien?.nik,
-                  alamat: pasien?.tempatLahir,
+                  umurAnak: patient?.umur.toString(),
+                  namaOrangTua: patient?.nik,
+                  alamat: patient?.tempatLahir,
                 ),
                 const SizedBox(height: 10),
                 _JenisVaksin(
-                  namaVaksin: jadwalPasienModel?.note,
+                  namaVaksin: appointment?.note,
                 )
               ],
             ),
           ),
         ),
-        bottomNavigationBar: _NextButton(pasien: pasien ?? const PatientModel()),
+        bottomNavigationBar: _NextButton(),
       ),
     );
   }
@@ -142,13 +153,12 @@ class _JenisVaksin extends StatelessWidget {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: BlocBuilder<FormPemeriksaanVaksinasiCubit,
-                        FormPemeriksaanVaksinasiState>(
+                    child: BlocBuilder<CheckupFormCubit, CheckupFormState>(
                       builder: (context, state) {
                         return DropdownButton(
                           underline: const SizedBox(),
-                          value: state.bulanKe != null
-                              ? int.parse(state.bulanKe!)
+                          value: state.checkup.month != null
+                              ? int.tryParse(state.checkup.month!)
                               : null,
                           items: List.generate(
                             24,
@@ -159,7 +169,7 @@ class _JenisVaksin extends StatelessWidget {
                           ),
                           onChanged: (value) {
                             context
-                                .read<FormPemeriksaanVaksinasiCubit>()
+                                .read<CheckupFormCubit>()
                                 .changeMonthOfVisit(value.toString());
                           },
                         );
@@ -182,11 +192,10 @@ class _JenisVaksin extends StatelessWidget {
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: BlocBuilder<FormPemeriksaanVaksinasiCubit,
-                    FormPemeriksaanVaksinasiState>(
+                child: BlocBuilder<CheckupFormCubit, CheckupFormState>(
                   builder: (context, state) {
                     return DropdownButton(
-                      value: state.jenisVaksin,
+                      value: state.checkup.vaccineType,
                       isExpanded: true,
                       underline: const SizedBox(),
                       items: List.generate(
@@ -198,7 +207,7 @@ class _JenisVaksin extends StatelessWidget {
                       ),
                       onChanged: (value) {
                         context
-                            .read<FormPemeriksaanVaksinasiCubit>()
+                            .read<CheckupFormCubit>()
                             .changeTypeOfVaccine(value.toString());
                       },
                     );
@@ -214,46 +223,37 @@ class _JenisVaksin extends StatelessWidget {
 }
 
 class _NextButton extends StatelessWidget {
-  final PatientModel pasien;
-  const _NextButton({required this.pasien});
+  const _NextButton();
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       height: 50,
-      child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        builder: (context, state) {
-          final user = state is Authenticated ? state.user : null;
-          return BlocBuilder<FormPemeriksaanVaksinasiCubit,
-              FormPemeriksaanVaksinasiState>(
-            builder: (context, formState) {
-              return ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero)),
-                child: const Text("Lanjut"),
-                onPressed: () {
-                  if ((formState.jenisVaksin == null ||
-                          formState.jenisVaksin!.isEmpty) &&
-                      (formState.bulanKe == null ||
-                          formState.bulanKe!.isEmpty)) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                            'Jenis Vaksin dan Bulan Kunjungan tidak boleh kosong,'),
-                      ),
-                    );
-                    return;
-                  }
-                  Navigator.push(context, MaterialPageRoute(builder: (_) {
-                    return BlocProvider.value(
-                      value: context.read<FormPemeriksaanVaksinasiCubit>()
-                        ..providePasienData(pasien.nik, user?.id, pasien),
-                      child: const FormPemeriksaanScreen(),
-                    );
-                  }));
-                },
+      child: BlocBuilder<CheckupFormCubit, CheckupFormState>(
+        builder: (context, formState) {
+          return ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero)),
+            child: const Text("Lanjut"),
+            onPressed: () {
+              if ((formState.checkup.vaccineType == null ||
+                      formState.checkup.vaccineType?.isEmpty == true) &&
+                  (formState.checkup.month == null ||
+                      formState.checkup.month?.isEmpty == true)) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      'Jenis Vaksin dan Bulan Kunjungan tidak boleh kosong,',
+                    ),
+                  ),
+                );
+                return;
+              }
+              context.goNamed(
+                MedicalRecordRouter.checkupFormRoute.name,
+                extra: context.read<CheckupFormCubit>(),
               );
             },
           );

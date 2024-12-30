@@ -1,12 +1,11 @@
 import 'package:eimunisasi_nakes/features/klinik/logic/bloc/klinik_bloc/klinik_bloc.dart';
-import 'package:eimunisasi_nakes/features/medical_record/logic/patient_cubit/patient_cubit.dart';
-import 'package:eimunisasi_nakes/features/medical_record/presentation/screens/pemeriksaan/pemeriksaan_screen.dart';
-import 'package:eimunisasi_nakes/features/medical_record/presentation/screens/rekam_medis_pasien/daftar_pasien_screen.dart';
+import 'package:eimunisasi_nakes/features/medical_record/presentation/screens/patient_medical_record/daftar_pasien_screen.dart';
+import 'package:eimunisasi_nakes/routers/medical_record_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
-import '../../../../injection.dart';
 
 class WrapperRekamMedis extends StatelessWidget {
   const WrapperRekamMedis({super.key});
@@ -51,13 +50,8 @@ class _PemeriksaanButton extends StatelessWidget {
               ),
             ),
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                    builder: (context) => BlocProvider(
-                          create: (context) =>
-                              getIt<PatientCubit>()..getPasien(),
-                          child: const PemeriksaanScreen(),
-                        )),
+              context.goNamed(
+                MedicalRecordRouter.checkupRoute.name,
               );
             },
             child: Row(
@@ -93,10 +87,8 @@ class _RekamMedisPasienButton extends StatelessWidget {
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-                builder: (context) => BlocProvider(
-                      create: (context) => getIt<PatientCubit>()..getPasien(),
-                      child: const DaftarPasienScreen(),
-                    )),
+              builder: (context) => const DaftarPasienScreen(),
+            ),
           );
         },
         child: Row(
