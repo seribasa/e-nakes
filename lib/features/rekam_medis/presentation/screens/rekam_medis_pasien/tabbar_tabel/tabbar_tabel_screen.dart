@@ -5,18 +5,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class TabbarTabelScreen extends StatelessWidget {
-  const TabbarTabelScreen({Key? key}) : super(key: key);
+  const TabbarTabelScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PemeriksaanCubit, PemeriksaanState>(
       builder: (context, state) {
-        final List<PemeriksaanModel> _pemeriksaan =
+        final List<PemeriksaanModel> pemeriksaan =
             (state is PemeriksaanLoaded) ? state.pemeriksaan ?? [] : [];
 
         final List<DataRow> listBodyTable =
-            List.generate(_pemeriksaan.length, (index) {
-          final data = _pemeriksaan[index];
+            List.generate(pemeriksaan.length, (index) {
+          final data = pemeriksaan[index];
           return DataRow(cells: [
             DataCell(Text(DateFormat('dd/MM/yyyy')
                 .format(data.createdAt ?? DateTime.now()))),

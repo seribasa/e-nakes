@@ -9,8 +9,7 @@ import 'package:formz/formz.dart';
 
 class UpdateEventKalenderScreen extends StatelessWidget {
   final CalendarModel calendarModel;
-  const UpdateEventKalenderScreen({Key? key, required this.calendarModel})
-      : super(key: key);
+  const UpdateEventKalenderScreen({super.key, required this.calendarModel});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +23,7 @@ class UpdateEventKalenderScreen extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       body: BlocListener<FormCalendarActivityCubit, FormCalendarActivityState>(
         listener: (context, state) {
-          if (state.status == FormzStatus.submissionSuccess) {
+          if (state.status == FormzSubmissionStatus.success) {
             formBloc.reset();
             Navigator.pop(context);
             ScaffoldMessenger.of(context).showSnackBar(
@@ -32,7 +31,7 @@ class UpdateEventKalenderScreen extends StatelessWidget {
                 content: Text('Kegiatan berhasil diubah'),
               ),
             );
-          } else if (state.status == FormzStatus.submissionFailure) {
+          } else if (state.status == FormzSubmissionStatus.failure) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Kegiatan gagal diubah'),
@@ -97,8 +96,7 @@ class UpdateEventKalenderScreen extends StatelessWidget {
 class _ActivityForm extends StatelessWidget {
   final String? initialValue;
   final void Function(String)? onChanged;
-  const _ActivityForm({Key? key, this.initialValue, this.onChanged})
-      : super(key: key);
+  const _ActivityForm({this.initialValue, this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -121,14 +119,14 @@ class _ActivityForm extends StatelessWidget {
 
 class _SaveButton extends StatelessWidget {
   final String? docId;
-  const _SaveButton({Key? key, required this.docId}) : super(key: key);
+  const _SaveButton({required this.docId});
 
   @override
   Widget build(BuildContext context) {
-    final _formBloc = BlocProvider.of<FormCalendarActivityCubit>(context);
+    final formBloc = BlocProvider.of<FormCalendarActivityCubit>(context);
     return BlocBuilder<FormCalendarActivityCubit, FormCalendarActivityState>(
       builder: (context, state) {
-        if (state.status == FormzStatus.submissionInProgress) {
+        if (state.status == FormzSubmissionStatus.inProgress) {
           return SizedBox(
             width: double.infinity,
             height: 50,
@@ -158,7 +156,7 @@ class _SaveButton extends StatelessWidget {
                     borderRadius: BorderRadius.zero)),
             child: const Text("Simpan"),
             onPressed: () {
-              _formBloc.updateCalendarActivity(docId: docId);
+              formBloc.updateCalendarActivity(docId: docId);
             },
           ),
         );

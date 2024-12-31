@@ -2,21 +2,20 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:eimunisasi_nakes/features/jadwal/logic/jadwal/jadwal_cubit.dart';
 import 'package:eimunisasi_nakes/features/jadwal/presentation/screens/riwayat%20janji/riwayat_janji_screen.dart';
-import 'package:eimunisasi_nakes/features/jadwal/presentation/screens/wrapper_jadwal.dart';
-import 'package:eimunisasi_nakes/features/kalender/logic/calendar/calendar_cubit.dart';
-import 'package:eimunisasi_nakes/features/kalender/logic/form_calendar_activity/form_calendar_activity_cubit.dart';
-import 'package:eimunisasi_nakes/features/kalender/presentation/screens/kalender_screen.dart';
-import 'package:eimunisasi_nakes/features/klinik/presentation/screens/wrapper_klinik.dart';
-import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/wrapper_rekam_medis.dart';
+import 'package:eimunisasi_nakes/injection.dart';
+import 'package:eimunisasi_nakes/routers/medical_record_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-
+import '../../../../routers/appointment_router.dart';
+import '../../../../routers/calendar_router.dart';
+import '../../../../routers/clinic_router.dart';
 import '../../../authentication/data/models/user.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -50,8 +49,9 @@ class HomeScreen extends StatelessWidget {
 }
 
 class _HelloHeader extends StatelessWidget {
-  final UserData? data;
-  const _HelloHeader({Key? key, required this.data}) : super(key: key);
+  final ProfileModel? data;
+
+  const _HelloHeader({required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -72,12 +72,12 @@ class _HelloHeader extends StatelessWidget {
                 if (data?.phone == '' || data?.phone == null) {
                   return Text(
                     data?.email ?? '',
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: Theme.of(context).textTheme.bodySmall,
                   );
                 } else {
                   return Text(
                     data?.phone ?? '',
-                    style: Theme.of(context).textTheme.caption,
+                    style: Theme.of(context).textTheme.labelSmall,
                   );
                 }
               }
@@ -95,7 +95,7 @@ class _HelloHeader extends StatelessWidget {
 }
 
 class _MenuList extends StatelessWidget {
-  const _MenuList({Key? key}) : super(key: key);
+  const _MenuList();
 
   @override
   Widget build(BuildContext context) {
@@ -103,22 +103,22 @@ class _MenuList extends StatelessWidget {
       {
         'title': 'Kalender',
         'icon': FontAwesomeIcons.calendar,
-        'route': const KalenderScreen(),
+        'route': CalendarRouter.calendarRoute,
       },
       {
         'title': 'Klinik',
         'icon': FontAwesomeIcons.hospital,
-        'route': const WrapperKlinik(),
+        'route': ClinicRouter.wrapperRoute,
       },
       {
         'title': 'Jadwal',
         'icon': FontAwesomeIcons.clipboardList,
-        'route': const WrapperJadwal(),
+        'route': AppointmentRouter.wrapperRoute,
       },
       {
         'title': 'Rekam Medis',
         'icon': FontAwesomeIcons.bookMedical,
-        'route': const WrapperRekamMedis(),
+        'route': MedicalRecordRouter.wrapperRoute,
       }
     ];
     return Padding(
@@ -133,66 +133,46 @@ class _MenuList extends StatelessWidget {
           const SizedBox(height: 10),
           Flexible(
             child: GridView.builder(
-                itemCount: data.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: 1.2,
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 40,
-                  mainAxisSpacing: 5,
-                ),
-                itemBuilder: (context, index) {
-                  return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                    builder: (context, state) {
-                      return GestureDetector(
-                        onTap: () =>
-                            Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => MultiBlocProvider(
-                            providers: [
-                              BlocProvider(
-                                create: (context) => CalendarCubit(
-                                    userData: (state is Authenticated)
-                                        ? state.user
-                                        : null)
-                                  ..getAllCalendar(),
-                              ),
-                              BlocProvider(
-                                create: (context) => FormCalendarActivityCubit(
-                                    userData: (state is Authenticated)
-                                        ? (state.user)
-                                        : null),
-                              ),
-                            ],
-                            child: data[index]['route'],
+              itemCount: data.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                childAspectRatio: 1.2,
+                crossAxisCount: 2,
+                crossAxisSpacing: 40,
+                mainAxisSpacing: 5,
+              ),
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    context.pushNamed(
+                      data[index]['route'].name,
+                    );
+                  },
+                  child: Column(
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            color: Colors.blue[300],
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(30.0),
+                          child: FaIcon(
+                            data[index]['icon'],
+                            size: 30,
+                            color: Colors.blue[100],
                           ),
-                        )),
-                        child: Column(
-                          children: [
-                            Container(
-                              alignment: Alignment.center,
-                              child: Padding(
-                                padding: const EdgeInsets.all(30.0),
-                                child: FaIcon(
-                                  data[index]['icon'],
-                                  size: 30,
-                                  color: Colors.blue[100],
-                                ),
-                              ),
-                              decoration: BoxDecoration(
-                                  color: Colors.blue[300],
-                                  borderRadius: BorderRadius.circular(20)),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              data[index]['title'],
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ],
                         ),
-                      );
-                    },
-                  );
-                }),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        data[index]['title'],
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),
@@ -201,12 +181,12 @@ class _MenuList extends StatelessWidget {
 }
 
 class _AppoinmentToday extends StatelessWidget {
-  const _AppoinmentToday({Key? key}) : super(key: key);
+  const _AppoinmentToday();
 
   @override
   Widget build(BuildContext context) {
-    final _user = context.read<AuthenticationBloc>().state.user;
-    final _jadwal = context.read<JadwalCubit>().state.jadwalPasienModel;
+    final jadwal =
+        context.read<JadwalCubit>().state.paginationAppointment?.data;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Column(
@@ -224,7 +204,7 @@ class _AppoinmentToday extends StatelessWidget {
                     MaterialPageRoute(
                         builder: (context) => BlocProvider(
                               create: (context) =>
-                                  JadwalCubit(userData: _user)..getAllJadwal(),
+                                  getIt<JadwalCubit>()..getAllJadwal(),
                               child: const RiwayatJanjiScreen(),
                             )),
                   );
@@ -258,7 +238,8 @@ class _AppoinmentToday extends StatelessWidget {
                             return CircleAvatar(
                               radius: 20,
                               backgroundImage: CachedNetworkImageProvider(
-                                state.jadwalPasienModel?.first.anak?.photoUrl ??
+                                state.paginationAppointment?.data?.first.child
+                                        ?.photoURL ??
                                     'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
                               ),
                             );
@@ -274,7 +255,8 @@ class _AppoinmentToday extends StatelessWidget {
                                   child: LinearProgressIndicator());
                             }
                             return Text(
-                              state.jadwalPasienModel?.first.anak?.nama ??
+                              state.paginationAppointment?.data?.first.child
+                                      ?.nama ??
                                   'Tidak ada pasien',
                               style: const TextStyle(
                                 color: Colors.white,
@@ -308,7 +290,7 @@ class _AppoinmentToday extends StatelessWidget {
                               ),
                               Text(
                                 DateFormat('dd-MMM-yyyy').format(
-                                    _jadwal?.first.tanggal ?? DateTime.now()),
+                                    jadwal?.first.date ?? DateTime.now()),
                                 style: const TextStyle(color: Colors.white),
                               ),
                             ],
@@ -327,7 +309,8 @@ class _AppoinmentToday extends StatelessWidget {
                                 builder: (context, state) {
                                   return Text(
                                     DateFormat('HH:mm').format(
-                                      state.jadwalPasienModel?.first.tanggal ??
+                                      state.paginationAppointment?.data?.first
+                                              .date ??
                                           DateTime.now(),
                                     ),
                                     style: const TextStyle(color: Colors.white),

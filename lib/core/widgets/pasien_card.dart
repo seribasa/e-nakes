@@ -4,8 +4,7 @@ class PasienCard extends StatelessWidget {
   final String? nama;
   final String? umur;
   final String? jenisKelamin;
-  const PasienCard({Key? key, this.nama, this.umur, this.jenisKelamin})
-      : super(key: key);
+  const PasienCard({super.key, this.nama, this.umur, this.jenisKelamin});
 
   @override
   Widget build(BuildContext context) {

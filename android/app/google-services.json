@@ -112,6 +112,42 @@
     },
     {
       "client_info": {
+        "mobilesdk_app_id": "1:683504612347:android:cdba92855c57375f97115e",
+        "android_client_info": {
+          "package_name": "com.peltops.e_imunisasi.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "683504612347-2inv0k0ltc7asj3cmli4junq0jg0uj4d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3SWRuu3Y5v-MC4saOILpeXLsFiVbcEGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "683504612347-2inv0k0ltc7asj3cmli4junq0jg0uj4d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "683504612347-323bhnhlf49h3vka5qqt26q0lpcqm99g.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.eImunisasi"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:683504612347:android:40e9dfcd1fcd9e6d97115e",
         "android_client_info": {
           "package_name": "com.peltops.eimunisasi_nakes"
@@ -134,6 +170,94 @@
             "certificate_hash": "1ab17926ae1e5880b958fbcc1dba4965ab399739"
           }
         },
+        {
+          "client_id": "683504612347-gehu7etsg1lu183unlq5uhj69h418alt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.peltops.eimunisasi_nakes",
+            "certificate_hash": "640f266ea9cae8880c7f5fbb5ca0b4cfdf11bb04"
+          }
+        },
+        {
+          "client_id": "683504612347-h4t28jg2lp9t0bllglrvmttmrs0be32c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.peltops.eimunisasi_nakes",
+            "certificate_hash": "dd84950852cd7e2656c312b66c7dd979da9968a0"
+          }
+        },
+        {
+          "client_id": "683504612347-2inv0k0ltc7asj3cmli4junq0jg0uj4d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3SWRuu3Y5v-MC4saOILpeXLsFiVbcEGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "683504612347-2inv0k0ltc7asj3cmli4junq0jg0uj4d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "683504612347-323bhnhlf49h3vka5qqt26q0lpcqm99g.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.eImunisasi"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683504612347:android:1938742e629c107c97115e",
+        "android_client_info": {
+          "package_name": "com.peltops.eimunisasi_nakes.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "683504612347-2inv0k0ltc7asj3cmli4junq0jg0uj4d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3SWRuu3Y5v-MC4saOILpeXLsFiVbcEGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "683504612347-2inv0k0ltc7asj3cmli4junq0jg0uj4d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "683504612347-323bhnhlf49h3vka5qqt26q0lpcqm99g.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.eImunisasi"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683504612347:android:c70f1eca6839561a97115e",
+        "android_client_info": {
+          "package_name": "digital.seribasa.eimunisasi"
+        }
+      },
+      "oauth_client": [
         {
           "client_id": "683504612347-2inv0k0ltc7asj3cmli4junq0jg0uj4d.apps.googleusercontent.com",
           "client_type": 3

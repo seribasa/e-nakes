@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eimunisasi_nakes/features/authentication/data/models/user.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pasien_model.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pemeriksaan_model.dart';
@@ -11,7 +11,7 @@ part 'form_pemeriksaan_vaksinasi_state.dart';
 class FormPemeriksaanVaksinasiCubit
     extends Cubit<FormPemeriksaanVaksinasiState> {
   final PemeriksaanRepository _pemeriksaanRepository;
-  final UserData? userData;
+  final ProfileModel? userData;
   FormPemeriksaanVaksinasiCubit({
     PemeriksaanRepository? pemeriksaanRepository,
     required this.userData,
@@ -58,6 +58,32 @@ class FormPemeriksaanVaksinasiCubit
     ));
   }
 
+  changeTypeOfVaccine(String value) {
+    if (value.isEmpty) {
+      emit(state.copyWith(
+        jenisVaksin: null,
+        errorMessage: 'Jenis vaksin tidak boleh kosong',
+      ));
+      return;
+    }
+    emit(state.copyWith(
+      jenisVaksin: value,
+    ));
+  }
+
+  changeMonthOfVisit(String value) {
+    if (value.isEmpty) {
+      emit(state.copyWith(
+        bulanKe: null,
+        errorMessage: 'Bulan kunjungan tidak boleh kosong',
+      ));
+      return;
+    }
+    emit(state.copyWith(
+      bulanKe: value,
+    ));
+  }
+
   changeTindakan(String value) {
     emit(state.copyWith(
       tindakan: value,
@@ -66,25 +92,25 @@ class FormPemeriksaanVaksinasiCubit
 
   validateForm() {
     emit(state.copyWith(
-      status: FormzStatus.submissionInProgress,
+      status: FormzSubmissionStatus.inProgress,
     ));
     final validate = state.beratBadan != null &&
         state.tinggiBadan != null &&
         state.lingkarKepala != null;
     if (validate) {
       emit(state.copyWith(
-        status: FormzStatus.valid,
+        status: FormzSubmissionStatus.success,
       ));
     } else {
       emit(state.copyWith(
-        status: FormzStatus.invalid,
+        status: FormzSubmissionStatus.failure,
       ));
     }
   }
 
   void savePemeriksaanVaksinasi() async {
     emit(state.copyWith(
-      status: FormzStatus.submissionInProgress,
+      status: FormzSubmissionStatus.inProgress,
     ));
     try {
       final data = PemeriksaanModel(
@@ -97,15 +123,17 @@ class FormPemeriksaanVaksinasiCubit
         idPasien: state.idPasien,
         idOrangTuaPasien: state.idOrangTuaPasien,
         idDokter: userData?.id,
+        jenisVaksin: state.jenisVaksin,
+        bulanKe: state.bulanKe,
         createdAt: DateTime.now(),
       );
       await _pemeriksaanRepository.setPemeriksaan(pemeriksaanModel: data);
       emit(state.copyWith(
-        status: FormzStatus.submissionSuccess,
+        status: FormzSubmissionStatus.success,
       ));
     } catch (e) {
       emit(state.copyWith(
-        status: FormzStatus.submissionFailure,
+        status: FormzSubmissionStatus.failure,
         errorMessage: e.toString(),
       ));
     }

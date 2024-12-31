@@ -5,24 +5,30 @@ class LocalAuthState extends Equatable {
     this.passcode = const Passcode.pure(),
     this.savedPasscode = const Passcode.pure(),
     this.confirmPasscode = '',
-    this.status = FormzStatus.pure,
+    this.status = FormzSubmissionStatus.initial,
+    this.statusGetPasscode = FormzSubmissionStatus.initial,
+    this.statusSetPasscode = FormzSubmissionStatus.initial,
     this.errorMessage,
   });
 
   final Passcode savedPasscode;
   final Passcode passcode;
   final String confirmPasscode;
-  final FormzStatus status;
+  final FormzSubmissionStatus status;
+  final FormzSubmissionStatus statusGetPasscode;
+  final FormzSubmissionStatus statusSetPasscode;
   final String? errorMessage;
 
   @override
-  List<Object> get props => [passcode, confirmPasscode, status];
+  List<Object?> get props => [passcode, confirmPasscode, status, statusGetPasscode, statusSetPasscode, errorMessage];
 
   LocalAuthState copyWith({
     Passcode? savedPasscode,
     Passcode? passcode,
     String? confirmPasscode,
-    FormzStatus? status,
+    FormzSubmissionStatus? status,
+    FormzSubmissionStatus? statusGetPasscode,
+    FormzSubmissionStatus? statusSetPasscode,
     String? errorMessage,
   }) {
     return LocalAuthState(
@@ -30,40 +36,9 @@ class LocalAuthState extends Equatable {
       passcode: passcode ?? this.passcode,
       confirmPasscode: confirmPasscode ?? this.confirmPasscode,
       status: status ?? this.status,
+      statusGetPasscode: statusGetPasscode ?? this.statusGetPasscode,
+      statusSetPasscode: statusSetPasscode ?? this.statusSetPasscode,
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 }
-
-// class LocalAuthInitial extends LocalAuthState {}
-
-// class LocalAuthLoading extends LocalAuthState {}
-
-// class LocalAuthPasscodeCreated extends LocalAuthState {
-//   final int passcode;
-
-//   const LocalAuthPasscodeCreated({required this.passcode});
-
-//   @override
-//   List<Object> get props => [passcode];
-// }
-
-// class LocalAuthPasscodeSucceeded extends LocalAuthState {
-//   final int passcode;
-
-//   const LocalAuthPasscodeSucceeded({required this.passcode});
-
-//   @override
-//   List<Object> get props => [passcode];
-// }
-
-// class LocalAuthPasscodeDestroyed extends LocalAuthState {}
-
-// class LocalAuthPasscodeFailured extends LocalAuthState {
-//   final String error;
-
-//   const LocalAuthPasscodeFailured({required this.error});
-
-//   @override
-//   List<Object> get props => [error];
-// }

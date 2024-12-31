@@ -10,7 +10,7 @@ class MyTextFormField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final void Function(String)? onChanged;
   const MyTextFormField({
-    Key? key,
+    super.key,
     this.keyboardType,
     this.initialValue,
     this.readOnly,
@@ -18,7 +18,7 @@ class MyTextFormField extends StatelessWidget {
     this.onChanged,
     this.errorText,
     this.inputFormatters,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

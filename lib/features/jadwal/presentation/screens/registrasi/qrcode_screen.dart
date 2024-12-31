@@ -3,12 +3,13 @@ import 'dart:io';
 
 import 'package:eimunisasi_nakes/features/jadwal/data/repositories/jadwal_repository.dart';
 import 'package:eimunisasi_nakes/features/rekam_medis/presentation/screens/pemeriksaan/verifikasi_pasien_screen.dart';
+import 'package:eimunisasi_nakes/injection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QrRegistrasiPemeriksaan extends StatefulWidget {
-  const QrRegistrasiPemeriksaan({Key? key}) : super(key: key);
+  const QrRegistrasiPemeriksaan({super.key});
 
   @override
   State<StatefulWidget> createState() => _QrRegistrasiPemeriksaanState();
@@ -88,7 +89,7 @@ class _QrRegistrasiPemeriksaanState extends State<QrRegistrasiPemeriksaan> {
                                 builder: (context, snapshot) {
                                   if (snapshot.data != null) {
                                     return Icon(
-                                      describeEnum(snapshot.data!) == 'back'
+                                      snapshot.data?.name == 'back'
                                           ? Icons.camera_rear
                                           : Icons.camera_front,
                                       color: Colors.white,
@@ -133,7 +134,7 @@ class _QrRegistrasiPemeriksaanState extends State<QrRegistrasiPemeriksaan> {
   }
 
   void _onQRViewCreated(QRViewController controller) {
-    final jadwalRepository = JadwalRepository();
+    final jadwalRepository = getIt<JadwalRepository>();
     setState(() {
       this.controller = controller;
     });
@@ -142,13 +143,13 @@ class _QrRegistrasiPemeriksaanState extends State<QrRegistrasiPemeriksaan> {
       setState(() {
         result = scanData;
       });
-      jadwalRepository.getJadwalActivityById(id: scanData.code).then((value) {
+      jadwalRepository. getAppointment(id: scanData.code).then((value) {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => VerifikasiPasienScreen(
               jadwalPasienModel: value,
-              pasien: value?.anak,
+              pasien: value?.child,
             ),
           ),
         );

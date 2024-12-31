@@ -9,25 +9,25 @@ abstract class BottomNavbarState extends Equatable {
 }
 
 class BottomNavbarHome extends BottomNavbarState {
-  const BottomNavbarHome(int itemIndex) : super(itemIndex);
+  const BottomNavbarHome(super.itemIndex);
   @override
   String toString() => 'BottomNavbarHome';
 }
 
 class BottomNavbarProfile extends BottomNavbarState {
-  const BottomNavbarProfile(int itemIndex) : super(itemIndex);
+  const BottomNavbarProfile(super.itemIndex);
   @override
   String toString() => 'BottomNavbarProfile';
 }
 
 class BottomNavbarMessage extends BottomNavbarState {
-  const BottomNavbarMessage(int itemIndex) : super(itemIndex);
+  const BottomNavbarMessage(super.itemIndex);
   @override
   String toString() => 'BottomNavbarMessage';
 }
 
 class BottomNavbarSetting extends BottomNavbarState {
-  const BottomNavbarSetting(int itemIndex) : super(itemIndex);
+  const BottomNavbarSetting(super.itemIndex);
   @override
   String toString() => 'BottomNavbarSetting';
 }

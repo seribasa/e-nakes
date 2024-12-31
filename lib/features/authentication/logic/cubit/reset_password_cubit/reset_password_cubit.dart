@@ -1,4 +1,5 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../data/models/email.dart';
 import '../../../data/repositories/user_repository.dart';
 import 'package:equatable/equatable.dart';
@@ -16,18 +17,20 @@ class ResetPasswordCubit extends Cubit<ResetPasswordState> {
       email: email,
       status: Formz.validate([
         email,
-      ]),
+      ])
+          ? FormzSubmissionStatus.success
+          : FormzSubmissionStatus.failure,
     ));
   }
 
   Future<void> resetPasswordFormSubmitted() async {
-    if (!state.status.isValidated) return;
-    emit(state.copyWith(status: FormzStatus.submissionInProgress));
+    if (!state.status.isSuccess) return;
+    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
     try {
       await _userRepository.forgetEmailPassword(email: state.email.value);
-      emit(state.copyWith(status: FormzStatus.submissionSuccess));
+      emit(state.copyWith(status: FormzSubmissionStatus.success));
     } catch (_) {
-      emit(state.copyWith(status: FormzStatus.submissionFailure));
+      emit(state.copyWith(status: FormzSubmissionStatus.failure));
     }
   }
 }

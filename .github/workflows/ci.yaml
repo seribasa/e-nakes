@@ -1,0 +1,84 @@
+name: E-Nakes CI
+env:
+  ANDROID_SDK_PATH: ${{ github.workspace }}/android_sdk
+  ANDROID_SDK_ROOT: ${{ github.workspace }}/android_sdk
+run-name: ${{ github.actor }} is building E-Nakes 🚀
+on: [push]
+jobs:
+  e-nakes_ci:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Build Info
+        run: | 
+         echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+         echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+         echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Initialize CI
+        run: |
+         echo $ANDROID_SDK_PATH
+         mkdir $ANDROID_SDK_PATH
+         ls ${{ github.workspace }}
+         echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+         echo "🖥️ The workflow is now ready to test your code on the runner."
+      - name: Install Linux packages
+        run: |
+          sudo apt-get install -y unzip openjdk-11-jdk curl wget
+      - name: Download and install FVM
+        run: |
+          curl -fsSL https://fvm.app/install.sh | bash
+          fvm --version
+      - name: Download and install sdkmanager
+        run: |
+          wget -q -O $ANDROID_SDK_PATH/sdkmanager.zip https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
+          unzip $ANDROID_SDK_PATH/sdkmanager.zip -d $ANDROID_SDK_PATH
+          mkdir $ANDROID_SDK_PATH/latest
+          mv $ANDROID_SDK_PATH/cmdline-tools/* $ANDROID_SDK_PATH/latest/.
+          $ANDROID_SDK_PATH/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT --list  
+      - name: Install sdkmanager packages
+        run: |
+          $ANDROID_SDK_PATH/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT "platform-tools" "platforms;android-31"
+          $ANDROID_SDK_PATH/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT "build-tools;31.0.0"
+      - name: Install flutter
+        run: |
+          fvm install
+      - name: Install flutter dependencies
+        run: |
+          fvm flutter pub get
+      - name: Generate code
+        run: fvm flutter pub run build_runner build --delete-conflicting-outputs
+      - name: Update local.properties
+        run: |
+          ls -al ${{ github.workspace }}/android/local.properties
+          cp ${{ github.workspace }}/android/local.properties ${{ github.workspace }}/android/local.properties.tmp
+          rm ${{ github.workspace }}/android/local.properties
+          ls -al android/
+          grep flutter ${{ github.workspace }}/android/local.properties.tmp > ${{ github.workspace }}/android/local.properties
+          cat ${{ github.workspace }}/android/local.properties
+          echo "" >> ${{ github.workspace }}/android/local.properties
+          echo "sdk.dir=$ANDROID_SDK_PATH" >> ${{ github.workspace }}/android/local.properties          
+          echo "flutter.compileSdkVersion=34" >> ${{ github.workspace }}/android/local.properties
+          echo "flutter.minSdkVersion=32" >> ${{ github.workspace }}/android/local.properties
+          echo "flutter.targetSdkVersion=34" >> ${{ github.workspace }}/android/local.properties
+          cat ${{ github.workspace }}/android/local.properties
+      - name: Create key.properties
+        run: |
+          touch android/key.properties        
+          echo "storePassword=${{ secrets.STORE_PASSWORD }}" >> android/key.properties
+          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
+          echo "keyAlias=upload" >> android/key.properties
+          echo "storeFile=./e_nakes-keystore.jks" >> android/key.properties          
+          echo "${{ secrets.KEYSTORE }}" >> android/app/keystore.asc                             
+          gpg -d --passphrase "${{ secrets.KEYSTORE_PASSPHRASE }}" --batch android/app/keystore.asc > android/app/e_nakes-keystore.jks
+      - name: Build APK and AppBundle
+        run: |
+          cat ${{ github.workspace }}/android/local.properties        
+          fvm flutter build apk
+          fvm flutter build appbundle
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+      - name: Upload apk
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk
+          path: build/app/outputs/flutter-apk/app-release.apk

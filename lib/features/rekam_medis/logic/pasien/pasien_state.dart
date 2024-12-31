@@ -1,11 +1,13 @@
 part of 'pasien_cubit.dart';
 
 abstract class PasienState extends Equatable {
+  final BasePagination<PasienModel>? patientPagination;
   final String? searchQuery;
-  const PasienState({this.searchQuery});
+
+  const PasienState({this.patientPagination, this.searchQuery});
 
   @override
-  List<Object?> get props => [searchQuery];
+  List<Object?> get props => [patientPagination, searchQuery];
 }
 
 class PasienInitial extends PasienState {}
@@ -13,12 +15,10 @@ class PasienInitial extends PasienState {}
 class PasienLoading extends PasienState {}
 
 class PasienLoaded extends PasienState {
-  final List<PasienModel> pasien;
-
-  const PasienLoaded({required this.pasien});
+  const PasienLoaded({super.patientPagination});
 
   @override
-  List<Object> get props => [pasien];
+  List<Object> get props => [];
 }
 
 class PasienError extends PasienState {

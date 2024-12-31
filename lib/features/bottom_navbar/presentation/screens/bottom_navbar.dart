@@ -3,21 +3,24 @@ import 'package:eimunisasi_nakes/features/home/presentation/screens/home_screen.
 import 'package:eimunisasi_nakes/features/jadwal/logic/jadwal/jadwal_cubit.dart';
 import 'package:eimunisasi_nakes/features/notifications/presentation/screens/notification_screen.dart';
 import 'package:eimunisasi_nakes/features/profile/presentation/screens/profile_screen.dart';
+import 'package:eimunisasi_nakes/injection.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../routers/route_paths/root_route_paths.dart';
 import '../../../authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BottomNavbarWrapper extends StatelessWidget {
-  const BottomNavbarWrapper({Key? key}) : super(key: key);
+  const BottomNavbarWrapper({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
         if (state is Unauthenticated) {
-          Navigator.of(context).pushReplacementNamed('/');
+          context.goNamed(RootRoutePaths.root.name);
         }
       },
       child: BlocProvider(
@@ -31,8 +34,7 @@ class BottomNavbarWrapper extends StatelessWidget {
                   builder: (contextNavbar, stateNavbar) {
                     if (stateNavbar is BottomNavbarHome) {
                       return BlocProvider(
-                        create: (context) =>
-                            JadwalCubit(userData: state.user)..getJadwalToday(),
+                        create: (context) => getIt<JadwalCubit>()..getJadwalToday(),
                         child: const HomeScreen(),
                       );
                     } else if (stateNavbar is BottomNavbarProfile) {

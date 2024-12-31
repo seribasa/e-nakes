@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:eimunisasi_nakes/core/extension/string_extension.dart';
 import 'package:eimunisasi_nakes/features/klinik/logic/bloc/klinik_bloc/klinik_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,9 +6,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/common/method_helper.dart';
+import '../../../authentication/data/models/user.dart';
 
 class ProfileKlinikScreen extends StatelessWidget {
-  const ProfileKlinikScreen({Key? key}) : super(key: key);
+  const ProfileKlinikScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +65,7 @@ class ProfileKlinikScreen extends StatelessWidget {
 
 class _NamaKlinik extends StatelessWidget {
   final String? namaKlinik;
-  const _NamaKlinik({Key? key, required this.namaKlinik}) : super(key: key);
+  const _NamaKlinik({required this.namaKlinik});
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +77,7 @@ class _NamaKlinik extends StatelessWidget {
 
 class _MottoKlinik extends StatelessWidget {
   final String? mottoKlinik;
-  const _MottoKlinik({Key? key, this.mottoKlinik}) : super(key: key);
+  const _MottoKlinik({this.mottoKlinik});
 
   @override
   Widget build(BuildContext context) {
@@ -87,8 +87,7 @@ class _MottoKlinik extends StatelessWidget {
 
 class _GambarKlinik extends StatelessWidget {
   final List<String>? gambarKlinikUrl;
-  const _GambarKlinik({Key? key, required this.gambarKlinikUrl})
-      : super(key: key);
+  const _GambarKlinik({required this.gambarKlinikUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -109,11 +108,9 @@ class _KontakCardKlinik extends StatelessWidget {
   final String? alamat;
   final String? namaKlinik;
   const _KontakCardKlinik(
-      {Key? key,
-      required this.nomorTelepon,
+      {required this.nomorTelepon,
       required this.namaKlinik,
-      this.alamat})
-      : super(key: key);
+      this.alamat});
 
   @override
   Widget build(BuildContext context) {
@@ -134,12 +131,12 @@ class _KontakCardKlinik extends StatelessWidget {
                   color: Theme.of(context).primaryColor,
                 ),
                 onPressed: () async {
-                  final Uri _phoneLaunchUri = Uri(
+                  final Uri phoneLaunchUri = Uri(
                     scheme: 'tel',
                     path: nomorTelepon,
                   );
-                  if (await canLaunchUrl(_phoneLaunchUri)) {
-                    await launchUrl(_phoneLaunchUri);
+                  if (await canLaunchUrl(phoneLaunchUri)) {
+                    await launchUrl(phoneLaunchUri);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -155,12 +152,12 @@ class _KontakCardKlinik extends StatelessWidget {
                   color: Theme.of(context).primaryColor,
                 ),
                 onPressed: () async {
-                  final Uri _smsLaunchUri = Uri(
+                  final Uri smsLaunchUri = Uri(
                     scheme: 'sms',
                     path: nomorTelepon,
                   );
-                  if (await canLaunchUrl(_smsLaunchUri)) {
-                    await launchUrl(_smsLaunchUri);
+                  if (await canLaunchUrl(smsLaunchUri)) {
+                    await launchUrl(smsLaunchUri);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -194,8 +191,8 @@ class _KontakCardKlinik extends StatelessWidget {
 }
 
 class _JadwalKlinik extends StatelessWidget {
-  final Map? jadwal;
-  const _JadwalKlinik({Key? key, required this.jadwal}) : super(key: key);
+  final List<Schedule>? jadwal;
+  const _JadwalKlinik({required this.jadwal});
 
   @override
   Widget build(BuildContext context) {
@@ -216,15 +213,15 @@ class _JadwalKlinik extends StatelessWidget {
             if (jadwal == null) {
               return const Center(child: Text('Tidak ada jadwal'));
             }
-            final length = jadwal?['hari'].length ?? 0;
+            final length = jadwal?.length  ?? 0;
             List<Widget> list = [];
             for (int i = 0; i < length; i++) {
               list.add(
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(jadwal!['hari'][i]?.toString().capitalize() ?? ''),
-                    Text(jadwal!['waktu'][i] ?? ''),
+                    Text(jadwal?[i].day?.name ?? ''),
+                    Text("${jadwal?[i].time}"),
                   ],
                 ),
               );

@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eimunisasi_nakes/features/klinik/data/models/anggota_klinik.dart';
 import 'package:eimunisasi_nakes/features/klinik/data/models/klinik.dart';
@@ -22,7 +22,7 @@ class KlinikBloc extends Bloc<KlinikEvent, KlinikState> {
       DocumentSnapshot<Map<String, dynamic>> data =
           await _klinikRepository.getKlinik(id: event.clinicId);
       if (data.exists) {
-        Klinik dataKlinik = Klinik.fromJson(data.data()!);
+        ClinicModel dataKlinik = ClinicModel.fromSeribase(data.data()!);
         emit(KlinikFetchData(klinik: dataKlinik));
       } else {
         emit(const KlinikFailure(error: 'Data klinik tidak ditemukan'));

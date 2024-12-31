@@ -2,7 +2,7 @@ import '../../widgets/confirm_passcode_form.dart';
 import 'package:flutter/material.dart';
 
 class ConfirmPasscodeScreen extends StatelessWidget {
-  const ConfirmPasscodeScreen({Key? key}) : super(key: key);
+  const ConfirmPasscodeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

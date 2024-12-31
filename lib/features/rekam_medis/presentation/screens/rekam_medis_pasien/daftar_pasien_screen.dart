@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DaftarPasienScreen extends StatelessWidget {
-  const DaftarPasienScreen({Key? key}) : super(key: key);
+  const DaftarPasienScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +29,15 @@ class DaftarPasienScreen extends StatelessWidget {
 }
 
 class _SearchBar extends StatelessWidget {
-  const _SearchBar({Key? key}) : super(key: key);
+  const _SearchBar();
 
   @override
   Widget build(BuildContext context) {
-    final _pasienBloc = BlocProvider.of<PasienCubit>(context);
-    return SearchBar(
+    final pasienBloc = BlocProvider.of<PasienCubit>(context);
+    return SearchBarPeltops(
       hintText: 'Cari Pasien (NIK) ...',
       onChanged: (val) {
-        _pasienBloc.getPasienBySearch(val);
+        pasienBloc.getPasienBySearch(val);
       },
       onPressed: () {},
     );
@@ -45,7 +45,7 @@ class _SearchBar extends StatelessWidget {
 }
 
 class _ListPasien extends StatelessWidget {
-  const _ListPasien({Key? key}) : super(key: key);
+  const _ListPasien();
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,7 @@ class _ListPasien extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         } else if (state is PasienLoaded) {
-          if (state.pasien.isEmpty) {
+          if (state.patientPagination?.data?.isEmpty ?? true) {
             return const Center(
               child: Text('Tidak ada pasien'),
             );
@@ -67,26 +67,29 @@ class _ListPasien extends StatelessWidget {
                 builder: (context, auth) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: List.generate(state.pasien.length, (index) {
-                      final pasien = state.pasien[index];
+                    children: List.generate(
+                        state.patientPagination?.data?.length ?? 0, (index) {
+                      final pasien = state.patientPagination?.data?[index];
                       return ListTile(
                         title: Text(
-                          '${pasien.nik}',
+                          '${pasien?.nik}',
                           style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
-                        subtitle: Text('${pasien.nama}'),
+                        subtitle: Text('${pasien?.nama}'),
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                                builder: (context) => BlocProvider(
-                                      create: (context) => PemeriksaanCubit(
-                                          userData: auth is Authenticated
-                                              ? auth.user
-                                              : null)
-                                        ..getPemeriksaanByIdPasien(pasien.nik),
-                                      child: RekamMedisPasienScreen(
-                                          pasien: pasien),
-                                    )),
+                              builder: (context) => BlocProvider(
+                                create: (context) => PemeriksaanCubit(
+                                    userData: auth is Authenticated
+                                        ? auth.user
+                                        : null)
+                                  ..getPemeriksaanByIdPasien(pasien?.nik),
+                                child: RekamMedisPasienScreen(
+                                  pasien: pasien,
+                                ),
+                              ),
+                            ),
                           );
                         },
                       );

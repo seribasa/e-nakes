@@ -19,31 +19,28 @@ class DefaultFirebaseOptions {
     if (kIsWeb) {
       throw UnsupportedError(
         'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
+            'you can reconfigure this by running the FlutterFire CLI again.',
       );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
+              'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
+              'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
+              'you can reconfigure this by running the FlutterFire CLI again.',
         );
       default:
         throw UnsupportedError(
@@ -60,4 +57,17 @@ class DefaultFirebaseOptions {
     databaseURL: 'https://eimunisasi-81ae1.firebaseio.com',
     storageBucket: 'eimunisasi-81ae1.appspot.com',
   );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyCz7GFyMLiRAEi3jzap-Gm0wio8Lv6WKNQ',
+    appId: '1:683504612347:ios:49d9cf52e55340e397115e',
+    messagingSenderId: '683504612347',
+    projectId: 'eimunisasi-81ae1',
+    databaseURL: 'https://eimunisasi-81ae1.firebaseio.com',
+    storageBucket: 'eimunisasi-81ae1.appspot.com',
+    androidClientId: '683504612347-3eph1h0vnqn430qqtukc6v71o45k06t9.apps.googleusercontent.com',
+    iosClientId: '683504612347-ot8n5ld4d2eglr31sf9aev5ciggmt7t8.apps.googleusercontent.com',
+    iosBundleId: 'com.example.eimunisasiNakes',
+  );
+
 }

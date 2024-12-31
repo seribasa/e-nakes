@@ -4,13 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
 class ResetEmailPasswordForm extends StatelessWidget {
-  const ResetEmailPasswordForm({Key? key}) : super(key: key);
+  const ResetEmailPasswordForm({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<ResetPasswordCubit, ResetPasswordState>(
       listener: (context, state) {
-        if (state.status.isSubmissionFailure) {
+        if (state.status.isFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -18,7 +18,7 @@ class ResetEmailPasswordForm extends StatelessWidget {
                 content: Text(state.errorMessage ?? 'Reset gagal!'),
               ),
             );
-        } else if (state.status.isSubmissionSuccess) {
+        } else if (state.status.isSuccess) {
           Navigator.of(context).pop();
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
@@ -61,7 +61,7 @@ class _EmailInput extends StatelessWidget {
           decoration: InputDecoration(
             labelText: 'Email',
             helperText: 'contoh: example@mail.com',
-            errorText: state.email.invalid ? 'Format email salah!' : null,
+            errorText: state.email.isNotValid ? 'Format email salah!' : null,
           ),
         );
       },
@@ -75,7 +75,7 @@ class _ResetButton extends StatelessWidget {
     return BlocBuilder<ResetPasswordCubit, ResetPasswordState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        return state.status.isSubmissionInProgress
+        return state.status.isInProgress
             ? const CircularProgressIndicator()
             : SizedBox(
                 width: double.infinity,
@@ -86,7 +86,7 @@ class _ResetButton extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: state.status.isValidated
+                  onPressed: state.status.isSuccess
                       ? () => context
                           .read<ResetPasswordCubit>()
                           .resetPasswordFormSubmitted()

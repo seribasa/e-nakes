@@ -7,7 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:formz/formz.dart';
 
 class TambahEventKalenderScreen extends StatelessWidget {
-  const TambahEventKalenderScreen({Key? key}) : super(key: key);
+  const TambahEventKalenderScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class TambahEventKalenderScreen extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       body: BlocListener<FormCalendarActivityCubit, FormCalendarActivityState>(
         listener: (context, state) {
-          if (state.status == FormzStatus.submissionSuccess) {
+          if (state.status == FormzSubmissionStatus.success) {
             formBloc.reset();
             Navigator.pop(context);
             ScaffoldMessenger.of(context).showSnackBar(
@@ -27,7 +27,7 @@ class TambahEventKalenderScreen extends StatelessWidget {
                 content: Text('Kegiatan berhasil ditambahkan'),
               ),
             );
-          } else if (state.status == FormzStatus.submissionFailure) {
+          } else if (state.status == FormzSubmissionStatus.failure) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Kegiatan gagal ditambahkan'),
@@ -89,16 +89,13 @@ class TambahEventKalenderScreen extends StatelessWidget {
 }
 
 class _ActivityForm extends StatelessWidget {
-  final String? initialValue;
   final String? hintText;
-
   final void Function(String)? onChanged;
+
   const _ActivityForm({
-    Key? key,
-    this.initialValue,
     this.hintText,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -120,14 +117,14 @@ class _ActivityForm extends StatelessWidget {
 }
 
 class _SaveButton extends StatelessWidget {
-  const _SaveButton({Key? key}) : super(key: key);
+  const _SaveButton();
 
   @override
   Widget build(BuildContext context) {
     final formBloc = context.read<FormCalendarActivityCubit>();
     return BlocBuilder<FormCalendarActivityCubit, FormCalendarActivityState>(
       builder: (context, state) {
-        if (state.status == FormzStatus.submissionInProgress) {
+        if (state.status == FormzSubmissionStatus.inProgress) {
           SizedBox(
             width: double.infinity,
             height: 50,
