@@ -1,3 +1,4 @@
+import 'package:eimunisasi_nakes/core/widgets/error.dart';
 import 'package:eimunisasi_nakes/core/widgets/search_bar_widget.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:eimunisasi_nakes/features/medical_record/logic/patient_cubit/patient_cubit.dart';
@@ -53,11 +54,21 @@ class _ListPasien extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<PatientCubit, PatientState>(
       builder: (context, state) {
+        if (state is PatientError) {
+          return ErrorContainer(
+            title: state.message,
+            message: 'Coba Lagi',
+            onRefresh: () {
+              context.read<PatientCubit>().getPasien();
+            },
+          );
+        }
         if (state is PatientLoading) {
           return const Center(
             child: CircularProgressIndicator(),
           );
-        } else if (state is PatientLoaded) {
+        }
+        if (state is PatientLoaded) {
           if (state.patientPagination?.data == null) {
             return const Center(
               child: Text('Tidak ada pasien'),

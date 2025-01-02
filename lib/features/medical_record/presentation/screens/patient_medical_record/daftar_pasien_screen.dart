@@ -7,6 +7,8 @@ import 'package:eimunisasi_nakes/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../core/widgets/error.dart';
+
 class DaftarPasienScreen extends StatelessWidget {
   const DaftarPasienScreen({super.key});
 
@@ -59,52 +61,60 @@ class _ListPasien extends StatelessWidget {
           return const Center(
             child: CircularProgressIndicator(),
           );
-        } else if (state is PatientLoaded) {
+        }
+        if (state is PatientError) {
+          return ErrorContainer(
+            title: state.message,
+            message: 'Coba Lagi',
+            onRefresh: () {
+              context.read<PatientCubit>().getPasien();
+            },
+          );
+        }
+        if (state is PatientLoaded) {
           if (state.patientPagination?.data?.isEmpty ?? true) {
             return const Center(
               child: Text('Tidak ada pasien'),
             );
-          } else {
-            return SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                builder: (context, auth) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: List.generate(
-                        state.patientPagination?.data?.length ?? 0, (index) {
-                      final pasien = state.patientPagination?.data?[index];
-                      return ListTile(
-                        title: Text(
-                          '${pasien?.nik}',
-                          style: const TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                        subtitle: Text('${pasien?.nama}'),
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => BlocProvider(
-                                create: (context) => getIt<CheckupCubit>()
-                                  ..getCheckupByPatientId(pasien?.nik),
-                                child: RekamMedisPasienScreen(
-                                  pasien: pasien,
-                                ),
+          }
+          return SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+              builder: (context, auth) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: List.generate(
+                      state.patientPagination?.data?.length ?? 0, (index) {
+                    final pasien = state.patientPagination?.data?[index];
+                    return ListTile(
+                      title: Text(
+                        '${pasien?.nik}',
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      subtitle: Text('${pasien?.nama}'),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => BlocProvider(
+                              create: (context) => getIt<CheckupCubit>()
+                                ..getCheckupByPatientId(pasien?.nik),
+                              child: RekamMedisPasienScreen(
+                                pasien: pasien,
                               ),
                             ),
-                          );
-                        },
-                      );
-                    }),
-                  );
-                },
-              ),
-            );
-          }
-        } else {
-          return const Center(
-            child: Text('Tidak ada data'),
+                          ),
+                        );
+                      },
+                    );
+                  }),
+                );
+              },
+            ),
           );
         }
+        return const Center(
+          child: Text('Tidak ada data'),
+        );
       },
     );
   }

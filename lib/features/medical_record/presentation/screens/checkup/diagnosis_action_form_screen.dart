@@ -16,6 +16,7 @@ class DiagnosisActionFormScreen extends StatelessWidget {
         title: const Text('Form diagnosa dan tindakan'),
       ),
       body: BlocListener<CheckupFormCubit, CheckupFormState>(
+        listenWhen: (previous, current) => previous.status != current.status,
         listener: (context, state) {
           if (state.status == FormzSubmissionStatus.success) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -29,7 +30,7 @@ class DiagnosisActionFormScreen extends StatelessWidget {
           } else if (state.status == FormzSubmissionStatus.failure) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('Terjadi kesalahan!'),
+                content: Text('Terjadi kesalahan, coba lagi!'),
               ),
             );
           }
@@ -39,15 +40,19 @@ class DiagnosisActionFormScreen extends StatelessWidget {
             padding: const EdgeInsets.all(20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                PasienCard(
-                  nama: 'Rizky faturriza',
-                  umur: '1 bulan 2 tahun',
+              children: [
+                BlocBuilder<CheckupFormCubit, CheckupFormState>(
+                  builder: (context, state) {
+                    return PasienCard(
+                      nama: state.patient?.nama,
+                      umur: state.patient?.umur,
+                    );
+                  },
                 ),
-                SizedBox(height: 10),
-                _DiagnosaForm(),
-                SizedBox(height: 10),
-                _TindakanForm()
+                const SizedBox(height: 10),
+                const _DiagnosaForm(),
+                const SizedBox(height: 10),
+                const _TindakanForm()
               ],
             ),
           ),
@@ -141,13 +146,13 @@ class _NextButton extends StatelessWidget {
         builder: (context, state) {
           return ElevatedButton(
             style: ElevatedButton.styleFrom(
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero)),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero,
+              ),
+            ),
             onPressed: state.status == FormzSubmissionStatus.inProgress
                 ? null
-                : () {
-                    pemeriksaanBloc.submit();
-                  },
+                : pemeriksaanBloc.submit,
             child: state.status == FormzSubmissionStatus.inProgress
                 ? const CircularProgressIndicator()
                 : const Text("Selesai"),
