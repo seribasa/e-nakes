@@ -1,11 +1,11 @@
 import 'package:eimunisasi_nakes/core/widgets/search_bar_widget.dart';
-import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:eimunisasi_nakes/features/medical_record/logic/patient_cubit/patient_cubit.dart';
-import 'package:eimunisasi_nakes/features/medical_record/logic/checkup_cubit/checkup_cubit.dart';
 import 'package:eimunisasi_nakes/features/medical_record/presentation/screens/patient_medical_record/rekam_medis_pasien_screen.dart';
 import 'package:eimunisasi_nakes/injection.dart';
+import 'package:eimunisasi_nakes/routers/medical_record_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../core/widgets/error.dart';
 
@@ -77,39 +77,28 @@ class _ListPasien extends StatelessWidget {
               child: Text('Tidak ada pasien'),
             );
           }
-          return SingleChildScrollView(
+          return ListView.builder(
             physics: const BouncingScrollPhysics(),
-            child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-              builder: (context, auth) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: List.generate(
-                      state.patientPagination?.data?.length ?? 0, (index) {
-                    final pasien = state.patientPagination?.data?[index];
-                    return ListTile(
-                      title: Text(
-                        '${pasien?.nik}',
-                        style: const TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                      subtitle: Text('${pasien?.nama}'),
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => BlocProvider(
-                              create: (context) => getIt<CheckupCubit>()
-                                ..getCheckupByPatientId(pasien?.nik),
-                              child: RekamMedisPasienScreen(
-                                pasien: pasien,
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  }),
-                );
-              },
-            ),
+            itemCount: state.patientPagination?.data?.length ?? 0,
+            itemBuilder: (context, index) {
+              final pasien = state.patientPagination?.data?[index];
+              return ListTile(
+                key: ValueKey(pasien?.id),
+                title: Text(
+                  '${pasien?.nik}',
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+                subtitle: Text('${pasien?.nama}'),
+                onTap: () {
+                  context.pushNamed(
+                    MedicalRecordRouter.medicalRecordDetailRoute.name,
+                    extra: RekamMedisPasienScreen(
+                      pasien: pasien,
+                    ),
+                  );
+                },
+              );
+            },
           );
         }
         return const Center(

@@ -8,6 +8,8 @@ import '../features/medical_record/presentation/screens/checkup/checkup_form_scr
 import '../features/medical_record/presentation/screens/checkup/checkup_screen.dart';
 import '../features/medical_record/presentation/screens/checkup/diagnosis_action_form_screen.dart';
 import '../features/medical_record/presentation/screens/checkup/patient_verification_screen.dart';
+import '../features/medical_record/presentation/screens/patient_medical_record/daftar_pasien_screen.dart';
+import '../features/medical_record/presentation/screens/patient_medical_record/rekam_medis_pasien_screen.dart';
 import '../features/medical_record/presentation/screens/wrapper_medical_record.dart';
 import 'models/route_model.dart';
 
@@ -20,6 +22,16 @@ class MedicalRecordRouter {
   static const RouteModel checkupRoute = RouteModel(
     name: 'checkup',
     path: 'checkup',
+    parent: wrapperRoute,
+  );
+  static const RouteModel choosePatientRoute = RouteModel(
+    name: 'choosePatient',
+    path: 'choose-patient',
+    parent: wrapperRoute,
+  );
+  static const RouteModel medicalRecordDetailRoute = RouteModel(
+    name: 'medicalRecordDetail',
+    path: 'detail',
     parent: wrapperRoute,
   );
   static const RouteModel checkupScanRoute = RouteModel(
@@ -111,6 +123,23 @@ class MedicalRecordRouter {
               },
             ),
           ],
+        ),
+        GoRoute(
+          name: choosePatientRoute.name,
+          path: choosePatientRoute.path,
+          builder: (context, state) => const DaftarPasienScreen(),
+          routes: [
+            GoRoute(
+              name: medicalRecordDetailRoute.name,
+              path: medicalRecordDetailRoute.path,
+              builder: (_, state) {
+                final extra = state.extra as RekamMedisPasienScreen?;
+                return  RekamMedisPasienScreen(
+                  pasien: extra?.pasien,
+                );
+              },
+            ),
+          ]
         ),
       ],
     ),

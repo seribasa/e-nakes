@@ -1,6 +1,5 @@
 import 'package:eimunisasi_nakes/core/widgets/error.dart';
 import 'package:eimunisasi_nakes/core/widgets/search_bar_widget.dart';
-import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:eimunisasi_nakes/features/medical_record/logic/patient_cubit/patient_cubit.dart';
 import 'package:eimunisasi_nakes/features/medical_record/presentation/screens/checkup/patient_verification_screen.dart';
 import 'package:eimunisasi_nakes/routers/medical_record_router.dart';
@@ -69,48 +68,37 @@ class _ListPasien extends StatelessWidget {
           );
         }
         if (state is PatientLoaded) {
-          if (state.patientPagination?.data == null) {
+          if (state.patientPagination?.data?.isEmpty ?? true) {
             return const Center(
               child: Text('Tidak ada pasien'),
             );
-          } else {
-            return SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                builder: (context, auth) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: List.generate(
-                      state.patientPagination?.data?.length ?? 0,
-                      (index) {
-                        final pasien = state.patientPagination?.data?[index];
-                        return ListTile(
-                          title: Text(
-                            '${pasien?.nama}',
-                            style: const TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                          subtitle: Text('${pasien?.nik}'),
-                          onTap: () {
-                            context.goNamed(
-                              MedicalRecordRouter.checkupVerificationRoute.name,
-                              extra: PatientVerificationScreenExtra(
-                                patient: pasien,
-                              ),
-                            );
-                          },
-                        );
-                      },
+          }
+          return ListView.builder(
+            physics: const BouncingScrollPhysics(),
+            itemCount: state.patientPagination?.data?.length ?? 0,
+            itemBuilder: (context, index) {
+              final pasien = state.patientPagination?.data?[index];
+              return ListTile(
+                title: Text(
+                  '${pasien?.nama}',
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+                subtitle: Text('${pasien?.nik}'),
+                onTap: () {
+                  context.goNamed(
+                    MedicalRecordRouter.checkupVerificationRoute.name,
+                    extra: PatientVerificationScreenExtra(
+                      patient: pasien,
                     ),
                   );
                 },
-              ),
-            );
-          }
-        } else {
-          return const Center(
-            child: Text('Tidak ada data'),
+              );
+            },
           );
         }
+        return const Center(
+          child: Text('Tidak ada data'),
+        );
       },
     );
   }
@@ -121,35 +109,14 @@ class _SearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final pasienBloc = BlocProvider.of<PatientCubit>(context);
+
     return SearchBarPeltops(
-      hintText: 'Cari Pasien ...',
-      onPressed: () {
-        showModalBottomSheet(
-          context: context,
-          builder: (context) => Container(
-            padding: const EdgeInsets.all(20),
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: List.generate(20, (index) {
-                  return ListTile(
-                    title: Text(
-                      'Pasien $index',
-                      style: const TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    subtitle: Text(
-                        'NIK $index${index + 1}${index + 2}${index + 3}${index + 4}'),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                  );
-                }),
-              ),
-            ),
-          ),
-        );
+      hintText: 'Cari Pasien (NIK) ...',
+      onChanged: (val) {
+        pasienBloc.getPasienBySearch(val);
       },
+      onPressed: () {},
     );
   }
 }
