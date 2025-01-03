@@ -110,7 +110,7 @@ class CheckupFormCubit extends Cubit<CheckupFormState> {
     } catch (e) {
       emit(state.copyWith(
         status: FormzSubmissionStatus.failure,
-        errorMessage: e.toString(),
+        errorMessage: 'Gagal mengirim data, coba lagi',
       ));
     }
   }

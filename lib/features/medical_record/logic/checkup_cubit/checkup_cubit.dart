@@ -23,7 +23,7 @@ class CheckupCubit extends Cubit<CheckupState> {
 
       emit(CheckupLoaded(checkupResult: result));
     } catch (e) {
-      emit(CheckupError(message: e.toString()));
+      emit(CheckupError(message: 'Gagal memuat data, coba lagi'));
     }
   }
 }

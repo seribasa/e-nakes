@@ -33,7 +33,7 @@ class PatientCubit extends Cubit<PatientState> {
       );
       emit(PatientLoaded(patientPagination: pagination));
     } catch (e) {
-      emit(PatientError(message: e.toString()));
+      emit(PatientError(message: 'Gagal memuat data, coba lagi'));
     }
   }
 
@@ -49,7 +49,7 @@ class PatientCubit extends Cubit<PatientState> {
       );
       emit(PatientLoaded(patientPagination: result));
     } catch (e) {
-      emit(PatientError(message: e.toString()));
+      emit(PatientError(message: 'Gagal memuat data, coba lagi'));
     }
   }
 }
