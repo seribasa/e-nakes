@@ -58,7 +58,11 @@ class AuthenticationBloc
         emit(Unauthenticated());
       }
     } catch (_) {
-      emit(Unauthenticated());
+      emit(
+        AuthenticationError(
+          message: 'Gagal memuat data. Silahkan coba lagi!',
+        ),
+      );
     }
   }
 
