@@ -5,16 +5,15 @@ void main() {
   group('PatientModel', () {
     test('should create PatientModel instance', () {
       final patient = PatientModel(
-        id: '1',
-        parentId: '2', 
-        nama: 'Test Patient',
-        nik: '1234567890',
-        tempatLahir: 'Test City',
-        tanggalLahir: DateTime(1990, 1, 1),
-        jenisKelamin: 'L',
-        golDarah: 'O',
-        photoURL: 'http://test.com/photo.jpg'
-      );
+          id: '1',
+          parentId: '2',
+          nama: 'Test Patient',
+          nik: '1234567890',
+          tempatLahir: 'Test City',
+          tanggalLahir: DateTime(1990, 1, 1),
+          jenisKelamin: 'L',
+          golDarah: 'O',
+          photoURL: 'http://test.com/photo.jpg');
 
       expect(patient.id, '1');
       expect(patient.parentId, '2');
@@ -55,15 +54,14 @@ void main() {
 
     test('should convert PatientModel to Seribase map', () {
       final patient = PatientModel(
-        parentId: '2',
-        nama: 'Test Patient',
-        nik: '1234567890',
-        tempatLahir: 'Test City',
-        tanggalLahir: DateTime(1990, 1, 1),
-        jenisKelamin: 'L',
-        golDarah: 'O',
-        photoURL: 'http://test.com/photo.jpg'
-      );
+          parentId: '2',
+          nama: 'Test Patient',
+          nik: '1234567890',
+          tempatLahir: 'Test City',
+          tanggalLahir: DateTime(1990, 1, 1),
+          jenisKelamin: 'L',
+          golDarah: 'O',
+          photoURL: 'http://test.com/photo.jpg');
 
       final map = patient.toSeribaseMap();
 
@@ -79,8 +77,9 @@ void main() {
 
     test('should calculate age correctly', () {
       final patient = PatientModel(
-        tanggalLahir: DateTime.now().subtract(const Duration(days: 730)) // 2 years ago
-      );
+          tanggalLahir:
+              DateTime.now().subtract(const Duration(days: 730)) // 2 years ago
+          );
 
       expect(patient.umur, startsWith('2 tahun'));
     });
@@ -88,6 +87,67 @@ void main() {
     test('should return default message when birthdate is null', () {
       final patient = PatientModel();
       expect(patient.umur, 'Umur belum diisi');
+    });
+
+    test('should return same object with copywith', () {
+      final patient = PatientModel(
+          id: '1',
+          parentId: '2',
+          nama: 'Test Patient',
+          nik: '1234567890',
+          tempatLahir: 'Test City',
+          tanggalLahir: DateTime(1990, 1, 1),
+          jenisKelamin: 'L',
+          golDarah: 'O',
+          photoURL: 'http://test.com/photo.jpg');
+
+      final newPatient = patient.copyWith();
+
+      expect(newPatient.id, '1');
+      expect(newPatient.parentId, '2');
+      expect(newPatient.nama, 'Test Patient');
+      expect(newPatient.nik, '1234567890');
+      expect(newPatient.tempatLahir, 'Test City');
+      expect(newPatient.tanggalLahir, DateTime(1990, 1, 1));
+      expect(newPatient.jenisKelamin, 'L');
+      expect(newPatient.golDarah, 'O');
+      expect(newPatient.photoURL, 'http://test.com/photo.jpg');
+    });
+
+    test('should return same object with copywith', () {
+      final patient = PatientModel(
+        id: '1',
+        parentId: '2',
+        nama: 'Test Patient',
+        nik: '1234567890',
+        tempatLahir: 'Test City',
+        tanggalLahir: DateTime(1990, 1, 1),
+        jenisKelamin: 'L',
+        golDarah: 'O',
+        photoURL: 'http://test.com/photo.jpg',
+      );
+
+      final newPatient = patient.copyWith(
+        id: '12',
+        parentId: '22',
+        nama: 'Test Patient2',
+        nik: '12345678902',
+        tempatLahir: 'Test City2',
+        tanggalLahir: DateTime(1990, 1, 2),
+        jenisKelamin: 'FEMALE',
+        golDarah: 'A',
+        photoURL: 'http://test.com/photo2.jpg',
+      );
+
+      expect(newPatient.id, '12');
+      expect(newPatient.parentId, '22');
+      expect(newPatient.nama, 'Test Patient2');
+      expect(newPatient.nik, '12345678902');
+      expect(newPatient.tempatLahir, 'Test City2');
+      expect(newPatient.tanggalLahir, DateTime(1990, 1, 2));
+      expect(newPatient.jenisKelamin, 'FEMALE');
+      expect(newPatient.golDarah, 'A');
+      expect(newPatient.photoURL, 'http://test.com/photo2.jpg');
     });
   });
 }
