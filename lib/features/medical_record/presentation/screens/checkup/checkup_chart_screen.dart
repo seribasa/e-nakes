@@ -1,3 +1,4 @@
+import 'package:eimunisasi_nakes/core/extension/context_ext.dart';
 import 'package:eimunisasi_nakes/core/widgets/grafik/grafik_tumbuh_kembang.dart';
 import 'package:eimunisasi_nakes/core/widgets/grafik/line_chart_template.dart';
 import 'package:eimunisasi_nakes/core/widgets/pasien_card.dart';
@@ -69,7 +70,15 @@ class _CheckupChartScaffold extends StatelessWidget {
                         Container(
                           width: double.infinity,
                           color: Colors.blue,
-                          child: const TabBar(
+                          child: TabBar(
+                            labelStyle: context.textTheme.labelMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                            unselectedLabelStyle: context.textTheme.labelMedium,
+                            unselectedLabelColor: Colors.white.withOpacity(
+                              0.8,
+                            ),
+                            labelColor: Colors.white,
                             indicatorColor: Colors.white,
                             tabs: [
                               Tab(

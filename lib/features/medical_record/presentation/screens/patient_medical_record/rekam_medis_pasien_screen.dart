@@ -1,3 +1,4 @@
+import 'package:eimunisasi_nakes/core/extension/context_ext.dart';
 import 'package:eimunisasi_nakes/core/widgets/error.dart';
 import 'package:eimunisasi_nakes/core/widgets/pasien_card.dart';
 import 'package:eimunisasi_nakes/features/medical_record/data/models/patient_model.dart';
@@ -64,7 +65,17 @@ class RekamMedisPasienScreen extends StatelessWidget {
                             Container(
                               width: double.infinity,
                               color: Colors.blue,
-                              child: const TabBar(
+                              child: TabBar(
+                                labelStyle:
+                                    context.textTheme.labelMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                unselectedLabelStyle:
+                                    context.textTheme.labelMedium,
+                                unselectedLabelColor: Colors.white.withOpacity(
+                                  0.8,
+                                ),
+                                labelColor: Colors.white,
                                 indicatorColor: Colors.white,
                                 isScrollable: true,
                                 tabs: [
