@@ -63,12 +63,14 @@ class CheckupRepository {
       if (userId == null) {
         throw Exception('User not authenticated');
       }
-      final checkup = checkupModel.copyWith(
-        healthWorkerId: userId,
-      );
+      final checkup = checkupModel
+          .copyWith(
+            healthWorkerId: userId,
+          )
+          .toSeribase();
       final fetch = await _supabaseClient.functions.invoke(
         'checkups',
-        queryParameters: checkup.toSeribase(),
+        body: checkup,
         method: HttpMethod.post,
       );
 
@@ -76,7 +78,7 @@ class CheckupRepository {
         throw Exception('Failed to set checkup');
       }
 
-      return CheckupModel.fromSeribase(fetch.data?['data']);
+      return CheckupModel.fromSeribase(fetch.data?['data'].first);
     } catch (e) {
       rethrow;
     }

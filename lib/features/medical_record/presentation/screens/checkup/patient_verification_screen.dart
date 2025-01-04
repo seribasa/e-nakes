@@ -4,7 +4,6 @@ import 'package:eimunisasi_nakes/core/common/constan.dart';
 import 'package:eimunisasi_nakes/features/appointment/data/models/appointment_model.dart';
 import 'package:eimunisasi_nakes/features/medical_record/data/models/patient_model.dart';
 import 'package:eimunisasi_nakes/features/medical_record/logic/checkup_form_cubit/checkup_form_cubit.dart';
-import 'package:eimunisasi_nakes/injection.dart';
 import 'package:eimunisasi_nakes/routers/medical_record_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,34 +36,31 @@ class PatientVerificationScreen extends StatelessWidget {
     final String? dataBarcode = result?.code;
     final String? nama =
         dataBarcode != null ? jsonDecode(dataBarcode)["nama"] : patient?.nama;
-    return BlocProvider(
-      create: (context) => getIt<CheckupFormCubit>()..selectedPatient(patient),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Verifikasi Pasien'),
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _IdentitasPasien(
-                  namaAnak: '$nama',
-                  umurAnak: patient?.umur.toString(),
-                  namaOrangTua: patient?.nik,
-                  alamat: patient?.tempatLahir,
-                ),
-                const SizedBox(height: 10),
-                _JenisVaksin(
-                  namaVaksin: appointment?.note,
-                )
-              ],
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Verifikasi Pasien'),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _IdentitasPasien(
+                namaAnak: '$nama',
+                umurAnak: patient?.umur.toString(),
+                namaOrangTua: patient?.nik,
+                alamat: patient?.tempatLahir,
+              ),
+              const SizedBox(height: 10),
+              _JenisVaksin(
+                namaVaksin: appointment?.note,
+              )
+            ],
           ),
         ),
-        bottomNavigationBar: _NextButton(),
       ),
+      bottomNavigationBar: _NextButton(),
     );
   }
 }
@@ -239,7 +235,7 @@ class _NextButton extends StatelessWidget {
             child: const Text("Lanjut"),
             onPressed: () {
               if ((formState.checkup.vaccineType == null ||
-                      formState.checkup.vaccineType?.isEmpty == true) &&
+                      formState.checkup.vaccineType?.isEmpty == true) ||
                   (formState.checkup.month == null ||
                       formState.checkup.month?.isEmpty == true)) {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -251,7 +247,7 @@ class _NextButton extends StatelessWidget {
                 );
                 return;
               }
-              context.goNamed(
+              context.pushNamed(
                 MedicalRecordRouter.checkupFormRoute.name,
                 extra: context.read<CheckupFormCubit>(),
               );

@@ -11,6 +11,7 @@ import '../features/medical_record/presentation/screens/checkup/patient_verifica
 import '../features/medical_record/presentation/screens/patient_medical_record/daftar_pasien_screen.dart';
 import '../features/medical_record/presentation/screens/patient_medical_record/rekam_medis_pasien_screen.dart';
 import '../features/medical_record/presentation/screens/wrapper_medical_record.dart';
+import '../injection.dart';
 import 'models/route_model.dart';
 
 class MedicalRecordRouter {
@@ -83,9 +84,13 @@ class MedicalRecordRouter {
               path: checkupVerificationRoute.path,
               builder: (_, state) {
                 final extra = state.extra as PatientVerificationScreenExtra?;
-                return PatientVerificationScreen(
-                  patient: extra?.patient,
-                  appointment: extra?.appointment,
+                return BlocProvider<CheckupFormCubit>(
+                  create: (context) => getIt<CheckupFormCubit>()
+                    ..selectedPatient(extra?.patient),
+                  child: PatientVerificationScreen(
+                    patient: extra?.patient,
+                    appointment: extra?.appointment,
+                  ),
                 );
               },
             ),
@@ -125,22 +130,21 @@ class MedicalRecordRouter {
           ],
         ),
         GoRoute(
-          name: choosePatientRoute.name,
-          path: choosePatientRoute.path,
-          builder: (context, state) => const DaftarPasienScreen(),
-          routes: [
-            GoRoute(
-              name: medicalRecordDetailRoute.name,
-              path: medicalRecordDetailRoute.path,
-              builder: (_, state) {
-                final extra = state.extra as RekamMedisPasienScreen?;
-                return  RekamMedisPasienScreen(
-                  pasien: extra?.pasien,
-                );
-              },
-            ),
-          ]
-        ),
+            name: choosePatientRoute.name,
+            path: choosePatientRoute.path,
+            builder: (context, state) => const DaftarPasienScreen(),
+            routes: [
+              GoRoute(
+                name: medicalRecordDetailRoute.name,
+                path: medicalRecordDetailRoute.path,
+                builder: (_, state) {
+                  final extra = state.extra as RekamMedisPasienScreen?;
+                  return RekamMedisPasienScreen(
+                    pasien: extra?.pasien,
+                  );
+                },
+              ),
+            ]),
       ],
     ),
   ];

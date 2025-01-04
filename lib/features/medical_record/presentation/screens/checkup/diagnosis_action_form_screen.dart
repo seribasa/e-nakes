@@ -24,7 +24,7 @@ class DiagnosisActionFormScreen extends StatelessWidget {
                 content: Text('Berhasil menyimpan pemeriksaan!'),
               ),
             );
-            context.pushReplacementNamed(
+            context.goNamed(
               RootRoutePaths.dashboard.name,
             );
           } else if (state.status == FormzSubmissionStatus.failure) {

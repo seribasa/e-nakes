@@ -19,33 +19,22 @@ class FormPemeriksaanScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Form Pemeriksaan Pasien'),
       ),
-      body: BlocListener<CheckupFormCubit, CheckupFormState>(
-        listener: (context, state) {
-          if (state.status == FormzSubmissionStatus.failure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Form tidak valid'),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              PasienCard(
+                nama: pasien?.nama,
+                umur: pasien?.umur,
+                jenisKelamin: pasien?.jenisKelamin,
               ),
-            );
-          }
-        },
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                PasienCard(
-                  nama: pasien?.nama,
-                  umur: pasien?.umur,
-                  jenisKelamin: pasien?.jenisKelamin,
-                ),
-                const SizedBox(height: 10),
-                const _PemeriksaanFisik(),
-                const SizedBox(height: 10),
-                const _RiwayatKeluhan()
-              ],
-            ),
+              const SizedBox(height: 10),
+              const _PemeriksaanFisik(),
+              const SizedBox(height: 10),
+              const _RiwayatKeluhan()
+            ],
           ),
         ),
       ),
@@ -75,6 +64,8 @@ class _BeratBadanForm extends StatelessWidget {
                     keyboardType: TextInputType.number,
                     hintText: '10',
                     onChanged: (value) {
+                      if (value.isEmpty) return;
+                      if (int.tryParse(value) == null) return;
                       pemeriksaanBloc.changeWeight(int.parse(value));
                     },
                   ),
@@ -129,6 +120,8 @@ class TinggiBadanForm extends StatelessWidget {
                     keyboardType: TextInputType.number,
                     hintText: '50',
                     onChanged: (value) {
+                      if (value.isEmpty) return;
+                      if (int.tryParse(value) == null) return;
                       pemeriksaanBloc.changeHeight(int.parse(value));
                     },
                   ),
@@ -183,6 +176,8 @@ class LingkarKepalaForm extends StatelessWidget {
                       keyboardType: TextInputType.number,
                       hintText: '15',
                       onChanged: (value) {
+                        if (value.isEmpty) return;
+                        if (int.tryParse(value) == null) return;
                         pemeriksaanBloc
                             .changeHeadCircumference(int.parse(value));
                       },
@@ -302,7 +297,7 @@ class _NextButton extends StatelessWidget {
           onPressed: !isValidForm
               ? null
               : () {
-                  context.goNamed(
+                  context.pushNamed(
                     MedicalRecordRouter.checkupChartRoute.name,
                     extra: pemeriksaanBloc,
                   );

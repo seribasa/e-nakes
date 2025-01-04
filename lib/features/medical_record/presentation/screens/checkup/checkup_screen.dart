@@ -85,7 +85,7 @@ class _ListPasien extends StatelessWidget {
                 ),
                 subtitle: Text('${pasien?.nik}'),
                 onTap: () {
-                  context.goNamed(
+                  context.pushNamed(
                     MedicalRecordRouter.checkupVerificationRoute.name,
                     extra: PatientVerificationScreenExtra(
                       patient: pasien,

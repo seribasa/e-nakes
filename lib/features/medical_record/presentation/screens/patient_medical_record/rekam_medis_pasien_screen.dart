@@ -1,3 +1,4 @@
+import 'package:eimunisasi_nakes/core/widgets/error.dart';
 import 'package:eimunisasi_nakes/core/widgets/pasien_card.dart';
 import 'package:eimunisasi_nakes/features/medical_record/data/models/patient_model.dart';
 import 'package:eimunisasi_nakes/features/medical_record/logic/checkup_cubit/checkup_cubit.dart';
@@ -26,7 +27,7 @@ class RekamMedisPasienScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<CheckupCubit>(
       create: (context) =>
-          getIt<CheckupCubit>()..getCheckupByPatientId(pasien?.nik),
+          getIt<CheckupCubit>()..getCheckupByPatientId(pasien?.id),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Riwayat Pemeriksaan'),
@@ -37,7 +38,8 @@ class RekamMedisPasienScreen extends StatelessWidget {
               return const Center(
                 child: CircularProgressIndicator(),
               );
-            } else if (state is CheckupLoaded) {
+            }
+            if (state is CheckupLoaded) {
               if (state.checkupResult == null ||
                   state.checkupResult?.data?.isEmpty == true) {
                 return const Center(
@@ -95,11 +97,19 @@ class RekamMedisPasienScreen extends StatelessWidget {
                   ],
                 );
               }
-            } else {
-              return const Center(
-                child: Text('Terjadi kesalahan'),
+            }
+            if (state is CheckupError) {
+              return ErrorContainer(
+                title: state.message,
+                message: 'Coba Lagi',
+                onRefresh: () {
+                  context
+                      .read<CheckupCubit>()
+                      .getCheckupByPatientId(pasien?.id);
+                },
               );
             }
+            return SizedBox();
           },
         ),
       ),

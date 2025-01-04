@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
-
 class WrapperRekamMedis extends StatelessWidget {
   const WrapperRekamMedis({super.key});
 
@@ -49,7 +48,7 @@ class _PemeriksaanButton extends StatelessWidget {
               ),
             ),
             onPressed: () {
-              context.goNamed(
+              context.pushNamed(
                 MedicalRecordRouter.checkupRoute.name,
               );
             },
@@ -84,7 +83,9 @@ class _RekamMedisPasienButton extends StatelessWidget {
           ),
         ),
         onPressed: () {
-          context.pushNamed(MedicalRecordRouter.choosePatientRoute.name);
+          context.pushNamed(
+            MedicalRecordRouter.choosePatientRoute.name,
+          );
         },
         child: Row(
           children: const [

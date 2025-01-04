@@ -56,6 +56,7 @@ class CheckupModel extends Equatable {
 
   factory CheckupModel.fromSeribase(Map<String, dynamic> map) {
     return CheckupModel(
+      id: map['id'],
       weight: map['weight'],
       height: map['height'],
       headCircumference: map['head_circumference'],
@@ -63,10 +64,10 @@ class CheckupModel extends Equatable {
       complaint: map['complaint'],
       diagnosis: map['diagnosis'],
       action: map['action'],
-      id: map['id'],
       parentId: map['parent_id'],
       patientId: map['child_id'],
       healthWorkerId: map['inspector_id'],
+      month: map['month'],
       createdAt: () {
         try {
           return DateTime.parse(map['created_at']);
@@ -103,6 +104,7 @@ class CheckupModel extends Equatable {
       if (patientId != null) 'child_id': patientId,
       if (parentId != null) 'parent_id': parentId,
       if (healthWorkerId != null) 'inspector_id': healthWorkerId,
+      if (month != null) 'month': month,
       if (createdAt != null) 'created_at': createdAt?.toIso8601String(),
       if (updatedAt != null) 'updated_at': updatedAt?.toIso8601String(),
       if (deletedAt != null) 'deleted_at': deletedAt?.toIso8601String(),

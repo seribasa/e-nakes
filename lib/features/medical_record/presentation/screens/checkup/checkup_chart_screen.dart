@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/widgets/error.dart';
 import '../../../../../injection.dart';
 
 class CheckupChartScreen extends StatelessWidget {
@@ -19,7 +20,7 @@ class CheckupChartScreen extends StatelessWidget {
     final patient = context.read<CheckupFormCubit>().state.patient;
     return BlocProvider(
       create: (context) {
-        return getIt<CheckupCubit>()..getCheckupByPatientId(patient?.nik);
+        return getIt<CheckupCubit>()..getCheckupByPatientId(patient?.id);
       },
       child: _CheckupChartScaffold(),
     );
@@ -47,7 +48,17 @@ class _CheckupChartScaffold extends StatelessWidget {
           ),
           BlocBuilder<CheckupCubit, CheckupState>(
             builder: (context, state) {
-              if (state is CheckupLoading) {
+              if (state is CheckupError) {
+                return ErrorContainer(
+                  title: state.message,
+                  message: 'Coba Lagi',
+                  onRefresh: () {
+                    context
+                        .read<CheckupCubit>()
+                        .getCheckupByPatientId(patient?.id);
+                  },
+                );
+              } else if (state is CheckupLoading) {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is CheckupLoaded) {
                 return Expanded(
@@ -148,7 +159,7 @@ class _NextButton extends StatelessWidget {
         ),
         child: const Text("Lanjut"),
         onPressed: () {
-          context.goNamed(
+          context.pushNamed(
             MedicalRecordRouter.checkupDiagnosisActionRoute.name,
             extra: pemeriksaanBloc,
           );
