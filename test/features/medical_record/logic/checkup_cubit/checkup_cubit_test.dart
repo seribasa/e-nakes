@@ -60,7 +60,7 @@ void main() {
       act: (cubit) => cubit.getCheckupByPatientId(tPatientId),
       expect: () => [
         CheckupLoading(),
-        CheckupError(message: 'Exception: Error fetching checkups'),
+        CheckupError(message: 'Gagal memuat data, coba lagi'),
       ],
     );
   });

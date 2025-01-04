@@ -90,7 +90,7 @@ class CheckupRepository {
     try {
       final fetch = await _supabaseClient.functions.invoke(
         'checkups/${checkupModel.id}',
-        queryParameters: checkupModel.toSeribase(),
+        body: checkupModel.toSeribase(),
         method: HttpMethod.put,
       );
 

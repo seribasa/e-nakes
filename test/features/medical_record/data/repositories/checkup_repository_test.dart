@@ -6,21 +6,37 @@ import 'package:mocktail/mocktail.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MockSupabaseClient extends Mock implements SupabaseClient {}
+
 class MockFunctionsClient extends Mock implements FunctionsClient {}
+
 class MockFunctionResponse extends Mock implements FunctionResponse {}
+
+class MockGoTrueClient extends Mock implements GoTrueClient {}
+
+class MockUser extends Mock implements User {}
 
 void main() {
   late CheckupRepository repository;
   late MockSupabaseClient mockSupabaseClient;
   late MockFunctionsClient mockFunctions;
   late MockFunctionResponse mockResponse;
+  late MockGoTrueClient mockGoTrueClient;
+  late MockUser mockSupabaseUser;
 
   setUp(() {
     mockSupabaseClient = MockSupabaseClient();
+    reset(mockSupabaseClient);
+
     mockFunctions = MockFunctionsClient();
     mockResponse = MockFunctionResponse();
+    mockGoTrueClient = MockGoTrueClient();
+    mockSupabaseUser = MockUser();
+
     repository = CheckupRepository(mockSupabaseClient);
-    
+    when(() => mockSupabaseUser.id).thenReturn('1');
+    when(() => mockGoTrueClient.currentUser).thenReturn(mockSupabaseUser);
+    when(() => mockSupabaseClient.auth).thenReturn(mockGoTrueClient);
+
     when(() => mockSupabaseClient.functions).thenReturn(mockFunctions);
   });
 
@@ -32,10 +48,10 @@ void main() {
         'metadata': {'total': 0, 'page': 1, 'per_page': 10}
       });
       when(() => mockFunctions.invoke(
-        'checkups',
-        queryParameters: any(named: 'queryParameters'),
-        method: HttpMethod.get,
-      )).thenAnswer((_) async => mockResponse);
+            'checkups',
+            queryParameters: any(named: 'queryParameters'),
+            method: HttpMethod.get,
+          )).thenAnswer((_) async => mockResponse);
 
       final result = await repository.getCheckups();
 
@@ -50,15 +66,15 @@ void main() {
         'metadata': {'total': 0, 'page': 1, 'per_page': 10}
       });
       when(() => mockFunctions.invoke(
-        'checkups',
-        queryParameters: {
-          'patient_id': 'test_id',
-          'page': '1',
-          'page_size': '10',
-          'date': date.toIso8601String()
-        },
-        method: HttpMethod.get,
-      )).thenAnswer((_) async => mockResponse);
+            'checkups',
+            queryParameters: {
+              'patient_id': 'test_id',
+              'page': '1',
+              'page_size': '10',
+              'date': date.toIso8601String()
+            },
+            method: HttpMethod.get,
+          )).thenAnswer((_) async => mockResponse);
 
       await repository.getCheckups(
         patientId: 'test_id',
@@ -68,24 +84,24 @@ void main() {
       );
 
       verify(() => mockFunctions.invoke(
-        'checkups',
-        queryParameters: {
-          'patient_id': 'test_id',
-          'page': '1',
-          'page_size': '10',
-          'date': date.toIso8601String()
-        },
-        method: HttpMethod.get,
-      )).called(1);
+            'checkups',
+            queryParameters: {
+              'patient_id': 'test_id',
+              'page': '1',
+              'page_size': '10',
+              'date': date.toIso8601String()
+            },
+            method: HttpMethod.get,
+          )).called(1);
     });
 
     test('getCheckups throws exception when status is not 200', () async {
       when(() => mockResponse.status).thenReturn(400);
       when(() => mockFunctions.invoke(
-        'checkups',
-        queryParameters: any(named: 'queryParameters'),
-        method: HttpMethod.get,
-      )).thenAnswer((_) async => mockResponse);
+            'checkups',
+            queryParameters: any(named: 'queryParameters'),
+            method: HttpMethod.get,
+          )).thenAnswer((_) async => mockResponse);
 
       expect(
         () => repository.getCheckups(),
@@ -94,14 +110,18 @@ void main() {
     });
 
     test('setCheckup creates new checkup', () async {
-      final checkup = CheckupModel();
+      final checkup = CheckupModel(weight: 2);
       when(() => mockResponse.status).thenReturn(200);
-      when(() => mockResponse.data).thenReturn({});
+      when(() => mockResponse.data).thenReturn({
+        'data': [checkup.toSeribase()],
+      });
       when(() => mockFunctions.invoke(
-        'checkups',
-        queryParameters: any(named: 'queryParameters'),
-        method: HttpMethod.post,
-      )).thenAnswer((_) async => mockResponse);
+            'checkups',
+            body: any(named: 'body'),
+            method: HttpMethod.post,
+          )).thenAnswer(
+        (_) async => mockResponse,
+      );
 
       final result = await repository.setCheckup(checkupModel: checkup);
 
@@ -112,10 +132,12 @@ void main() {
       final checkup = CheckupModel();
       when(() => mockResponse.status).thenReturn(400);
       when(() => mockFunctions.invoke(
-        'checkups',
-        queryParameters: any(named: 'queryParameters'),
-        method: HttpMethod.post,
-      )).thenAnswer((_) async => mockResponse);
+            'checkups',
+            body: any(named: 'body'),
+            method: HttpMethod.post,
+          )).thenThrow(
+        Exception('Failed to create checkup'),
+      );
 
       expect(
         () => repository.setCheckup(checkupModel: checkup),
@@ -126,12 +148,14 @@ void main() {
     test('updateCheckup updates existing checkup', () async {
       final checkup = CheckupModel();
       when(() => mockResponse.status).thenReturn(200);
-      when(() => mockResponse.data).thenReturn({});
+      when(() => mockResponse.data).thenReturn({
+        'data': checkup.toSeribase(),
+      });
       when(() => mockFunctions.invoke(
-        'checkups/${checkup.id}',
-        queryParameters: any(named: 'queryParameters'),
-        method: HttpMethod.put,
-      )).thenAnswer((_) async => mockResponse);
+            'checkups/${checkup.id}',
+            body: any(named: 'body'),
+            method: HttpMethod.put,
+          )).thenAnswer((_) async => mockResponse);
 
       final result = await repository.updateCheckup(checkupModel: checkup);
 
@@ -142,10 +166,10 @@ void main() {
       final checkup = CheckupModel();
       when(() => mockResponse.status).thenReturn(400);
       when(() => mockFunctions.invoke(
-        'checkups/${checkup.id}',
-        queryParameters: any(named: 'queryParameters'),
-        method: HttpMethod.put,
-      )).thenAnswer((_) async => mockResponse);
+            'checkups/${checkup.id}',
+            body: any(named: 'body'),
+            method: HttpMethod.put,
+          )).thenAnswer((_) async => mockResponse);
 
       expect(
         () => repository.updateCheckup(checkupModel: checkup),
