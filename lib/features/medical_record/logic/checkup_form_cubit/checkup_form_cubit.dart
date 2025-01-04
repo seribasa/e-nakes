@@ -71,9 +71,6 @@ class CheckupFormCubit extends Cubit<CheckupFormState> {
   changeMonthOfVisit(String value) {
     if (value.isEmpty) {
       emit(state.copyWith(
-        checkup: state.checkup.copyWith(
-          month: value,
-        ),
         errorMessage: 'Bulan kunjungan tidak boleh kosong',
       ));
       return;
