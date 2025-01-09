@@ -7,6 +7,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:formz/formz.dart';
 
+class UpdateEventCalendarScreenExtra {
+  final CalendarModel calendarModel;
+  final FormCalendarActivityCubit formCalendarActivityCubit;
+
+  const UpdateEventCalendarScreenExtra({
+    required this.calendarModel,
+    required this.formCalendarActivityCubit,
+  });
+}
+
 class UpdateEventCalendarScreen extends StatelessWidget {
   final CalendarModel calendarModel;
   const UpdateEventCalendarScreen({super.key, required this.calendarModel});

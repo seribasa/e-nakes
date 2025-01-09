@@ -5,13 +5,14 @@ import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authenticati
 import 'package:eimunisasi_nakes/features/calendar/data/models/calendar_model.dart';
 import 'package:eimunisasi_nakes/features/calendar/logic/calendar/calendar_cubit.dart';
 import 'package:eimunisasi_nakes/features/calendar/logic/form_calendar_activity/form_calendar_activity_cubit.dart';
-import 'package:eimunisasi_nakes/features/calendar/presentation/screens/add_event_calendar_screen.dart';
 import 'package:eimunisasi_nakes/features/calendar/presentation/screens/update_event_calendar_screen.dart';
 import 'package:eimunisasi_nakes/injection.dart';
+import 'package:eimunisasi_nakes/routers/calendar_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:formz/formz.dart';
+import 'package:go_router/go_router.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
@@ -96,9 +97,10 @@ class __KalenderScaffoldState extends State<_KalenderScaffold> {
                 "${events.length}",
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 10.0,
-                    fontWeight: FontWeight.bold),
+                  color: Colors.white,
+                  fontSize: 10.0,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
@@ -122,14 +124,14 @@ class __KalenderScaffoldState extends State<_KalenderScaffold> {
             bloc: authBloc,
             builder: (context, state) {
               return IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => BlocProvider.value(
-                                value: formCalendarActivityBloc,
-                                child: const AddEventCalendarScreen(),
-                              ))));
+                icon: const Icon(Icons.add),
+                onPressed: () {
+                  context.pushNamed(
+                    CalendarRouter.addCalendarRoute.name,
+                    extra: formCalendarActivityBloc,
+                  );
+                },
+              );
             },
           )
         ],
@@ -145,7 +147,7 @@ class __KalenderScaffoldState extends State<_KalenderScaffold> {
           BlocListener<CalendarCubit, CalendarState>(
               listener: (context, state) {
             if (state is CalendarDeleted) {
-              Navigator.pop(context);
+              context.pop();
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                 content: Text("Kegiatan berhasil dihapus"),
               ));
@@ -285,96 +287,99 @@ class _DataTableActivity extends StatelessWidget {
   final List<CalendarModel>? events;
   final DateTime? onPageChangeDate;
 
-  const _DataTableActivity(
-      {required this.events, required this.onPageChangeDate});
+  const _DataTableActivity({
+    required this.events,
+    required this.onPageChangeDate,
+  });
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CalendarCubit, CalendarState>(
       builder: (context, state) {
         return DataTable(
-            headingRowHeight: 40,
-            columnSpacing: 0,
-            headingTextStyle: const TextStyle(
-                fontFamily: 'Nunito',
-                color: Colors.white,
-                fontWeight: FontWeight.bold),
-            dataTextStyle: const TextStyle(
+          headingRowHeight: 40,
+          columnSpacing: 0,
+          headingTextStyle: const TextStyle(
               fontFamily: 'Nunito',
-              color: Colors.black,
+              color: Colors.white,
+              fontWeight: FontWeight.bold),
+          dataTextStyle: const TextStyle(
+            fontFamily: 'Nunito',
+            color: Colors.black,
+          ),
+          headingRowColor: WidgetStateColor.resolveWith(
+              (states) => Theme.of(context).primaryColor),
+          columns: const <DataColumn>[
+            DataColumn(
+              label: Text(
+                'Tanggal',
+              ),
             ),
-            headingRowColor: WidgetStateColor.resolveWith(
-                (states) => Theme.of(context).primaryColor),
-            columns: const <DataColumn>[
-              DataColumn(
-                label: Text(
-                  'Tanggal',
-                ),
+            DataColumn(
+              label: Text(
+                'Aktivitas',
               ),
-              DataColumn(
-                label: Text(
-                  'Aktivitas',
+            ),
+          ],
+          rows: () {
+            if (state is CalendarLoading) {
+              return [
+                const DataRow(
+                  cells: [
+                    DataCell(Center(child: LinearProgressIndicator())),
+                    DataCell(Center(child: LinearProgressIndicator())),
+                  ],
                 ),
-              ),
-            ],
-            rows: () {
-              if (state is CalendarLoading) {
-                return [
-                  const DataRow(
-                    cells: [
-                      DataCell(Center(child: LinearProgressIndicator())),
-                      DataCell(Center(child: LinearProgressIndicator())),
-                    ],
-                  ),
-                ];
-              } else if (events != null && events!.isNotEmpty) {
-                return events!
-                    .where((e) =>
-                        e.doAt!.month == onPageChangeDate!.month &&
-                        e.doAt!.year == onPageChangeDate!.year)
-                    .map(
-                      (e) => DataRow(
-                        cells: <DataCell>[
-                          DataCell(
-                            Text(DateFormat('dd-MM-yyyy')
-                                .format(e.doAt!)
-                                .toString()),
-                          ),
-                          DataCell(Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  e.activity!,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
+              ];
+            } else if (events != null && events!.isNotEmpty) {
+              return events!
+                  .where((e) =>
+                      e.doAt!.month == onPageChangeDate!.month &&
+                      e.doAt!.year == onPageChangeDate!.year)
+                  .map(
+                    (e) => DataRow(
+                      cells: <DataCell>[
+                        DataCell(
+                          Text(DateFormat('dd-MM-yyyy')
+                              .format(e.doAt!)
+                              .toString()),
+                        ),
+                        DataCell(Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
+                              child: Text(
+                                e.activity!,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              !e.readOnly!
-                                  ? _PopUpMenuActivity(
-                                      event: e,
-                                    )
-                                  : Container(),
-                            ],
-                          )),
-                        ],
-                      ),
-                    )
-                    .toList();
-              } else {
-                return [
-                  const DataRow(
-                    cells: <DataCell>[
-                      DataCell(
-                        Text('-'),
-                      ),
-                      DataCell(
-                        Text('Belum ada aktivitas'),
-                      ),
-                    ],
+                            ),
+                            !e.readOnly!
+                                ? _PopUpMenuActivity(
+                                    event: e,
+                                  )
+                                : Container(),
+                          ],
+                        )),
+                      ],
+                    ),
                   )
-                ];
-              }
-            }());
+                  .toList();
+            } else {
+              return [
+                const DataRow(
+                  cells: <DataCell>[
+                    DataCell(
+                      Text('-'),
+                    ),
+                    DataCell(
+                      Text('Belum ada aktivitas'),
+                    ),
+                  ],
+                )
+              ];
+            }
+          }(),
+        );
       },
     );
   }
@@ -396,7 +401,7 @@ class _PopUpMenuActivity extends StatelessWidget {
       Widget cancelButton = TextButton(
         child: const Text("No"),
         onPressed: () {
-          Navigator.pop(context);
+          context.pop();
         },
       );
       Widget continueButton = TextButton(
@@ -406,7 +411,7 @@ class _PopUpMenuActivity extends StatelessWidget {
         ),
         onPressed: () async {
           calendarBloc.deleteCalendarByDocId(event.id!);
-          Navigator.pop(context);
+          context.pop();
         },
       );
       // set up the AlertDialog
@@ -430,15 +435,13 @@ class _PopUpMenuActivity extends StatelessWidget {
     return PopupMenuButton(
       onSelected: (item) {
         if (item == 0) {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => BlocProvider.value(
-                        value: formCalendarActivityBloc,
-                        child: UpdateEventCalendarScreen(
-                          calendarModel: event,
-                        ),
-                      )));
+          context.pushNamed(
+            CalendarRouter.updateCalendarRoute.name,
+            extra: UpdateEventCalendarScreenExtra(
+              calendarModel: event,
+              formCalendarActivityCubit: formCalendarActivityBloc,
+            ),
+          );
         } else if (item == 1) {
           confirmDeleteDialog(event);
         }

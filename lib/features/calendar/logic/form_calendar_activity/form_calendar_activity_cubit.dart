@@ -39,7 +39,10 @@ class FormCalendarActivityCubit extends Cubit<FormCalendarActivityState> {
       emit(state.copyWith(status: FormzSubmissionStatus.success));
     } catch (e) {
       emit(state.copyWith(
-          status: FormzSubmissionStatus.failure, errorMessage: e.toString()));
+        status: FormzSubmissionStatus.failure,
+        errorMessage:
+            'Terjadi kesalahan saat menambahkan data, silahkan coba lagi',
+      ));
     }
   }
 
@@ -52,7 +55,9 @@ class FormCalendarActivityCubit extends Cubit<FormCalendarActivityState> {
       emit(state.copyWith(status: FormzSubmissionStatus.success));
     } catch (e) {
       emit(state.copyWith(
-          status: FormzSubmissionStatus.failure, errorMessage: e.toString()));
+        status: FormzSubmissionStatus.failure,
+        errorMessage: 'Terjadi kesalahan saat mengubah data, silahkan coba lagi',
+      ));
     }
   }
 
