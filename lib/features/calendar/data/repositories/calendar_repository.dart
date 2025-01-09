@@ -21,7 +21,7 @@ class CalendarRepository {
       final userId = _supabase.auth.currentUser?.id;
       assert(userId != null, 'User id is null');
       final result = await _supabase
-          .from('calendars')
+          .from(CalendarModel.tableName)
           .select()
           .eq('user_id', userId!)
           .range(from, to)
@@ -52,7 +52,7 @@ class CalendarRepository {
       final userId = _supabase.auth.currentUser?.id;
       assert(userId != null, 'User id is null');
       final result = await _supabase
-          .from('calendars')
+          .from(CalendarModel.tableName)
           .select()
           .eq('user_id', userId!)
           .eq('do_at', date!.toIso8601String())
@@ -81,13 +81,18 @@ class CalendarRepository {
     try {
       final userId = _supabase.auth.currentUser?.id;
       assert(userId != null, 'User id is null');
-      final json = calendarModel.copyWith(
-        userId: userId,
-      ).toMap();
-      final result =
-          await _supabase.from('calendars').insert(json).single().withConverter(
-                (calendar) => CalendarModel.fromMap(calendar),
-              );
+      final json = calendarModel
+          .copyWith(
+            userId: userId,
+          )
+          .toMap();
+      final result = await _supabase
+          .from(CalendarModel.tableName)
+          .insert(json)
+          .single()
+          .withConverter(
+            (calendar) => CalendarModel.fromMap(calendar),
+          );
 
       return result;
     } catch (e) {
@@ -105,7 +110,7 @@ class CalendarRepository {
 
       final json = calendarModel.toMap();
       final result = await _supabase
-          .from('calendars')
+          .from(CalendarModel.tableName)
           .update(json)
           .eq('id', calendarModel.id!)
           .single()
@@ -123,7 +128,7 @@ class CalendarRepository {
     required String docId,
   }) async {
     try {
-      await _supabase.from('calendars').delete().eq('id', docId);
+      return await _supabase.from('calendars').delete().eq('id', docId);
     } catch (e) {
       rethrow;
     }
