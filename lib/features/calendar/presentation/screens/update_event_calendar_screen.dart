@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:formz/formz.dart';
+import 'package:go_router/go_router.dart';
 
 class UpdateEventCalendarScreenExtra {
   final CalendarModel calendarModel;
@@ -32,10 +33,11 @@ class UpdateEventCalendarScreen extends StatelessWidget {
       ),
       resizeToAvoidBottomInset: false,
       body: BlocListener<FormCalendarActivityCubit, FormCalendarActivityState>(
+        listenWhen: (previous, current) => previous.status != current.status,
         listener: (context, state) {
           if (state.status == FormzSubmissionStatus.success) {
             formBloc.reset();
-            Navigator.pop(context);
+            context.pop();
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Kegiatan berhasil diubah'),

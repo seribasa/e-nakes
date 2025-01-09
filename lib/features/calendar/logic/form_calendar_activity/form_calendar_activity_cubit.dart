@@ -32,10 +32,11 @@ class FormCalendarActivityCubit extends Cubit<FormCalendarActivityState> {
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
     try {
       await _calendarRepository.addCalendarActivity(
-          calendarModel: CalendarModel(
-        doAt: state.date,
-        activity: state.activity,
-      ));
+        calendarModel: CalendarModel(
+          doAt: state.date,
+          activity: state.activity,
+        ),
+      );
       emit(state.copyWith(status: FormzSubmissionStatus.success));
     } catch (e) {
       emit(state.copyWith(
@@ -56,7 +57,8 @@ class FormCalendarActivityCubit extends Cubit<FormCalendarActivityState> {
     } catch (e) {
       emit(state.copyWith(
         status: FormzSubmissionStatus.failure,
-        errorMessage: 'Terjadi kesalahan saat mengubah data, silahkan coba lagi',
+        errorMessage:
+            'Terjadi kesalahan saat mengubah data, silahkan coba lagi',
       ));
     }
   }

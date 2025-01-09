@@ -89,6 +89,7 @@ class CalendarRepository {
       final result = await _supabase
           .from(CalendarModel.tableName)
           .insert(json)
+          .select()
           .single()
           .withConverter(
             (calendar) => CalendarModel.fromMap(calendar),
@@ -113,6 +114,7 @@ class CalendarRepository {
           .from(CalendarModel.tableName)
           .update(json)
           .eq('id', calendarModel.id!)
+          .select()
           .single()
           .withConverter(
             (calendar) => CalendarModel.fromMap(calendar),

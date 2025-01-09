@@ -6,12 +6,12 @@ class FormCalendarActivityState extends Equatable {
   final FormzSubmissionStatus status;
   final String? errorMessage;
 
-  const FormCalendarActivityState({
-    this.date,
+  FormCalendarActivityState({
+    DateTime? date,
     this.activity,
     this.status = FormzSubmissionStatus.initial,
     this.errorMessage,
-  });
+  }) : date = date ?? DateTime.now();
 
   @override
   List<Object?> get props => [date, activity, status, errorMessage];

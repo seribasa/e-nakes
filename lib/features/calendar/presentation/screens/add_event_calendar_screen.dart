@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:formz/formz.dart';
+import 'package:go_router/go_router.dart';
 
 class AddEventCalendarScreen extends StatelessWidget {
   const AddEventCalendarScreen({super.key});
@@ -18,10 +19,11 @@ class AddEventCalendarScreen extends StatelessWidget {
       ),
       resizeToAvoidBottomInset: false,
       body: BlocListener<FormCalendarActivityCubit, FormCalendarActivityState>(
+        listenWhen: (previous, current) => previous.status != current.status,
         listener: (context, state) {
           if (state.status == FormzSubmissionStatus.success) {
             formBloc.reset();
-            Navigator.pop(context);
+            context.pop();
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Kegiatan berhasil ditambahkan'),
@@ -38,48 +40,56 @@ class AddEventCalendarScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: SingleChildScrollView(
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const SizedBox(height: 5.0),
-              DateTimePicker(
-                type: DateTimePickerType.dateTimeSeparate,
-                dateMask: 'd MMM, yyyy',
-                initialValue: DateTime.now().toString(),
-                firstDate: DateTime.now().add(const Duration(days: -365)),
-                lastDate: DateTime.now().add(const Duration(days: 365)),
-                icon: const Icon(FontAwesomeIcons.calendarXmark),
-                dateLabelText: 'Tanggal',
-                timeLabelText: "Jam",
-                selectableDayPredicate: (date) {
-                  // Disable weekend days to select from the calendar
-                  if (date.weekday == 6 || date.weekday == 7) {
-                    return false;
-                  }
-                  return true;
-                },
-                onChanged: (val) {
-                  DateTime value = DateTime.parse(val);
-                  formBloc.dateChange(value);
-                  debugPrint(val);
-                },
-                onSaved: (val) {
-                  DateTime value =
-                      DateTime.parse(val ?? DateTime.now().toString());
-                  formBloc.dateChange(value);
-                  debugPrint(val);
-                },
-              ),
-              const SizedBox(height: 10.0),
-              _ActivityForm(
-                hintText: 'Periksa bayi dan imunisasi',
-                onChanged: (val) {
-                  formBloc.activityChange(val);
-                },
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-            ]),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 5.0),
+                BlocBuilder<FormCalendarActivityCubit,
+                    FormCalendarActivityState>(
+                  builder: (context, state) {
+                    return DateTimePicker(
+                      type: DateTimePickerType.dateTimeSeparate,
+                      dateMask: 'd MMM, yyyy',
+                      initialValue: state.date.toString(),
+                      firstDate: DateTime.now().add(const Duration(days: -365)),
+                      lastDate: DateTime.now().add(const Duration(days: 365)),
+                      icon: const Icon(FontAwesomeIcons.calendarXmark),
+                      dateLabelText: 'Tanggal',
+                      timeLabelText: "Jam",
+                      selectableDayPredicate: (date) {
+                        // Disable weekend days to select from the calendar
+                        if (date.weekday == 6 || date.weekday == 7) {
+                          return false;
+                        }
+                        return true;
+                      },
+                      onChanged: (val) {
+                        DateTime value = DateTime.parse(val);
+                        formBloc.dateChange(value);
+                        debugPrint(val);
+                      },
+                      onSaved: (val) {
+                        DateTime value = DateTime.parse(
+                          val ?? DateTime.now().toString(),
+                        );
+                        formBloc.dateChange(value);
+                        debugPrint(val);
+                      },
+                    );
+                  },
+                ),
+                const SizedBox(height: 10.0),
+                _ActivityForm(
+                  hintText: 'Periksa bayi dan imunisasi',
+                  onChanged: (val) {
+                    formBloc.activityChange(val);
+                  },
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -124,38 +134,33 @@ class _SaveButton extends StatelessWidget {
     final formBloc = context.read<FormCalendarActivityCubit>();
     return BlocBuilder<FormCalendarActivityCubit, FormCalendarActivityState>(
       builder: (context, state) {
-        if (state.status == FormzSubmissionStatus.inProgress) {
-          SizedBox(
-            width: double.infinity,
-            height: 50,
-            child: ElevatedButton(
-              onPressed: null,
-              style: ElevatedButton.styleFrom(
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text('Menyimpan...'),
-                  SizedBox(width: 10),
-                  CircularProgressIndicator(),
-                ],
-              ),
-            ),
-          );
-        }
+        final isLoading = state.status == FormzSubmissionStatus.inProgress;
         return SizedBox(
           width: double.infinity,
           height: 50,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero)),
-            child: const Text("Simpan"),
-            onPressed: () {
-              formBloc.addCalendarActivity();
-            },
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero,
+              ),
+            ),
+            onPressed: isLoading
+                ? null
+                : () {
+                    formBloc.addCalendarActivity();
+                  },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (isLoading) ...[
+                  Text('Menyimpan...'),
+                  SizedBox(width: 10),
+                  CircularProgressIndicator(),
+                ] else ...[
+                  const Text("Simpan"),
+                ],
+              ],
+            ),
           ),
         );
       },
