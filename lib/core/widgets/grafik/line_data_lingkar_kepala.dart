@@ -1,6 +1,6 @@
 // ignore_for_file: file_names
 
-import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pemeriksaan_model.dart';
+import 'package:eimunisasi_nakes/features/medical_record/data/models/checkup_model.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:math_expressions/math_expressions.dart';
 // Boy
@@ -180,13 +180,13 @@ class LineDataHeadCircumferenceModel {
   }
 
   //method data pasien
-  static List<FlSpot> listDataPasienLine(List<PemeriksaanModel> listData) {
+  static List<FlSpot> listDataPasienLine(List<CheckupModel> listData) {
     List<FlSpot> list = [];
     for (int i = 0; i < listData.length; i++) {
-      final sumbuX = listData[i].bulanKe;
+      final sumbuX = listData[i].month;
       if (sumbuX != null) {
         list.add(FlSpot(double.parse(sumbuX),
-            listData[i].lingkarKepala?.toDouble() ?? 0.0));
+            listData[i].headCircumference?.toDouble() ?? 0.0));
       }
     }
     list.sort((a, b) => a.x.compareTo(b.x));

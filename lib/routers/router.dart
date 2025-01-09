@@ -33,7 +33,7 @@ final router = GoRouter(
             (_) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Error: $error'),
+                  content: Text(error),
                 ),
               );
             },
@@ -45,7 +45,7 @@ final router = GoRouter(
             if (state is AuthenticationError) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Error: ${state.message}'),
+                  content: Text(state.message),
                 ),
               );
             }
@@ -60,7 +60,15 @@ final router = GoRouter(
             } else if (state is Unauthenticated) {
               return const LoginSeribaseOauthScreen();
             } else if (state is AuthenticationError) {
-              return const LoginSeribaseOauthScreen();
+              return Scaffold(
+                body: ErrorContainer(
+                  title: state.message,
+                  message: 'Coba Lagi',
+                  onRefresh: () {
+                    context.read<AuthenticationBloc>().add(AppStarted());
+                  },
+                ),
+              );
             }
             return Container();
           },

@@ -1,11 +1,11 @@
-import 'package:eimunisasi_nakes/features/rekam_medis/data/models/pemeriksaan_model.dart';
+import 'package:eimunisasi_nakes/features/medical_record/data/models/checkup_model.dart';
 import 'package:flutter/material.dart';
 
 import 'line_chart_template.dart';
 
 class GrafikPertumbuhan extends StatefulWidget {
   final LineChartType type;
-  final List<PemeriksaanModel> listData;
+  final List<CheckupModel> listData;
   final bool? isBoy;
   const GrafikPertumbuhan({
     super.key,

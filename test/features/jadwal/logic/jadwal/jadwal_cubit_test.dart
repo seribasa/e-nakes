@@ -1,25 +1,25 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:eimunisasi_nakes/core/models/pagination_model.dart';
-import 'package:eimunisasi_nakes/features/jadwal/data/models/jadwal_model.dart';
-import 'package:eimunisasi_nakes/features/jadwal/data/repositories/jadwal_repository.dart';
-import 'package:eimunisasi_nakes/features/jadwal/logic/jadwal/jadwal_cubit.dart';
+import 'package:eimunisasi_nakes/features/appointment/data/models/appointment_model.dart';
+import 'package:eimunisasi_nakes/features/appointment/data/repositories/appointment_repository.dart';
+import 'package:eimunisasi_nakes/features/appointment/logic/appointment_cubit/appointment_cubit.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-class MockJadwalRepository extends Mock implements JadwalRepository {}
+class MockJadwalRepository extends Mock implements AppointmentRepository {}
 
 void main() {
-  late JadwalCubit jadwalCubit;
+  late AppointmentCubit jadwalCubit;
   late MockJadwalRepository mockRepository;
 
   setUp(() {
     mockRepository = MockJadwalRepository();
-    jadwalCubit = JadwalCubit(mockRepository);
+    jadwalCubit = AppointmentCubit(mockRepository);
   });
 
   group('JadwalCubit getAllJadwal', () {
-    final tPagination = BasePagination<JadwalPasienModel>(
-      data: [JadwalPasienModel()],
+    final tPagination = BasePagination<PatientAppointmentModel>(
+      data: [PatientAppointmentModel()],
       metadata: MetadataPaginationModel(
         page: 1,
         perPage: 10,
@@ -27,7 +27,7 @@ void main() {
       ),
     );
 
-    blocTest<JadwalCubit, JadwalState>(
+    blocTest<AppointmentCubit, AppointmentState>(
       'emits [JadwalLoading, JadwalLoaded] when getAllJadwal is successful',
       build: () {
         when(() => mockRepository.getAppointments(
@@ -40,12 +40,12 @@ void main() {
       },
       act: (cubit) => cubit.getAllJadwal(),
       expect: () => [
-        JadwalLoading(),
-        JadwalLoaded(paginationAppointment: tPagination),
+        AppointmentLoading(),
+        AppointmentLoaded(paginationAppointment: tPagination),
       ],
     );
 
-    blocTest<JadwalCubit, JadwalState>(
+    blocTest<AppointmentCubit, AppointmentState>(
       'emits [JadwalLoading, JadwalError] when getAllJadwal fails',
       build: () {
         when(() => mockRepository.getAppointments(
@@ -58,21 +58,21 @@ void main() {
       },
       act: (cubit) => cubit.getAllJadwal(),
       expect: () => [
-        JadwalLoading(),
-        JadwalError(message: 'Terjadi kesalahan, silahkan coba lagi'),
+        AppointmentLoading(),
+        AppointmentError(message: 'Terjadi kesalahan, silahkan coba lagi'),
       ],
     );
   });
 
   group('JadwalCubit getJadwalToday', () {
-    final tJadwal = JadwalPasienModel();
+    final tJadwal = PatientAppointmentModel();
 
-    blocTest<JadwalCubit, JadwalState>(
+    blocTest<AppointmentCubit, AppointmentState>(
       'emits [JadwalLoading, JadwalLoaded] when getJadwalToday is successful',
       build: () {
         when(() => mockRepository.getAppointments(
               date: any(named: 'date'),
-            )).thenAnswer((_) async => BasePagination<JadwalPasienModel>(
+            )).thenAnswer((_) async => BasePagination<PatientAppointmentModel>(
                 data: [tJadwal],
                 metadata: MetadataPaginationModel(
                   page: 1,
@@ -83,12 +83,12 @@ void main() {
       },
       act: (cubit) => cubit.getJadwalToday(),
       expect: () => [
-        JadwalLoading(),
-        JadwalLoaded(todayAppointment: tJadwal),
+        AppointmentLoading(),
+        AppointmentLoaded(todayAppointment: tJadwal),
       ],
     );
 
-    blocTest<JadwalCubit, JadwalState>(
+    blocTest<AppointmentCubit, AppointmentState>(
       'emits [JadwalLoading, JadwalError] when getJadwalToday fails',
       build: () {
         when(() => mockRepository.getAppointments(
@@ -98,16 +98,16 @@ void main() {
       },
       act: (cubit) => cubit.getJadwalToday(),
       expect: () => [
-        JadwalLoading(),
-        JadwalError(message: 'Terjadi kesalahan, silahkan coba lagi'),
+        AppointmentLoading(),
+        AppointmentError(message: 'Terjadi kesalahan, silahkan coba lagi'),
       ],
     );
   });
 
   group('JadwalCubit getSelectedDetail', () {
-    final tJadwal = JadwalPasienModel();
+    final tJadwal = PatientAppointmentModel();
 
-    blocTest<JadwalCubit, JadwalState>(
+    blocTest<AppointmentCubit, AppointmentState>(
       'emits [JadwalLoading, JadwalLoaded] when getSelectedDetail is successful',
       build: () {
         when(() => mockRepository.getAppointment(
@@ -117,12 +117,12 @@ void main() {
       },
       act: (cubit) => cubit.getSelectedDetail('1'),
       expect: () => [
-        JadwalLoading(),
-        JadwalLoaded(selectedAppointment: tJadwal),
+        AppointmentLoading(),
+        AppointmentLoaded(selectedAppointment: tJadwal),
       ],
     );
 
-    blocTest<JadwalCubit, JadwalState>(
+    blocTest<AppointmentCubit, AppointmentState>(
       'emits [JadwalLoading, JadwalError] when getSelectedDetail fails',
       build: () {
         when(() => mockRepository.getAppointment(
@@ -132,8 +132,8 @@ void main() {
       },
       act: (cubit) => cubit.getSelectedDetail('1'),
       expect: () => [
-        JadwalLoading(),
-        JadwalError(message: 'Terjadi kesalahan, silahkan coba lagi'),
+        AppointmentLoading(),
+        AppointmentError(message: 'Terjadi kesalahan, silahkan coba lagi'),
       ],
     );
   });

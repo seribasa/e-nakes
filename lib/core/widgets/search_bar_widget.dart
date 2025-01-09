@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/debouncer.dart';
+
 class SearchBarPeltops extends StatelessWidget {
   final void Function()? onPressed;
   final void Function(String)? onChanged;
@@ -9,6 +11,7 @@ class SearchBarPeltops extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final debouncer = Debouncer(milliseconds: 500);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
@@ -16,7 +19,13 @@ class SearchBarPeltops extends StatelessWidget {
         color: Colors.grey[200],
       ),
       child: TextField(
-        onChanged: onChanged,
+        onChanged: onChanged != null
+            ? (value) {
+                debouncer.run(() {
+                  onChanged!(value);
+                });
+              }
+            : null,
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: hintText,
