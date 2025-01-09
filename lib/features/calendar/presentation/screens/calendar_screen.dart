@@ -2,11 +2,12 @@ import 'dart:collection';
 
 import 'package:eimunisasi_nakes/core/widgets/loading_dialog.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
-import 'package:eimunisasi_nakes/features/kalender/data/models/calendar_model.dart';
-import 'package:eimunisasi_nakes/features/kalender/logic/calendar/calendar_cubit.dart';
-import 'package:eimunisasi_nakes/features/kalender/logic/form_calendar_activity/form_calendar_activity_cubit.dart';
-import 'package:eimunisasi_nakes/features/kalender/presentation/screens/tambah_event_kalender_screen.dart';
-import 'package:eimunisasi_nakes/features/kalender/presentation/screens/update_event_kalender_screen.dart';
+import 'package:eimunisasi_nakes/features/calendar/data/models/calendar_model.dart';
+import 'package:eimunisasi_nakes/features/calendar/logic/calendar/calendar_cubit.dart';
+import 'package:eimunisasi_nakes/features/calendar/logic/form_calendar_activity/form_calendar_activity_cubit.dart';
+import 'package:eimunisasi_nakes/features/calendar/presentation/screens/add_event_calendar_screen.dart';
+import 'package:eimunisasi_nakes/features/calendar/presentation/screens/update_event_calendar_screen.dart';
+import 'package:eimunisasi_nakes/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,25 +15,18 @@ import 'package:formz/formz.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
-class KalenderScreen extends StatelessWidget {
-  const KalenderScreen({super.key});
+class CalendarScreen extends StatelessWidget {
+  const CalendarScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final user = () {
-      final state = context.read<AuthenticationBloc>().state;
-      if (state is Authenticated) {
-        return state.user;
-      }
-      null;
-    }();
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => CalendarCubit(userData: user)..getAllCalendar(),
+          create: (context) => getIt<CalendarCubit>()..getAllCalendar(),
         ),
         BlocProvider(
-          create: (context) => FormCalendarActivityCubit(userData: user),
+          create: (context) => getIt<FormCalendarActivityCubit>(),
         ),
       ],
       child: const _KalenderScaffold(),
@@ -76,8 +70,8 @@ class __KalenderScaffoldState extends State<_KalenderScaffold> {
   _groupEvents(List<CalendarModel>? allEvents) {
     _groupedEvents = LinkedHashMap(equals: isSameDay, hashCode: getHashCode);
     allEvents?.forEach((event) {
-      DateTime date = DateTime.utc(event.date!.year, event.date!.month,
-          event.date!.day, event.date!.hour, event.date!.minute);
+      DateTime date = DateTime.utc(event.doAt!.year, event.doAt!.month,
+          event.doAt!.day, event.doAt!.hour, event.doAt!.minute);
       if (_groupedEvents?[date] == null) _groupedEvents?[date] = [];
       _groupedEvents?[date]?.add(event);
     });
@@ -134,7 +128,7 @@ class __KalenderScaffoldState extends State<_KalenderScaffold> {
                       MaterialPageRoute(
                           builder: (context) => BlocProvider.value(
                                 value: formCalendarActivityBloc,
-                                child: const TambahEventKalenderScreen(),
+                                child: const AddEventCalendarScreen(),
                               ))));
             },
           )
@@ -175,7 +169,7 @@ class __KalenderScaffoldState extends State<_KalenderScaffold> {
               if (state is CalendarFailure) {
                 return const Center(child: Text('Gagal mengambil data'));
               } else if (state is CalendarLoaded) {
-                allEvents = state.listCalendarModel;
+                allEvents = state.calendarPagination?.data;
                 _groupEvents(allEvents);
               }
               DateTime? selectedDate = _selectedDay;
@@ -261,7 +255,7 @@ class __KalenderScaffoldState extends State<_KalenderScaffold> {
                                 isThreeLine: true,
                                 title: Text(event.activity ?? ''),
                                 subtitle: Text(DateFormat('HH:mm')
-                                    .format(event.date ?? DateTime.now())),
+                                    .format(event.doAt ?? DateTime.now())),
                               )),
                         ],
                       );
@@ -336,14 +330,14 @@ class _DataTableActivity extends StatelessWidget {
               } else if (events != null && events!.isNotEmpty) {
                 return events!
                     .where((e) =>
-                        e.date!.month == onPageChangeDate!.month &&
-                        e.date!.year == onPageChangeDate!.year)
+                        e.doAt!.month == onPageChangeDate!.month &&
+                        e.doAt!.year == onPageChangeDate!.year)
                     .map(
                       (e) => DataRow(
                         cells: <DataCell>[
                           DataCell(
                             Text(DateFormat('dd-MM-yyyy')
-                                .format(e.date!)
+                                .format(e.doAt!)
                                 .toString()),
                           ),
                           DataCell(Row(
@@ -411,7 +405,7 @@ class _PopUpMenuActivity extends StatelessWidget {
           style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
         ),
         onPressed: () async {
-          calendarBloc.deleteCalendarByDocId(event.documentID!);
+          calendarBloc.deleteCalendarByDocId(event.id!);
           Navigator.pop(context);
         },
       );
@@ -441,7 +435,7 @@ class _PopUpMenuActivity extends StatelessWidget {
               MaterialPageRoute(
                   builder: (context) => BlocProvider.value(
                         value: formCalendarActivityBloc,
-                        child: UpdateEventKalenderScreen(
+                        child: UpdateEventCalendarScreen(
                           calendarModel: event,
                         ),
                       )));
