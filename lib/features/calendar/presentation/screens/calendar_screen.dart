@@ -1,7 +1,6 @@
 import 'dart:collection';
 
 import 'package:eimunisasi_nakes/core/widgets/loading_dialog.dart';
-import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:eimunisasi_nakes/features/calendar/data/models/calendar_model.dart';
 import 'package:eimunisasi_nakes/features/calendar/logic/calendar/calendar_cubit.dart';
 import 'package:eimunisasi_nakes/features/calendar/logic/form_calendar_activity/form_calendar_activity_cubit.dart';
@@ -112,38 +111,33 @@ class __KalenderScaffoldState extends State<_KalenderScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    final authBloc = BlocProvider.of<AuthenticationBloc>(context);
-    final formCalendarActivityBloc =
-        BlocProvider.of<FormCalendarActivityCubit>(context);
+    final formCalendarActivityBloc = context.read<FormCalendarActivityCubit>();
 
     return Scaffold(
       appBar: AppBar(
         title: const Text("Kalender"),
         actions: [
-          BlocBuilder(
-            bloc: authBloc,
-            builder: (context, state) {
-              return IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: () {
-                  context.pushNamed(
-                    CalendarRouter.addCalendarRoute.name,
-                    extra: formCalendarActivityBloc,
-                  );
-                },
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              context.pushNamed(
+                CalendarRouter.addCalendarRoute.name,
+                extra: formCalendarActivityBloc,
               );
             },
-          )
+          ),
         ],
       ),
       body: MultiBlocListener(
         listeners: [
           BlocListener<FormCalendarActivityCubit, FormCalendarActivityState>(
+              listenWhen: (previous, current) =>
+                  previous.status != current.status,
               listener: (context, state) {
-            if (state.status == FormzSubmissionStatus.success) {
-              context.read<CalendarCubit>().getAllCalendar();
-            }
-          }),
+                if (state.status == FormzSubmissionStatus.success) {
+                  context.read<CalendarCubit>().getAllCalendar();
+                }
+              }),
           BlocListener<CalendarCubit, CalendarState>(
               listener: (context, state) {
             if (state is CalendarDeleted) {
@@ -157,7 +151,7 @@ class __KalenderScaffoldState extends State<_KalenderScaffold> {
                 barrierDismissible: false,
                 context: context,
                 builder: (context) => const LoadingDialog(
-                  label: 'Deleting...',
+                  label: 'Menghapus...',
                 ),
               );
             }
@@ -184,13 +178,18 @@ class __KalenderScaffoldState extends State<_KalenderScaffold> {
                     calendarBuilders: calendarBuilder(),
                     eventLoader: _getEventsfromDay,
                     headerStyle: const HeaderStyle(
-                        formatButtonVisible: false, titleCentered: true),
+                      formatButtonVisible: false,
+                      titleCentered: true,
+                    ),
                     calendarStyle: CalendarStyle(
-                        todayDecoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            shape: BoxShape.circle),
-                        selectedDecoration: BoxDecoration(
-                            color: Colors.blue[200], shape: BoxShape.circle)),
+                      todayDecoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          shape: BoxShape.circle),
+                      selectedDecoration: BoxDecoration(
+                        color: Colors.blue[200],
+                        shape: BoxShape.circle,
+                      ),
+                    ),
                     firstDay: kFirstDay,
                     lastDay: kLastDay,
                     focusedDay: _focusedDay,
@@ -235,30 +234,31 @@ class __KalenderScaffoldState extends State<_KalenderScaffold> {
                                   fontSize: 15,
                                 ),
                               ),
-                              CircleAvatar(
-                                foregroundColor: Colors.white,
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.secondary,
-                                child: IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        _selectedDay = null;
-                                      });
-                                    },
-                                    icon: const Icon(Icons.close_rounded)),
+                              IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _selectedDay = null;
+                                  });
+                                },
+                                icon: const Icon(Icons.close_rounded),
                               )
                             ],
                           ),
                           const SizedBox(height: 5.0),
-                          ..._selectedEvents.map((event) => ListTile(
-                                trailing: _PopUpMenuActivity(
-                                  event: event,
+                          ..._selectedEvents.map(
+                            (event) => ListTile(
+                              trailing: _PopUpMenuActivity(
+                                event: event,
+                              ),
+                              isThreeLine: true,
+                              title: Text(event.activity ?? ''),
+                              subtitle: Text(
+                                DateFormat('HH:mm').format(
+                                  event.doAt ?? DateTime.now(),
                                 ),
-                                isThreeLine: true,
-                                title: Text(event.activity ?? ''),
-                                subtitle: Text(DateFormat('HH:mm')
-                                    .format(event.doAt ?? DateTime.now())),
-                              )),
+                              ),
+                            ),
+                          ),
                         ],
                       );
                     } else {
@@ -266,13 +266,14 @@ class __KalenderScaffoldState extends State<_KalenderScaffold> {
                     }
                   }()),
                   SizedBox(
-                      width: double.infinity,
-                      child: selectedDate == null
-                          ? _DataTableActivity(
-                              events: allEvents,
-                              onPageChangeDate: _onPageChangeDate,
-                            )
-                          : Container()),
+                    width: double.infinity,
+                    child: selectedDate == null
+                        ? _DataTableActivity(
+                            events: allEvents,
+                            onPageChangeDate: _onPageChangeDate,
+                          )
+                        : Container(),
+                  ),
                 ],
               );
             }),
@@ -340,26 +341,28 @@ class _DataTableActivity extends StatelessWidget {
                     (e) => DataRow(
                       cells: <DataCell>[
                         DataCell(
-                          Text(DateFormat('dd-MM-yyyy')
-                              .format(e.doAt!)
-                              .toString()),
+                          Text(
+                            DateFormat('dd-MM-yyyy').format(e.doAt!).toString(),
+                          ),
                         ),
-                        DataCell(Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Flexible(
-                              child: Text(
-                                e.activity!,
-                                overflow: TextOverflow.ellipsis,
+                        DataCell(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  e.activity!,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
-                            ),
-                            !e.readOnly!
-                                ? _PopUpMenuActivity(
-                                    event: e,
-                                  )
-                                : Container(),
-                          ],
-                        )),
+                              !e.readOnly!
+                                  ? _PopUpMenuActivity(
+                                      event: e,
+                                    )
+                                  : Container(),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   )
@@ -392,38 +395,40 @@ class _PopUpMenuActivity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formCalendarActivityBloc =
-        BlocProvider.of<FormCalendarActivityCubit>(context);
-    final calendarBloc = BlocProvider.of<CalendarCubit>(context);
+    final formCalendarActivityBloc = context.read<FormCalendarActivityCubit>();
+    final calendarBloc = context.read<CalendarCubit>();
 
     confirmDeleteDialog(CalendarModel event) {
-      // set up the buttons
       Widget cancelButton = TextButton(
-        child: const Text("No"),
+        child: const Text("Tidak"),
         onPressed: () {
           context.pop();
         },
       );
       Widget continueButton = TextButton(
-        child: const Text(
-          "Yes",
-          style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+        style: TextButton.styleFrom(
+          backgroundColor: Theme.of(context).colorScheme.errorContainer,
+        ),
+        child: Text(
+          "Iya",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onErrorContainer,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         onPressed: () async {
           calendarBloc.deleteCalendarByDocId(event.id!);
           context.pop();
         },
       );
-      // set up the AlertDialog
       AlertDialog alert = AlertDialog(
         title: const Text("Konfirmasi"),
-        content: Text("Anda yakin akan menghapus?\n\n${event.activity}"),
+        content: Text("Anda yakin akan menghapus?\n${event.activity}"),
         actions: [
           cancelButton,
           continueButton,
         ],
       );
-      // show the dialog
       return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -454,26 +459,34 @@ class _PopUpMenuActivity extends StatelessWidget {
         PopupMenuItem<int>(
           value: 0,
           child: Row(
-            children: const [
+            children: [
               FaIcon(
                 FontAwesomeIcons.penToSquare,
-                color: Colors.blue,
+                color: Theme.of(context).primaryColor,
+                size: 16,
               ),
               SizedBox(width: 10),
-              Text("Ubah"),
+              Text(
+                "Ubah",
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
             ],
           ),
         ),
         PopupMenuItem<int>(
           value: 1,
           child: Row(
-            children: const [
+            children: [
               FaIcon(
                 FontAwesomeIcons.trashCan,
-                color: Colors.red,
+                color: Theme.of(context).colorScheme.error,
+                size: 16,
               ),
               SizedBox(width: 10),
-              Text("Hapus"),
+              Text(
+                "Hapus",
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
             ],
           ),
         ),
