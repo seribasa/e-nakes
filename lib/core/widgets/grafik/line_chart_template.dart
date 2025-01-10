@@ -6,7 +6,7 @@ import 'package:eimunisasi_nakes/core/widgets/grafik/line_data_tinggi_badan.dart
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-import '../../../features/rekam_medis/data/models/pemeriksaan_model.dart';
+import '../../../features/medical_record/data/models/checkup_model.dart';
 
 enum LineChartType {
   beratBadan,
@@ -21,7 +21,7 @@ class LineChartTemplate extends StatelessWidget {
   final double? minY;
   final double? maxY;
   final bool? isBoy;
-  final List<PemeriksaanModel> listData;
+  final List<CheckupModel> listData;
   const LineChartTemplate({
     Key? key,
     required this.type,
