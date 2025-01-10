@@ -15,9 +15,11 @@ class CalendarRepository {
     int? page,
     int? perPage,
   }) async {
+    final defaultPage = 1;
+    final defaultPerPage = 100;
     try {
-      final from = page! * perPage!;
-      final to = from + perPage;
+      final from = ((page ?? defaultPage) - 1) * (perPage ?? defaultPerPage);
+      final to = from + ((perPage ?? defaultPerPage) - 1);
       final userId = _supabase.auth.currentUser?.id;
       assert(userId != null, 'User id is null');
       final result = await _supabase
@@ -36,8 +38,8 @@ class CalendarRepository {
         data: result.data,
         metadata: MetadataPaginationModel(
           total: result.count,
-          page: page,
-          perPage: perPage,
+          page: page ?? defaultPage,
+          perPage: perPage ?? defaultPerPage,
         ),
       );
     } catch (e) {
