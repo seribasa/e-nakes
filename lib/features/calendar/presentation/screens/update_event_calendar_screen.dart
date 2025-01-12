@@ -1,36 +1,52 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:eimunisasi_nakes/core/widgets/custom_text_field.dart';
-import 'package:eimunisasi_nakes/features/kalender/logic/form_calendar_activity/form_calendar_activity_cubit.dart';
+import 'package:eimunisasi_nakes/features/calendar/data/models/calendar_model.dart';
+import 'package:eimunisasi_nakes/features/calendar/logic/form_calendar_activity/form_calendar_activity_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:formz/formz.dart';
+import 'package:go_router/go_router.dart';
 
-class TambahEventKalenderScreen extends StatelessWidget {
-  const TambahEventKalenderScreen({super.key});
+class UpdateEventCalendarScreenExtra {
+  final CalendarModel calendarModel;
+  final FormCalendarActivityCubit formCalendarActivityCubit;
+
+  const UpdateEventCalendarScreenExtra({
+    required this.calendarModel,
+    required this.formCalendarActivityCubit,
+  });
+}
+
+class UpdateEventCalendarScreen extends StatelessWidget {
+  final CalendarModel calendarModel;
+  const UpdateEventCalendarScreen({super.key, required this.calendarModel});
 
   @override
   Widget build(BuildContext context) {
     final formBloc = BlocProvider.of<FormCalendarActivityCubit>(context);
+    formBloc.activityChange(calendarModel.activity!);
+    formBloc.dateChange(calendarModel.doAt!);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tambah Kegiatan'),
+        title: const Text('Update Kegiatan'),
       ),
       resizeToAvoidBottomInset: false,
       body: BlocListener<FormCalendarActivityCubit, FormCalendarActivityState>(
+        listenWhen: (previous, current) => previous.status != current.status,
         listener: (context, state) {
           if (state.status == FormzSubmissionStatus.success) {
             formBloc.reset();
-            Navigator.pop(context);
+            context.pop();
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('Kegiatan berhasil ditambahkan'),
+                content: Text('Kegiatan berhasil diubah'),
               ),
             );
           } else if (state.status == FormzSubmissionStatus.failure) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('Kegiatan gagal ditambahkan'),
+                content: Text('Kegiatan gagal diubah'),
               ),
             );
           }
@@ -44,7 +60,7 @@ class TambahEventKalenderScreen extends StatelessWidget {
               DateTimePicker(
                 type: DateTimePickerType.dateTimeSeparate,
                 dateMask: 'd MMM, yyyy',
-                initialValue: DateTime.now().toString(),
+                initialValue: calendarModel.doAt.toString(),
                 firstDate: DateTime.now().add(const Duration(days: -365)),
                 lastDate: DateTime.now().add(const Duration(days: 365)),
                 icon: const Icon(FontAwesomeIcons.calendarXmark),
@@ -71,11 +87,10 @@ class TambahEventKalenderScreen extends StatelessWidget {
               ),
               const SizedBox(height: 10.0),
               _ActivityForm(
-                hintText: 'Periksa bayi dan imunisasi',
-                onChanged: (val) {
-                  formBloc.activityChange(val);
-                },
-              ),
+                  initialValue: '${calendarModel.activity}',
+                  onChanged: (val) {
+                    formBloc.activityChange(val);
+                  }),
               const SizedBox(
                 height: 20.0,
               ),
@@ -83,19 +98,17 @@ class TambahEventKalenderScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: const _SaveButton(),
+      bottomNavigationBar: _SaveButton(
+        docId: calendarModel.id,
+      ),
     );
   }
 }
 
 class _ActivityForm extends StatelessWidget {
-  final String? hintText;
+  final String? initialValue;
   final void Function(String)? onChanged;
-
-  const _ActivityForm({
-    this.hintText,
-    this.onChanged,
-  });
+  const _ActivityForm({this.initialValue, this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -108,8 +121,8 @@ class _ActivityForm extends StatelessWidget {
         ),
         const SizedBox(width: 5),
         MyTextFormField(
+          initialValue: initialValue,
           onChanged: onChanged,
-          hintText: hintText,
         ),
       ],
     );
@@ -117,15 +130,16 @@ class _ActivityForm extends StatelessWidget {
 }
 
 class _SaveButton extends StatelessWidget {
-  const _SaveButton();
+  final String? docId;
+  const _SaveButton({required this.docId});
 
   @override
   Widget build(BuildContext context) {
-    final formBloc = context.read<FormCalendarActivityCubit>();
+    final formBloc = BlocProvider.of<FormCalendarActivityCubit>(context);
     return BlocBuilder<FormCalendarActivityCubit, FormCalendarActivityState>(
       builder: (context, state) {
         if (state.status == FormzSubmissionStatus.inProgress) {
-          SizedBox(
+          return SizedBox(
             width: double.infinity,
             height: 50,
             child: ElevatedButton(
@@ -154,7 +168,11 @@ class _SaveButton extends StatelessWidget {
                     borderRadius: BorderRadius.zero)),
             child: const Text("Simpan"),
             onPressed: () {
-              formBloc.addCalendarActivity();
+              formBloc.updateCalendarActivity(CalendarModel(
+                id: docId,
+                activity: state.activity,
+                doAt: state.date,
+              ));
             },
           ),
         );

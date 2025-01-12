@@ -1,20 +1,18 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:eimunisasi_nakes/features/authentication/data/models/user.dart';
-import 'package:eimunisasi_nakes/features/kalender/data/models/calendar_model.dart';
-import 'package:eimunisasi_nakes/features/kalender/data/repositories/calendar_repository.dart';
+import 'package:eimunisasi_nakes/features/calendar/data/models/calendar_model.dart';
+import 'package:eimunisasi_nakes/features/calendar/data/repositories/calendar_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
+import 'package:injectable/injectable.dart';
 
 part 'form_calendar_activity_state.dart';
 
+@injectable
 class FormCalendarActivityCubit extends Cubit<FormCalendarActivityState> {
   final CalendarRepository _calendarRepository;
-  final ProfileModel? userData;
-  FormCalendarActivityCubit({
-    CalendarRepository? calendarRepository,
-    required this.userData,
-  })  : _calendarRepository = calendarRepository ?? CalendarRepository(),
-        super(FormCalendarActivityState(date: DateTime.now()));
+  FormCalendarActivityCubit(
+    this._calendarRepository,
+  ) : super(FormCalendarActivityState());
 
   void dateChange(DateTime value) {
     emit(state.copyWith(
@@ -34,30 +32,34 @@ class FormCalendarActivityCubit extends Cubit<FormCalendarActivityState> {
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
     try {
       await _calendarRepository.addCalendarActivity(
-          calendarModel: CalendarModel(
-              uid: userData?.id, date: state.date, activity: state.activity));
-      emit(state.copyWith(status: FormzSubmissionStatus.success));
-    } catch (e) {
-      emit(state.copyWith(
-          status: FormzSubmissionStatus.failure, errorMessage: e.toString()));
-    }
-  }
-
-  Future<void> updateCalendarActivity({required String? docId}) async {
-    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
-    try {
-      await _calendarRepository.updateCalendarActivity(
         calendarModel: CalendarModel(
-          uid: userData?.id,
-          date: state.date,
+          doAt: state.date,
           activity: state.activity,
         ),
-        docId: docId,
       );
       emit(state.copyWith(status: FormzSubmissionStatus.success));
     } catch (e) {
       emit(state.copyWith(
-          status: FormzSubmissionStatus.failure, errorMessage: e.toString()));
+        status: FormzSubmissionStatus.failure,
+        errorMessage:
+            'Terjadi kesalahan saat menambahkan data, silahkan coba lagi',
+      ));
+    }
+  }
+
+  Future<void> updateCalendarActivity(CalendarModel model) async {
+    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
+    try {
+      await _calendarRepository.updateCalendarActivity(
+        calendarModel: model,
+      );
+      emit(state.copyWith(status: FormzSubmissionStatus.success));
+    } catch (e) {
+      emit(state.copyWith(
+        status: FormzSubmissionStatus.failure,
+        errorMessage:
+            'Terjadi kesalahan saat mengubah data, silahkan coba lagi',
+      ));
     }
   }
 

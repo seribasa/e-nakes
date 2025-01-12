@@ -14,12 +14,12 @@ class CalendarLoading extends CalendarState {}
 class CalendarDeleting extends CalendarState {}
 
 class CalendarLoaded extends CalendarState {
-  final List<CalendarModel>? listCalendarModel;
+  final BasePagination<CalendarModel>? calendarPagination;
 
-  const CalendarLoaded({this.listCalendarModel});
+  const CalendarLoaded({this.calendarPagination});
 
   @override
-  List<Object?> get props => [listCalendarModel];
+  List<Object?> get props => [calendarPagination];
 }
 
 class CalendarDeleted extends CalendarState {}

@@ -1,38 +1,32 @@
 import 'dart:collection';
 
 import 'package:eimunisasi_nakes/core/widgets/loading_dialog.dart';
-import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
-import 'package:eimunisasi_nakes/features/kalender/data/models/calendar_model.dart';
-import 'package:eimunisasi_nakes/features/kalender/logic/calendar/calendar_cubit.dart';
-import 'package:eimunisasi_nakes/features/kalender/logic/form_calendar_activity/form_calendar_activity_cubit.dart';
-import 'package:eimunisasi_nakes/features/kalender/presentation/screens/tambah_event_kalender_screen.dart';
-import 'package:eimunisasi_nakes/features/kalender/presentation/screens/update_event_kalender_screen.dart';
+import 'package:eimunisasi_nakes/features/calendar/data/models/calendar_model.dart';
+import 'package:eimunisasi_nakes/features/calendar/logic/calendar/calendar_cubit.dart';
+import 'package:eimunisasi_nakes/features/calendar/logic/form_calendar_activity/form_calendar_activity_cubit.dart';
+import 'package:eimunisasi_nakes/features/calendar/presentation/screens/update_event_calendar_screen.dart';
+import 'package:eimunisasi_nakes/injection.dart';
+import 'package:eimunisasi_nakes/routers/calendar_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:formz/formz.dart';
+import 'package:go_router/go_router.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
-class KalenderScreen extends StatelessWidget {
-  const KalenderScreen({super.key});
+class CalendarScreen extends StatelessWidget {
+  const CalendarScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final user = () {
-      final state = context.read<AuthenticationBloc>().state;
-      if (state is Authenticated) {
-        return state.user;
-      }
-      null;
-    }();
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => CalendarCubit(userData: user)..getAllCalendar(),
+          create: (context) => getIt<CalendarCubit>()..getAllCalendar(),
         ),
         BlocProvider(
-          create: (context) => FormCalendarActivityCubit(userData: user),
+          create: (context) => getIt<FormCalendarActivityCubit>(),
         ),
       ],
       child: const _KalenderScaffold(),
@@ -76,8 +70,8 @@ class __KalenderScaffoldState extends State<_KalenderScaffold> {
   _groupEvents(List<CalendarModel>? allEvents) {
     _groupedEvents = LinkedHashMap(equals: isSameDay, hashCode: getHashCode);
     allEvents?.forEach((event) {
-      DateTime date = DateTime.utc(event.date!.year, event.date!.month,
-          event.date!.day, event.date!.hour, event.date!.minute);
+      DateTime date = DateTime.utc(event.doAt!.year, event.doAt!.month,
+          event.doAt!.day, event.doAt!.hour, event.doAt!.minute);
       if (_groupedEvents?[date] == null) _groupedEvents?[date] = [];
       _groupedEvents?[date]?.add(event);
     });
@@ -102,9 +96,10 @@ class __KalenderScaffoldState extends State<_KalenderScaffold> {
                 "${events.length}",
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 10.0,
-                    fontWeight: FontWeight.bold),
+                  color: Colors.white,
+                  fontSize: 10.0,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
@@ -116,42 +111,37 @@ class __KalenderScaffoldState extends State<_KalenderScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    final authBloc = BlocProvider.of<AuthenticationBloc>(context);
-    final formCalendarActivityBloc =
-        BlocProvider.of<FormCalendarActivityCubit>(context);
+    final formCalendarActivityBloc = context.read<FormCalendarActivityCubit>();
 
     return Scaffold(
       appBar: AppBar(
         title: const Text("Kalender"),
         actions: [
-          BlocBuilder(
-            bloc: authBloc,
-            builder: (context, state) {
-              return IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => BlocProvider.value(
-                                value: formCalendarActivityBloc,
-                                child: const TambahEventKalenderScreen(),
-                              ))));
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              context.pushNamed(
+                CalendarRouter.addCalendarRoute.name,
+                extra: formCalendarActivityBloc,
+              );
             },
-          )
+          ),
         ],
       ),
       body: MultiBlocListener(
         listeners: [
           BlocListener<FormCalendarActivityCubit, FormCalendarActivityState>(
+              listenWhen: (previous, current) =>
+                  previous.status != current.status,
               listener: (context, state) {
-            if (state.status == FormzSubmissionStatus.success) {
-              context.read<CalendarCubit>().getAllCalendar();
-            }
-          }),
+                if (state.status == FormzSubmissionStatus.success) {
+                  context.read<CalendarCubit>().getAllCalendar();
+                }
+              }),
           BlocListener<CalendarCubit, CalendarState>(
               listener: (context, state) {
             if (state is CalendarDeleted) {
-              Navigator.pop(context);
+              context.pop();
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                 content: Text("Kegiatan berhasil dihapus"),
               ));
@@ -161,7 +151,7 @@ class __KalenderScaffoldState extends State<_KalenderScaffold> {
                 barrierDismissible: false,
                 context: context,
                 builder: (context) => const LoadingDialog(
-                  label: 'Deleting...',
+                  label: 'Menghapus...',
                 ),
               );
             }
@@ -175,7 +165,7 @@ class __KalenderScaffoldState extends State<_KalenderScaffold> {
               if (state is CalendarFailure) {
                 return const Center(child: Text('Gagal mengambil data'));
               } else if (state is CalendarLoaded) {
-                allEvents = state.listCalendarModel;
+                allEvents = state.calendarPagination?.data;
                 _groupEvents(allEvents);
               }
               DateTime? selectedDate = _selectedDay;
@@ -188,13 +178,18 @@ class __KalenderScaffoldState extends State<_KalenderScaffold> {
                     calendarBuilders: calendarBuilder(),
                     eventLoader: _getEventsfromDay,
                     headerStyle: const HeaderStyle(
-                        formatButtonVisible: false, titleCentered: true),
+                      formatButtonVisible: false,
+                      titleCentered: true,
+                    ),
                     calendarStyle: CalendarStyle(
-                        todayDecoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            shape: BoxShape.circle),
-                        selectedDecoration: BoxDecoration(
-                            color: Colors.blue[200], shape: BoxShape.circle)),
+                      todayDecoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          shape: BoxShape.circle),
+                      selectedDecoration: BoxDecoration(
+                        color: Colors.blue[200],
+                        shape: BoxShape.circle,
+                      ),
+                    ),
                     firstDay: kFirstDay,
                     lastDay: kLastDay,
                     focusedDay: _focusedDay,
@@ -239,30 +234,31 @@ class __KalenderScaffoldState extends State<_KalenderScaffold> {
                                   fontSize: 15,
                                 ),
                               ),
-                              CircleAvatar(
-                                foregroundColor: Colors.white,
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.secondary,
-                                child: IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        _selectedDay = null;
-                                      });
-                                    },
-                                    icon: const Icon(Icons.close_rounded)),
+                              IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _selectedDay = null;
+                                  });
+                                },
+                                icon: const Icon(Icons.close_rounded),
                               )
                             ],
                           ),
                           const SizedBox(height: 5.0),
-                          ..._selectedEvents.map((event) => ListTile(
-                                trailing: _PopUpMenuActivity(
-                                  event: event,
+                          ..._selectedEvents.map(
+                            (event) => ListTile(
+                              trailing: _PopUpMenuActivity(
+                                event: event,
+                              ),
+                              isThreeLine: true,
+                              title: Text(event.activity ?? ''),
+                              subtitle: Text(
+                                DateFormat('HH:mm').format(
+                                  event.doAt ?? DateTime.now(),
                                 ),
-                                isThreeLine: true,
-                                title: Text(event.activity ?? ''),
-                                subtitle: Text(DateFormat('HH:mm')
-                                    .format(event.date ?? DateTime.now())),
-                              )),
+                              ),
+                            ),
+                          ),
                         ],
                       );
                     } else {
@@ -270,13 +266,14 @@ class __KalenderScaffoldState extends State<_KalenderScaffold> {
                     }
                   }()),
                   SizedBox(
-                      width: double.infinity,
-                      child: selectedDate == null
-                          ? _DataTableActivity(
-                              events: allEvents,
-                              onPageChangeDate: _onPageChangeDate,
-                            )
-                          : Container()),
+                    width: double.infinity,
+                    child: selectedDate == null
+                        ? _DataTableActivity(
+                            events: allEvents,
+                            onPageChangeDate: _onPageChangeDate,
+                          )
+                        : Container(),
+                  ),
                 ],
               );
             }),
@@ -291,62 +288,65 @@ class _DataTableActivity extends StatelessWidget {
   final List<CalendarModel>? events;
   final DateTime? onPageChangeDate;
 
-  const _DataTableActivity(
-      {required this.events, required this.onPageChangeDate});
+  const _DataTableActivity({
+    required this.events,
+    required this.onPageChangeDate,
+  });
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CalendarCubit, CalendarState>(
       builder: (context, state) {
         return DataTable(
-            headingRowHeight: 40,
-            columnSpacing: 0,
-            headingTextStyle: const TextStyle(
-                fontFamily: 'Nunito',
-                color: Colors.white,
-                fontWeight: FontWeight.bold),
-            dataTextStyle: const TextStyle(
+          headingRowHeight: 40,
+          columnSpacing: 0,
+          headingTextStyle: const TextStyle(
               fontFamily: 'Nunito',
-              color: Colors.black,
+              color: Colors.white,
+              fontWeight: FontWeight.bold),
+          dataTextStyle: const TextStyle(
+            fontFamily: 'Nunito',
+            color: Colors.black,
+          ),
+          headingRowColor: WidgetStateColor.resolveWith(
+              (states) => Theme.of(context).primaryColor),
+          columns: const <DataColumn>[
+            DataColumn(
+              label: Text(
+                'Tanggal',
+              ),
             ),
-            headingRowColor: WidgetStateColor.resolveWith(
-                (states) => Theme.of(context).primaryColor),
-            columns: const <DataColumn>[
-              DataColumn(
-                label: Text(
-                  'Tanggal',
-                ),
+            DataColumn(
+              label: Text(
+                'Aktivitas',
               ),
-              DataColumn(
-                label: Text(
-                  'Aktivitas',
+            ),
+          ],
+          rows: () {
+            if (state is CalendarLoading) {
+              return [
+                const DataRow(
+                  cells: [
+                    DataCell(Center(child: LinearProgressIndicator())),
+                    DataCell(Center(child: LinearProgressIndicator())),
+                  ],
                 ),
-              ),
-            ],
-            rows: () {
-              if (state is CalendarLoading) {
-                return [
-                  const DataRow(
-                    cells: [
-                      DataCell(Center(child: LinearProgressIndicator())),
-                      DataCell(Center(child: LinearProgressIndicator())),
-                    ],
-                  ),
-                ];
-              } else if (events != null && events!.isNotEmpty) {
-                return events!
-                    .where((e) =>
-                        e.date!.month == onPageChangeDate!.month &&
-                        e.date!.year == onPageChangeDate!.year)
-                    .map(
-                      (e) => DataRow(
-                        cells: <DataCell>[
-                          DataCell(
-                            Text(DateFormat('dd-MM-yyyy')
-                                .format(e.date!)
-                                .toString()),
+              ];
+            } else if (events != null && events!.isNotEmpty) {
+              return events!
+                  .where((e) =>
+                      e.doAt!.month == onPageChangeDate!.month &&
+                      e.doAt!.year == onPageChangeDate!.year)
+                  .map(
+                    (e) => DataRow(
+                      cells: <DataCell>[
+                        DataCell(
+                          Text(
+                            DateFormat('dd-MM-yyyy').format(e.doAt!).toString(),
                           ),
-                          DataCell(Row(
+                        ),
+                        DataCell(
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Flexible(
@@ -361,26 +361,28 @@ class _DataTableActivity extends StatelessWidget {
                                     )
                                   : Container(),
                             ],
-                          )),
-                        ],
-                      ),
-                    )
-                    .toList();
-              } else {
-                return [
-                  const DataRow(
-                    cells: <DataCell>[
-                      DataCell(
-                        Text('-'),
-                      ),
-                      DataCell(
-                        Text('Belum ada aktivitas'),
-                      ),
-                    ],
+                          ),
+                        ),
+                      ],
+                    ),
                   )
-                ];
-              }
-            }());
+                  .toList();
+            } else {
+              return [
+                const DataRow(
+                  cells: <DataCell>[
+                    DataCell(
+                      Text('-'),
+                    ),
+                    DataCell(
+                      Text('Belum ada aktivitas'),
+                    ),
+                  ],
+                )
+              ];
+            }
+          }(),
+        );
       },
     );
   }
@@ -393,38 +395,40 @@ class _PopUpMenuActivity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formCalendarActivityBloc =
-        BlocProvider.of<FormCalendarActivityCubit>(context);
-    final calendarBloc = BlocProvider.of<CalendarCubit>(context);
+    final formCalendarActivityBloc = context.read<FormCalendarActivityCubit>();
+    final calendarBloc = context.read<CalendarCubit>();
 
     confirmDeleteDialog(CalendarModel event) {
-      // set up the buttons
       Widget cancelButton = TextButton(
-        child: const Text("No"),
+        child: const Text("Tidak"),
         onPressed: () {
-          Navigator.pop(context);
+          context.pop();
         },
       );
       Widget continueButton = TextButton(
-        child: const Text(
-          "Yes",
-          style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+        style: TextButton.styleFrom(
+          backgroundColor: Theme.of(context).colorScheme.errorContainer,
+        ),
+        child: Text(
+          "Iya",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onErrorContainer,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         onPressed: () async {
-          calendarBloc.deleteCalendarByDocId(event.documentID!);
-          Navigator.pop(context);
+          calendarBloc.deleteCalendarByDocId(event.id!);
+          context.pop();
         },
       );
-      // set up the AlertDialog
       AlertDialog alert = AlertDialog(
         title: const Text("Konfirmasi"),
-        content: Text("Anda yakin akan menghapus?\n\n${event.activity}"),
+        content: Text("Anda yakin akan menghapus?\n${event.activity}"),
         actions: [
           cancelButton,
           continueButton,
         ],
       );
-      // show the dialog
       return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -436,15 +440,13 @@ class _PopUpMenuActivity extends StatelessWidget {
     return PopupMenuButton(
       onSelected: (item) {
         if (item == 0) {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => BlocProvider.value(
-                        value: formCalendarActivityBloc,
-                        child: UpdateEventKalenderScreen(
-                          calendarModel: event,
-                        ),
-                      )));
+          context.pushNamed(
+            CalendarRouter.updateCalendarRoute.name,
+            extra: UpdateEventCalendarScreenExtra(
+              calendarModel: event,
+              formCalendarActivityCubit: formCalendarActivityBloc,
+            ),
+          );
         } else if (item == 1) {
           confirmDeleteDialog(event);
         }
@@ -457,26 +459,34 @@ class _PopUpMenuActivity extends StatelessWidget {
         PopupMenuItem<int>(
           value: 0,
           child: Row(
-            children: const [
+            children: [
               FaIcon(
                 FontAwesomeIcons.penToSquare,
-                color: Colors.blue,
+                color: Theme.of(context).primaryColor,
+                size: 16,
               ),
               SizedBox(width: 10),
-              Text("Ubah"),
+              Text(
+                "Ubah",
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
             ],
           ),
         ),
         PopupMenuItem<int>(
           value: 1,
           child: Row(
-            children: const [
+            children: [
               FaIcon(
                 FontAwesomeIcons.trashCan,
-                color: Colors.red,
+                color: Theme.of(context).colorScheme.error,
+                size: 16,
               ),
               SizedBox(width: 10),
-              Text("Hapus"),
+              Text(
+                "Hapus",
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
             ],
           ),
         ),
