@@ -1,9 +1,11 @@
-import 'package:eimunisasi_nakes/core/widgets/profile_card.dart';
+import 'package:eimunisasi_nakes/core/extension/context_ext.dart';
+import 'package:eimunisasi_nakes/features/profile/presentation/widgets/profile_card.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
-import 'package:eimunisasi_nakes/features/profile/presentation/screens/detail_profile_screen.dart';
+import 'package:eimunisasi_nakes/routers/route_paths/root_route_paths.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -49,7 +51,7 @@ class _LogoutButton extends StatelessWidget {
               key: const Key('logout_continue_raisedButton'),
               style: ElevatedButton.styleFrom(
                 elevation: 0,
-                backgroundColor: Colors.red[700],
+                backgroundColor: context.theme.colorScheme.error,
               ),
               onPressed: () =>
                   context.read<AuthenticationBloc>().add(LoggedOut()),
@@ -57,9 +59,7 @@ class _LogoutButton extends StatelessWidget {
                 children: [
                   FaIcon(FontAwesomeIcons.arrowRightFromBracket),
                   SizedBox(width: 10),
-                  Text(
-                    'Keluar',
-                  ),
+                  Text('Keluar'),
                 ],
               ),
             ),
@@ -84,17 +84,13 @@ class _MyProfileButton extends StatelessWidget {
           alignment: Alignment.centerLeft,
         ),
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return const DetailProfileScreen();
-          }));
+          context.pushNamed(RootRoutePaths.profile.name);
         },
         child: const Row(
           children: [
             FaIcon(FontAwesomeIcons.userNurse),
             SizedBox(width: 10),
-            Text(
-              'Tenaga Kesehatan',
-            ),
+            Text('Tenaga Kesehatan'),
           ],
         ),
       ),
