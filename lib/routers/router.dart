@@ -5,6 +5,7 @@ import 'package:eimunisasi_nakes/routers/appointment_router.dart';
 import 'package:eimunisasi_nakes/routers/calendar_router.dart';
 import 'package:eimunisasi_nakes/routers/clinic_router.dart';
 import 'package:eimunisasi_nakes/routers/medical_record_router.dart';
+import 'package:eimunisasi_nakes/routers/profile_router.dart';
 import 'package:eimunisasi_nakes/routers/route_paths/auth_route_paths.dart';
 import 'package:eimunisasi_nakes/routers/route_paths/root_route_paths.dart';
 import 'package:flutter/material.dart';
@@ -115,6 +116,7 @@ final router = GoRouter(
       builder: (context, state) {
         return DetailProfileScreen();
       },
+      routes: ProfileRouter.routes,
     ),
     GoRoute(
       name: RootRoutePaths.error.name,
