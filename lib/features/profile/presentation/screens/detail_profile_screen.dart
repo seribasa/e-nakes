@@ -1,5 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:eimunisasi_nakes/core/extension/context_ext.dart';
 import 'package:eimunisasi_nakes/core/widgets/custom_text_field.dart';
 import 'package:eimunisasi_nakes/features/authentication/data/models/user.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
@@ -14,6 +12,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/widgets/image_picker.dart';
+import '../../../../core/widgets/profile_picture.dart';
 import '../../../../injection.dart';
 
 class DetailProfileScreen extends StatelessWidget {
@@ -23,14 +22,17 @@ class DetailProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<ProfileBloc>(
       create: (context) => getIt<ProfileBloc>(),
-      child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        builder: (context, state) {
-          if (state is Authenticated) {
-            return Scaffold(
-              appBar: AppBar(
-                title: const Text('Profile saya'),
-              ),
-              body: SingleChildScrollView(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Profile saya'),
+        ),
+        body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          builder: (context, state) {
+            if (state is Loading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (state is Authenticated) {
+              return SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
@@ -51,11 +53,11 @@ class DetailProfileScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-              ),
-            );
-          }
-          return Container();
-        },
+              );
+            }
+            return SizedBox();
+          },
+        ),
       ),
     );
   }
@@ -96,49 +98,16 @@ class _ProfilePicture extends StatelessWidget {
               content: Text('Berhasil mengganti foto profil'),
             ),
           );
+          context.read<AuthenticationBloc>().add(AppStarted());
         }
       },
       buildWhen: (previous, current) =>
           previous.updateAvatarStatus != current.updateAvatarStatus,
       builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5),
-          child: CircleAvatar(
-            radius: 50.0,
-            backgroundColor: imageUrl == null
-                ? context.theme.colorScheme.primary
-                : Colors.transparent,
-            backgroundImage: imageUrl != null
-                ? CachedNetworkImageProvider(imageUrl!, scale: 0.1)
-                : null,
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: CircleAvatar(
-                backgroundColor: context.theme.colorScheme.secondary,
-                radius: 15,
-                child: Builder(
-                  builder: (context) {
-                    if (state.updateAvatarStatus?.isInProgress == true) {
-                      return const CircularProgressIndicator(
-                        strokeWidth: 2,
-                        strokeCap: StrokeCap.round,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      );
-                    }
-                    return IconButton(
-                      padding: EdgeInsets.zero,
-                      icon: Icon(
-                        Icons.photo_camera,
-                        size: 15.0,
-                        color: context.theme.colorScheme.onSecondary,
-                      ),
-                      onPressed: showAndSaveImage,
-                    );
-                  },
-                ),
-              ),
-            ),
-          ),
+        return ProfilePictureFromUrl(
+          url: 'imageUrl',
+          isLoading: state.updateAvatarStatus?.isInProgress == true,
+          onPressedCamera: showAndSaveImage,
         );
       },
     );
