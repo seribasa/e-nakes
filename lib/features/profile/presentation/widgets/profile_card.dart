@@ -5,25 +5,36 @@ class ProfileCard extends StatelessWidget {
   final String? nama;
   final String? pekerjaan;
   final String? urlGambar;
-  const ProfileCard(
-      {super.key, this.nama, this.pekerjaan, required this.urlGambar});
+  const ProfileCard({
+    super.key,
+    this.nama,
+    this.pekerjaan,
+    required this.urlGambar,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: CircleAvatar(
         radius: 25,
-        backgroundImage:
-            urlGambar != null ? CachedNetworkImageProvider(urlGambar!) : null,
+        backgroundImage: urlGambar != null
+            ? CachedNetworkImageProvider(
+                urlGambar!,
+              )
+            : null,
       ),
       title: Text(
         nama ?? '',
-        style:
-            const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        style: const TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),
       ),
       subtitle: Text(
         pekerjaan ?? '',
-        style: const TextStyle(color: Colors.black),
+        style: const TextStyle(
+          color: Colors.black,
+        ),
       ),
     );
   }

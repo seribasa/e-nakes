@@ -54,7 +54,7 @@ jobs:
           echo "" >> ${{ github.workspace }}/android/local.properties
           echo "sdk.dir=$ANDROID_SDK_PATH" >> ${{ github.workspace }}/android/local.properties          
           echo "flutter.compileSdkVersion=34" >> ${{ github.workspace }}/android/local.properties
-          echo "flutter.minSdkVersion=32" >> ${{ github.workspace }}/android/local.properties
+          echo "flutter.minSdkVersion=23" >> ${{ github.workspace }}/android/local.properties
           echo "flutter.targetSdkVersion=34" >> ${{ github.workspace }}/android/local.properties
           cat ${{ github.workspace }}/android/local.properties
           

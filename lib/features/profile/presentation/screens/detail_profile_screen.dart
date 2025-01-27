@@ -1,16 +1,18 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eimunisasi_nakes/core/widgets/custom_text_field.dart';
 import 'package:eimunisasi_nakes/features/authentication/data/models/user.dart';
-import 'package:eimunisasi_nakes/features/authentication/data/repositories/user_repository.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
+import 'package:eimunisasi_nakes/features/profile/presentation/logic/profile_bloc/profile_bloc.dart';
 import 'package:eimunisasi_nakes/features/profile/presentation/screens/form_ganti_pin_screen.dart';
-import 'package:eimunisasi_nakes/features/profile/presentation/screens/profile_nakes_screen.dart';
+import 'package:eimunisasi_nakes/routers/profile_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:formz/formz.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/widgets/image_picker.dart';
+import '../../../../core/widgets/profile_picture.dart';
 import '../../../../injection.dart';
 
 class DetailProfileScreen extends StatelessWidget {
@@ -18,39 +20,45 @@ class DetailProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-      builder: (context, state) {
-        if (state is Authenticated) {
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text('Profile saya'),
-            ),
-            body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                        child: _ProfilePicture(
-                      imageUrl: state.user?.photo,
-                    )),
-                    const SizedBox(height: 10),
-                    _ProfilNakesSection(
-                      user: state.user,
-                    ),
-                    const SizedBox(height: 10),
-                    _InformasiAkunSection(
-                      user: state.user,
-                    ),
-                  ],
+    return BlocProvider<ProfileBloc>(
+      create: (context) => getIt<ProfileBloc>(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Profile saya'),
+        ),
+        body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          builder: (context, state) {
+            if (state is Loading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (state is Authenticated) {
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                          child: _ProfilePicture(
+                        imageUrl: state.user?.photo,
+                      )),
+                      const SizedBox(height: 10),
+                      _ProfilNakesSection(
+                        user: state.user,
+                      ),
+                      const SizedBox(height: 10),
+                      _InformasiAkunSection(
+                        user: state.user,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ),
-          );
-        }
-        return Container();
-      },
+              );
+            }
+            return SizedBox();
+          },
+        ),
+      ),
     );
   }
 }
@@ -61,99 +69,47 @@ class _ProfilePicture extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userRepository = getIt<UserRepository>();
     Future<void> showAndSaveImage() async {
-      ModalPickerImage().showPicker(context, (val) {
-        if (val != null) {
-          userRepository
-              .updateUserAvatar(val)
-              .then(
-                (value) => ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Berhasil mengubah foto profil'),
-                  ),
-                ),
-              )
-              .catchError(
-                (e) => ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Gagal mengubah foto profil'),
-                  ),
-                ),
-              );
-        }
-      });
+      if (context.mounted) {
+        final modalPickerImage = ModalPickerImage();
+        modalPickerImage.showPicker(
+          context,
+          (file) {
+            context.read<ProfileBloc>().add(ChangeAvatar(file));
+          },
+        );
+      }
     }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: Column(
-        children: [
-          imageUrl == null
-              ? CircleAvatar(
-                  foregroundColor: Colors.white,
-                  radius: 50.0,
-                  child: Stack(
-                    children: [
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: CircleAvatar(
-                          foregroundColor: Colors.white,
-                          backgroundColor:
-                              Theme.of(context).colorScheme.secondary,
-                          radius: 15,
-                          child: IconButton(
-                              alignment: Alignment.center,
-                              icon: const Icon(
-                                Icons.photo_camera,
-                                size: 15.0,
-                              ),
-                              onPressed: () async {
-                                showAndSaveImage();
-                              }),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              : CircleAvatar(
-                  radius: 50.0,
-                  backgroundColor: Colors.transparent,
-                  backgroundImage: const CachedNetworkImageProvider(
-                      'https://i.pinimg.com/originals/d2/4d/db/d24ddb8271b8ea9b4bbf4b67df8cbc01.gif',
-                      scale: 0.1),
-                  child: Stack(
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: CircleAvatar(
-                          radius: 50,
-                          backgroundColor: Colors.transparent,
-                          backgroundImage: CachedNetworkImageProvider(
-                              imageUrl ?? '',
-                              scale: 0.1),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: CircleAvatar(
-                          radius: 15,
-                          child: IconButton(
-                              alignment: Alignment.center,
-                              icon: const Icon(
-                                Icons.photo_camera,
-                                size: 15.0,
-                              ),
-                              onPressed: () async {
-                                showAndSaveImage();
-                              }),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-        ],
-      ),
+    return BlocConsumer<ProfileBloc, ProfileState>(
+      listenWhen: (previous, current) =>
+          previous.updateAvatarStatus != current.updateAvatarStatus,
+      listener: (context, state) {
+        if (state.updateAvatarStatus?.isFailure == true) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Gagal mengganti foto profil'),
+            ),
+          );
+        }
+        if (state.updateAvatarStatus?.isSuccess == true) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Berhasil mengganti foto profil'),
+            ),
+          );
+          context.read<AuthenticationBloc>().add(AppStarted());
+        }
+      },
+      buildWhen: (previous, current) =>
+          previous.updateAvatarStatus != current.updateAvatarStatus,
+      builder: (context, state) {
+        return ProfilePictureFromUrl(
+          url: 'imageUrl',
+          isLoading: state.updateAvatarStatus?.isInProgress == true,
+          onPressedCamera: showAndSaveImage,
+        );
+      },
     );
   }
 }
@@ -563,17 +519,13 @@ class _ProfileViewButton extends StatelessWidget {
           alignment: Alignment.centerLeft,
         ),
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return const ProfileNakesScreen();
-          }));
+          context.pushNamed(ProfileRouter.showProfileRoute.name);
         },
         child: Row(
           children: const [
             FaIcon(FontAwesomeIcons.usersViewfinder),
             SizedBox(width: 10),
-            Text(
-              'Lihat Sebagai',
-            ),
+            Text('Lihat Sebagai'),
           ],
         ),
       ),
