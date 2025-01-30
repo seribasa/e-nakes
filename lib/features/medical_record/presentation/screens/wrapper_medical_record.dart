@@ -1,4 +1,5 @@
-import 'package:eimunisasi_nakes/features/klinik/logic/bloc/klinik_bloc/klinik_bloc.dart';
+import 'package:eimunisasi_nakes/features/clinic/logic/bloc/clinic_bloc/clinic_bloc.dart';
+import 'package:eimunisasi_nakes/injection.dart';
 import 'package:eimunisasi_nakes/routers/medical_record_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +12,7 @@ class WrapperRekamMedis extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => KlinikBloc(),
+      create: (context) => getIt<ClinicBloc>(),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Rekam Medis'),
@@ -35,7 +36,7 @@ class _PemeriksaanButton extends StatelessWidget {
   const _PemeriksaanButton();
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<KlinikBloc, KlinikState>(
+    return BlocBuilder<ClinicBloc, ClinicState>(
       builder: (context, state) {
         return SizedBox(
           height: 50,

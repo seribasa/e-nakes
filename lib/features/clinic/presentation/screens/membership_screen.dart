@@ -1,5 +1,5 @@
-import 'package:eimunisasi_nakes/features/klinik/data/models/anggota_klinik.dart';
-import 'package:eimunisasi_nakes/features/klinik/logic/bloc/klinik_bloc/klinik_bloc.dart';
+import 'package:eimunisasi_nakes/features/clinic/data/models/clinic_member_model.dart';
+import 'package:eimunisasi_nakes/features/clinic/logic/bloc/clinic_bloc/clinic_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,17 +15,17 @@ class KeanggotaanKlinikScreen extends StatelessWidget {
       body: SingleChildScrollView(
           child: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: BlocBuilder<KlinikBloc, KlinikState>(
+        child: BlocBuilder<ClinicBloc, ClinicState>(
           builder: (context, state) {
-            if (state is KlinikLoading) {
+            if (state is ClinicLoading) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
-            } else if (state is KlinikFailure) {
+            } else if (state is ClinicFailure) {
               return const Center(
                 child: Text('Data gagal dimuat'),
               );
-            } else if (state is KlinikFetchDataAnggota) {
+            } else if (state is ClinicMemberDataFetched) {
               return Column(
                 children: [
                   _RowAnggotaKlinik(
@@ -45,7 +45,7 @@ class KeanggotaanKlinikScreen extends StatelessWidget {
 }
 
 class _RowAnggotaKlinik extends StatelessWidget {
-  final List<AnggotaKlinik>? data;
+  final List<ClinicMemberModel>? data;
   const _RowAnggotaKlinik({this.data});
 
   @override
@@ -62,9 +62,9 @@ class _RowAnggotaKlinik extends StatelessWidget {
         const Divider(
           thickness: 2,
         ),
-        for (final AnggotaKlinik? anggota in data ?? [])
+        for (final ClinicMemberModel? anggota in data ?? [])
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text(anggota?.uid ?? '', style: const TextStyle(fontSize: 15)),
+            Text(anggota?.healthWorkerId ?? '', style: const TextStyle(fontSize: 15)),
             const Text('bidan', style: TextStyle(fontSize: 15)),
           ]),
         const Divider(),

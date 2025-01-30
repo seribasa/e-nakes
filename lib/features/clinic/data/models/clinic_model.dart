@@ -17,6 +17,8 @@ class ClinicModel extends Equatable {
     this.schedules = const [],
   });
 
+  static const tableName = 'clinics';
+
   @override
   List<Object?> get props => [
     id,

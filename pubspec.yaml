@@ -39,6 +39,7 @@ dependencies:
   supabase_flutter: ^2.8.0
   injectable: ^2.4.4
   get_it: ^7.7.0
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

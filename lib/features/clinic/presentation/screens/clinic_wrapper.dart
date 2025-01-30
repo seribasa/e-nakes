@@ -1,6 +1,7 @@
-import 'package:eimunisasi_nakes/features/klinik/logic/bloc/klinik_bloc/klinik_bloc.dart';
-import 'package:eimunisasi_nakes/features/klinik/presentation/screens/keanggotaan_screen.dart';
-import 'package:eimunisasi_nakes/features/klinik/presentation/screens/profile_klinik_screen.dart';
+import 'package:eimunisasi_nakes/features/clinic/logic/bloc/clinic_bloc/clinic_bloc.dart';
+import 'package:eimunisasi_nakes/features/clinic/presentation/screens/membership_screen.dart';
+import 'package:eimunisasi_nakes/features/clinic/presentation/screens/clinic_profile_screen.dart';
+import 'package:eimunisasi_nakes/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -13,7 +14,7 @@ class WrapperKlinik extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => KlinikBloc(),
+      create: (context) => getIt<ClinicBloc>(),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Klinik'),
@@ -38,7 +39,7 @@ class _KlinikProfileButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = context.read<AuthenticationBloc>().state.user;
-    return BlocBuilder<KlinikBloc, KlinikState>(
+    return BlocBuilder<ClinicBloc, ClinicState>(
       builder: (context, state) {
         return SizedBox(
           height: 50,
@@ -54,8 +55,8 @@ class _KlinikProfileButton extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => BlocProvider(
-                    create: (context) => KlinikBloc()
-                      ..add(KlinikProfilePressed(clinicId: user?.clinic?.id)),
+                    create: (context) => getIt<ClinicBloc>()
+                      ..add(ClinicProfileSelected(clinicId: user?.clinic?.id)),
                     child: const ProfileKlinikScreen(),
                   ),
                 ),
@@ -96,8 +97,8 @@ class _KlinikKeanggotaanButton extends StatelessWidget {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => BlocProvider(
-                create: (context) => KlinikBloc()
-                  ..add(KlinikKeanggotaanPressed(clinicId: user?.clinic?.id)),
+                create: (context) => getIt<ClinicBloc>()
+                  ..add(ClinicMembershipSelected(clinicId: user?.clinic?.id)),
                 child: const KeanggotaanKlinikScreen(),
               ),
             ),

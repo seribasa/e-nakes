@@ -1,7 +1,7 @@
 import 'package:eimunisasi_nakes/routers/route_paths/root_route_paths.dart';
 import 'package:go_router/go_router.dart';
 
-import '../features/klinik/presentation/screens/wrapper_klinik.dart';
+import '../features/clinic/presentation/screens/clinic_wrapper.dart';
 import 'models/route_model.dart';
 
 class ClinicRouter {

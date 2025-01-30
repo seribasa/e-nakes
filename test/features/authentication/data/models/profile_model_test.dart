@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:eimunisasi_nakes/features/authentication/data/models/user.dart';
-import 'package:eimunisasi_nakes/features/klinik/data/models/klinik.dart';
+import 'package:eimunisasi_nakes/features/clinic/data/models/clinic_model.dart';
 
 void main() {
   group('ProfileModel', () {

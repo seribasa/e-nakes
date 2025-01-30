@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:eimunisasi_nakes/features/klinik/logic/bloc/klinik_bloc/klinik_bloc.dart';
+import 'package:eimunisasi_nakes/features/clinic/logic/bloc/clinic_bloc/clinic_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -21,33 +21,33 @@ class ProfileKlinikScreen extends StatelessWidget {
           child: Padding(
         padding: const EdgeInsets.all(20.0),
         // child: GetUserName(),
-        child: BlocBuilder<KlinikBloc, KlinikState>(
+        child: BlocBuilder<ClinicBloc, ClinicState>(
           builder: (context, state) {
-            if (state is KlinikLoading) {
+            if (state is ClinicLoading) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
-            } else if (state is KlinikFailure) {
+            } else if (state is ClinicFailure) {
               return const Center(
                 child: Text('Data gagal dimuat'),
               );
-            } else if (state is KlinikFetchData) {
+            } else if (state is ClinicFetchData) {
               return Column(
                 children: [
                   _NamaKlinik(
-                    namaKlinik: state.klinik?.name,
+                    namaKlinik: state.clinic?.name,
                   ),
-                  _MottoKlinik(mottoKlinik: state.klinik?.motto),
+                  _MottoKlinik(mottoKlinik: state.clinic?.motto),
                   _GambarKlinik(
-                    gambarKlinikUrl: state.klinik?.photos,
+                    gambarKlinikUrl: state.clinic?.photos,
                   ),
                   _KontakCardKlinik(
-                    nomorTelepon: state.klinik?.phoneNumber,
-                    alamat: state.klinik?.address,
-                    namaKlinik: state.klinik?.name,
+                    nomorTelepon: state.clinic?.phoneNumber,
+                    alamat: state.clinic?.address,
+                    namaKlinik: state.clinic?.name,
                   ),
                   _JadwalKlinik(
-                    jadwal: state.klinik?.schedules,
+                    jadwal: state.clinic?.schedules,
                   ),
                 ],
               );
@@ -108,9 +108,7 @@ class _KontakCardKlinik extends StatelessWidget {
   final String? alamat;
   final String? namaKlinik;
   const _KontakCardKlinik(
-      {required this.nomorTelepon,
-      required this.namaKlinik,
-      this.alamat});
+      {required this.nomorTelepon, required this.namaKlinik, this.alamat});
 
   @override
   Widget build(BuildContext context) {
@@ -213,7 +211,7 @@ class _JadwalKlinik extends StatelessWidget {
             if (jadwal == null) {
               return const Center(child: Text('Tidak ada jadwal'));
             }
-            final length = jadwal?.length  ?? 0;
+            final length = jadwal?.length ?? 0;
             List<Widget> list = [];
             for (int i = 0; i < length; i++) {
               list.add(
