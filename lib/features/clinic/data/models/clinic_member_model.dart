@@ -1,10 +1,15 @@
 import 'package:equatable/equatable.dart';
 
 class ClinicMemberModel extends Equatable {
-  final String? healthWorkerName, healthWorkerId, clinicId, clinicName;
+  final String? healthWorkerName,
+      healthWorkerId,
+      healthWorkerProfession,
+      clinicId,
+      clinicName;
   const ClinicMemberModel({
     this.healthWorkerName,
     this.healthWorkerId,
+    this.healthWorkerProfession,
     this.clinicId,
     this.clinicName,
   });
@@ -13,6 +18,7 @@ class ClinicMemberModel extends Equatable {
     return ClinicMemberModel(
       healthWorkerName: data['full_name'],
       healthWorkerId: data['user_id'],
+      healthWorkerProfession: data['profession'],
       clinicId: data['clinic']?['id'],
       clinicName: data['clinic']?['name'],
     );
@@ -22,6 +28,7 @@ class ClinicMemberModel extends Equatable {
     return {
       if (healthWorkerName != null) "full_name": healthWorkerName,
       if (healthWorkerId != null) "user_id": healthWorkerId,
+      if (healthWorkerProfession != null) "profession": healthWorkerProfession,
       if (clinicId != null || clinicName != null)
         "clinic": {
           if (clinicId != null) "id": clinicId,
@@ -34,6 +41,7 @@ class ClinicMemberModel extends Equatable {
   List<Object?> get props => [
         healthWorkerName,
         healthWorkerId,
+        healthWorkerProfession,
         clinicId,
         clinicName,
       ];

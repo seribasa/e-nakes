@@ -1,3 +1,4 @@
+import 'package:eimunisasi_nakes/core/extension/context_ext.dart';
 import 'package:eimunisasi_nakes/features/clinic/data/models/clinic_member_model.dart';
 import 'package:eimunisasi_nakes/features/clinic/logic/bloc/clinic_bloc/clinic_bloc.dart';
 import 'package:flutter/material.dart';
@@ -42,13 +43,7 @@ class _ClinicMembershipScaffold extends StatelessWidget {
                 child: Text('Data gagal dimuat'),
               );
             } else if (state is ClinicMemberDataFetched) {
-              return Column(
-                children: [
-                  _RowAnggotaKlinik(
-                    data: state.data,
-                  ),
-                ],
-              );
+              return _RowAnggotaKlinik(data: state.data);
             }
             return const Center(
               child: CircularProgressIndicator(),
@@ -66,25 +61,49 @@ class _RowAnggotaKlinik extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Table(
+      columnWidths: const {
+        0: FlexColumnWidth(2),
+        1: FlexColumnWidth(1),
+      },
       children: [
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: const [
-          Text('Anggota',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          Text('Profesi',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-        ]),
-        const SizedBox(height: 10),
-        const Divider(
-          thickness: 2,
+        TableRow(
+          children: [
+            TableCell(
+              child: Text(
+                'Anggota',
+                style: context.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            TableCell(
+              child: Text(
+                'Profesi',
+                style: context.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
         ),
-        for (final ClinicMemberModel? anggota in data ?? [])
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text(anggota?.healthWorkerId ?? '',
-                style: const TextStyle(fontSize: 15)),
-            const Text('bidan', style: TextStyle(fontSize: 15)),
-          ]),
-        const Divider(),
+        for (final member in data ?? [])
+          TableRow(
+            children: [
+              TableCell(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Text(member.healthWorkerName ?? ''),
+                ),
+              ),
+              TableCell(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Text(member.healthWorkerProfession ?? ''),
+                ),
+              ),
+            ],
+          ),
       ],
     );
   }
