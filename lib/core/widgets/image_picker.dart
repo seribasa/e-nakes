@@ -9,7 +9,7 @@ import 'package:image_picker/image_picker.dart';
 class ModalPickerImage {
   final UserRepository _userRepository = getIt<UserRepository>();
 
-  Future<String> uploadFirebase(context, File image) async =>
+  Future<String> uploadImage(context, File image) async =>
       await _userRepository.uploadImage(image);
 
   FutureOr<File?> _imgFromCamera(context) async {
@@ -48,7 +48,7 @@ class ModalPickerImage {
                     onTap: () async {
                       final image = await _imgFromGallery(context);
                       if (image != null) {
-                        uploadFirebase(context, image)
+                        uploadImage(context, image)
                             .then((value) => callback(value))
                             .catchError((e) => callback(null));
                       }
@@ -63,7 +63,7 @@ class ModalPickerImage {
                   onTap: () async {
                     final image = await _imgFromCamera(context);
                     if (image != null) {
-                      uploadFirebase(context, image)
+                      uploadImage(context, image)
                           .then((value) => callback(value))
                           .catchError((e) => callback(null));
                     }

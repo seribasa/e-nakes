@@ -1,9 +1,7 @@
-import 'package:eimunisasi_nakes/firebase_options.dart';
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'app.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,9 +20,5 @@ void main() async {
     Bloc.observer = AppBlocObserver();
   }
   await configureDependencies();
-  await Firebase.initializeApp(
-    name: "E-Imunisasi-Nakes",
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
   runApp(App());
 }
