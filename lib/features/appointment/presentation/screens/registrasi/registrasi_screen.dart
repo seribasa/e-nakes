@@ -1,6 +1,7 @@
-import 'package:eimunisasi_nakes/features/appointment/presentation/screens/registrasi/qrcode_screen.dart';
+import 'package:eimunisasi_nakes/routers/medical_record_router.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 class RegistrasiScreen extends StatelessWidget {
   const RegistrasiScreen({super.key});
@@ -17,8 +18,7 @@ class RegistrasiScreen extends StatelessWidget {
           children: [
             QRScanButton(
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const QrRegistrasiPemeriksaan()));
+                context.pushNamed(MedicalRecordRouter.checkupScanRoute.name);
               },
             ),
             const SizedBox(height: 10),

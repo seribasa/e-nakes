@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:eimunisasi_nakes/features/appointment/logic/appointment_cubit/appointment_cubit.dart';
-import 'package:eimunisasi_nakes/injection.dart';
 import 'package:eimunisasi_nakes/routers/medical_record_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +10,6 @@ import 'package:intl/intl.dart';
 import '../../../../routers/appointment_router.dart';
 import '../../../../routers/calendar_router.dart';
 import '../../../../routers/clinic_router.dart';
-import '../../../appointment/presentation/screens/appointment_history/appointment_screen.dart';
 import '../../../authentication/data/models/user.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -200,13 +198,8 @@ class _AppoinmentToday extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => BlocProvider(
-                              create: (context) =>
-                                  getIt<AppointmentCubit>()..getAllJadwal(),
-                              child: const RiwayatJanjiScreen(),
-                            )),
+                  context.pushNamed(
+                    AppointmentRouter.historiesRoute.name,
                   );
                 },
                 child: const Text(

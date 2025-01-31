@@ -1,9 +1,10 @@
 import 'package:eimunisasi_nakes/core/widgets/profile_card.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
-import 'package:eimunisasi_nakes/features/profile/presentation/screens/detail_profile_screen.dart';
+import 'package:eimunisasi_nakes/routers/auth_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -84,9 +85,7 @@ class _MyProfileButton extends StatelessWidget {
           alignment: Alignment.centerLeft,
         ),
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return const DetailProfileScreen();
-          }));
+          context.pushNamed(AuthRouter.profileRoute.name);
         },
         child: const Row(
           children: [

@@ -112,9 +112,10 @@ class _GambarNakes extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: CachedNetworkImage(
-          fit: BoxFit.cover,
-          imageUrl: gambarNakesUrl?.last ??
-              'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png'),
+        fit: BoxFit.cover,
+        imageUrl: gambarNakesUrl?.last ??
+            'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png',
+      ),
     );
   }
 }

@@ -1,8 +1,9 @@
 import 'package:eimunisasi_nakes/core/widgets/error.dart';
 import 'package:eimunisasi_nakes/features/appointment/logic/appointment_cubit/appointment_cubit.dart';
-import 'package:eimunisasi_nakes/features/appointment/presentation/screens/appointment_history/appointment_detail_screen.dart';
+import 'package:eimunisasi_nakes/routers/appointment_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../injection.dart';
@@ -98,12 +99,9 @@ class _ListDate extends StatelessWidget {
                           ),
                           subtitle: Text(appointment.note ?? '-'),
                           onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => RiwayatJanjiDetailScreen(
-                                  id: appointment.id ?? '',
-                                ),
-                              ),
+                            context.pushNamed(
+                              AppointmentRouter.historyDetailRoute.name,
+                              pathParameters: {'id': appointment.id ?? ''},
                             );
                           },
                         ),

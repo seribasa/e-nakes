@@ -21,16 +21,6 @@ class ClinicRouter {
     parent: wrapperRoute,
   );
 
-  // Navigator.of(context).push(
-  //   MaterialPageRoute(
-  //     builder: (context) => BlocProvider(
-  //       create: (context) => getIt<ClinicBloc>()
-  //         ..add(ClinicMembershipSelected(clinicId: user?.clinic?.id)),
-  //       child: const ClinicMembershipScreen(),
-  //     ),
-  //   ),
-  // );
-
   static const RouteModel clinicMembershipRoute = RouteModel(
     name: 'clinicMembership',
     path: 'membership',

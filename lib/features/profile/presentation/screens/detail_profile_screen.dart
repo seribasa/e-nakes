@@ -3,7 +3,6 @@ import 'package:eimunisasi_nakes/core/widgets/custom_text_field.dart';
 import 'package:eimunisasi_nakes/features/authentication/data/models/user.dart';
 import 'package:eimunisasi_nakes/features/authentication/data/repositories/user_repository.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
-import 'package:eimunisasi_nakes/features/profile/presentation/screens/form_ganti_pin_screen.dart';
 import 'package:eimunisasi_nakes/features/profile/presentation/screens/profile_nakes_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -63,26 +62,29 @@ class _ProfilePicture extends StatelessWidget {
   Widget build(BuildContext context) {
     final userRepository = getIt<UserRepository>();
     Future<void> showAndSaveImage() async {
-      ModalPickerImage().showPicker(context, (val) {
-        if (val != null) {
-          userRepository
-              .updateUserAvatar(val)
-              .then(
-                (value) => ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Berhasil mengubah foto profil'),
+      ModalPickerImage().showPicker(
+        context,
+        (val) {
+          if (val != null) {
+            userRepository
+                .updateUserAvatar(val)
+                .then(
+                  (value) => ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Berhasil mengubah foto profil'),
+                    ),
                   ),
-                ),
-              )
-              .catchError(
-                (e) => ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Gagal mengubah foto profil'),
+                )
+                .catchError(
+                  (e) => ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Gagal mengubah foto profil'),
+                    ),
                   ),
-                ),
-              );
-        }
-      });
+                );
+          }
+        },
+      );
     }
 
     return Padding(
@@ -491,60 +493,6 @@ class _NomorHPForm extends StatelessWidget {
           keyboardType: TextInputType.number,
         ),
       ],
-    );
-  }
-}
-
-class _GantiPasscodeButton extends StatelessWidget {
-  const _GantiPasscodeButton();
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      width: double.infinity,
-      child: ElevatedButton(
-        key: const Key('my_profile_raisedButton'),
-        style: ElevatedButton.styleFrom(
-          alignment: Alignment.centerLeft,
-        ),
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return const GantiPINScreen();
-          }));
-        },
-        child: Row(
-          children: const [
-            FaIcon(FontAwesomeIcons.lock),
-            SizedBox(width: 10),
-            Text(
-              'Ganti PIN',
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _SaveButton extends StatelessWidget {
-  const _SaveButton();
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 50,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            shape:
-                const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
-        child: const Text("Simpan"),
-        onPressed: () {
-          // Navigator.push(context, MaterialPageRoute(builder: (context) {
-          //   return GrafikPemeriksaanScreen();
-          // }));
-        },
-      ),
     );
   }
 }

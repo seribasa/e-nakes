@@ -1,4 +1,3 @@
-import 'package:eimunisasi_nakes/features/appointment/presentation/screens/registrasi/registrasi_screen.dart';
 import 'package:eimunisasi_nakes/routers/appointment_router.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -49,40 +48,6 @@ class _RiwayatJanjiButton extends StatelessWidget {
             SizedBox(width: 10),
             Text(
               'Riwayat Janji',
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _RegistrasiButton extends StatelessWidget {
-  const _RegistrasiButton();
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      width: double.infinity,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          alignment: Alignment.centerLeft,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const RegistrasiScreen()),
-          );
-        },
-        child: Row(
-          children: const [
-            FaIcon(FontAwesomeIcons.registered),
-            SizedBox(width: 10),
-            Text(
-              'Registrasi',
             ),
           ],
         ),
