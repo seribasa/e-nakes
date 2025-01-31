@@ -6,10 +6,27 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/common/method_helper.dart';
+import '../../../../injection.dart';
 import '../../../authentication/data/models/user.dart';
 
-class ProfileKlinikScreen extends StatelessWidget {
-  const ProfileKlinikScreen({super.key});
+class ClinicProfileScreen extends StatelessWidget {
+  final String id;
+  const ClinicProfileScreen({super.key, required this.id});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => getIt<ClinicBloc>()
+        ..add(
+          ClinicProfileSelected(clinicId: id),
+        ),
+      child: const _ClinicProfileScaffold(),
+    );
+  }
+}
+
+class _ClinicProfileScaffold extends StatelessWidget {
+  const _ClinicProfileScaffold();
 
   @override
   Widget build(BuildContext context) {

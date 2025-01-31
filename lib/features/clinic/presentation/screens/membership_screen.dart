@@ -3,8 +3,24 @@ import 'package:eimunisasi_nakes/features/clinic/logic/bloc/clinic_bloc/clinic_b
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class KeanggotaanKlinikScreen extends StatelessWidget {
-  const KeanggotaanKlinikScreen({super.key});
+import '../../../../injection.dart';
+
+class ClinicMembershipScreen extends StatelessWidget {
+  final String clinicId;
+  const ClinicMembershipScreen({super.key, required this.clinicId});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => getIt<ClinicBloc>()
+        ..add(ClinicMembershipSelected(clinicId: clinicId)),
+      child: const _ClinicMembershipScaffold(),
+    );
+  }
+}
+
+class _ClinicMembershipScaffold extends StatelessWidget {
+  const _ClinicMembershipScaffold();
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +80,8 @@ class _RowAnggotaKlinik extends StatelessWidget {
         ),
         for (final ClinicMemberModel? anggota in data ?? [])
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text(anggota?.healthWorkerId ?? '', style: const TextStyle(fontSize: 15)),
+            Text(anggota?.healthWorkerId ?? '',
+                style: const TextStyle(fontSize: 15)),
             const Text('bidan', style: TextStyle(fontSize: 15)),
           ]),
         const Divider(),

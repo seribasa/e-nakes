@@ -1,11 +1,11 @@
 import 'package:eimunisasi_nakes/features/clinic/logic/bloc/clinic_bloc/clinic_bloc.dart';
-import 'package:eimunisasi_nakes/features/clinic/presentation/screens/membership_screen.dart';
-import 'package:eimunisasi_nakes/features/clinic/presentation/screens/clinic_profile_screen.dart';
 import 'package:eimunisasi_nakes/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../routers/clinic_router.dart';
 import '../../../authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
 
 class WrapperKlinik extends StatelessWidget {
@@ -52,15 +52,10 @@ class _KlinikProfileButton extends StatelessWidget {
               ),
             ),
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => BlocProvider(
-                    create: (context) => getIt<ClinicBloc>()
-                      ..add(ClinicProfileSelected(clinicId: user?.clinic?.id)),
-                    child: const ProfileKlinikScreen(),
-                  ),
-                ),
-              );
+              context.pushNamed(ClinicRouter.clinicProfileRoute.name,
+                  pathParameters: {
+                    if (user?.clinic?.id != null) 'id': user!.clinic!.id!,
+                  });
             },
             child: Row(
               children: const [
@@ -94,14 +89,11 @@ class _KlinikKeanggotaanButton extends StatelessWidget {
           ),
         ),
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => BlocProvider(
-                create: (context) => getIt<ClinicBloc>()
-                  ..add(ClinicMembershipSelected(clinicId: user?.clinic?.id)),
-                child: const KeanggotaanKlinikScreen(),
-              ),
-            ),
+          context.pushNamed(
+            ClinicRouter.clinicMembershipRoute.name,
+            pathParameters: {
+              if (user?.clinic?.id != null) 'id': user!.clinic!.id!,
+            },
           );
         },
         child: Row(
