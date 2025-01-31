@@ -3,8 +3,8 @@ import 'package:eimunisasi_nakes/core/models/pagination_model.dart';
 import 'package:eimunisasi_nakes/features/appointment/data/models/appointment_model.dart';
 import 'package:eimunisasi_nakes/features/appointment/data/repositories/appointment_repository.dart';
 import 'package:eimunisasi_nakes/features/appointment/logic/appointment_cubit/appointment_cubit.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:test/test.dart';
 
 class MockJadwalRepository extends Mock implements AppointmentRepository {}
 

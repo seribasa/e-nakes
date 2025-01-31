@@ -52,7 +52,7 @@ class ModalPickerImage {
                             .then((value) => callback(value))
                             .catchError((e) => callback(null));
                       }
-                      Navigator.of(context).pop();
+                      context.pop();
                     }),
                 ListTile(
                   leading: Icon(
@@ -67,7 +67,7 @@ class ModalPickerImage {
                           .then((value) => callback(value))
                           .catchError((e) => callback(null));
                     }
-                    Navigator.of(context).pop();
+                    context.pop();
                   },
                 ),
               ],

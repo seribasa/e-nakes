@@ -1,3 +1,5 @@
+import 'package:go_router/go_router.dart';
+
 import '../../logic/cubit/signup_cubit/signup_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,8 +13,8 @@ class SignUpForm extends StatelessWidget {
     return BlocListener<SignUpCubit, SignUpState>(
       listener: (context, state) {
         if (state.status.isSuccess) {
-          Navigator.of(context).pop();
-          Navigator.of(context).pop();
+          context.pop();
+          context.pop();
         } else if (state.status.isFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()

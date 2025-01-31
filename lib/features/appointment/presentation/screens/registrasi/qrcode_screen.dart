@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:eimunisasi_nakes/features/appointment/data/repositories/appointment_repository.dart';
 import 'package:eimunisasi_nakes/features/medical_record/presentation/screens/checkup/patient_verification_screen.dart';
 import 'package:eimunisasi_nakes/injection.dart';
-import 'package:eimunisasi_nakes/routers/auth_router.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
