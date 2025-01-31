@@ -4,6 +4,7 @@ import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authenticati
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfileNakesScreen extends StatelessWidget {
@@ -47,18 +48,17 @@ class ProfileNakesScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             _NamaNakes(
-                              namaNakes: state.user?.fullName,
+                              namaNakes: state.user?.fullName ?? '',
                             ),
                             Text(
                               state.user?.profession ?? '',
                             ),
-                            Text(
-                              state.user?.birthDate
-                                      .toString()
-                                      .split(' ')
-                                      .first ??
-                                  '',
-                            ),
+                            if (state.user?.birthDate != null) ...[
+                              Text(
+                                DateFormat('dd MMMM yyyy')
+                                    .format(state.user!.birthDate!),
+                              ),
+                            ],
                             state.user?.phone != null && state.user?.phone != ''
                                 ? _KontakCardNakes(
                                     nomorTelepon: state.user?.phone,
