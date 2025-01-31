@@ -33,5 +33,8 @@ class RootRoutePaths {
     name: 'dashboard',
     path: '/dashboard',
   );
-
+  static const RouteModel profile = RouteModel(
+    name: 'profile',
+    path: '/profile',
+  );
 }

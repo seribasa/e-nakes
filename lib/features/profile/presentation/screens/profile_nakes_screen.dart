@@ -40,7 +40,7 @@ class ProfileNakesScreen extends StatelessWidget {
                     children: [
                       Flexible(
                         child: _GambarNakes(
-                          gambarNakesUrl: state.user?.clinic?.photos,
+                          gambarNakesUrl: state.user?.photo,
                         ),
                       ),
                       Flexible(
@@ -48,22 +48,24 @@ class ProfileNakesScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             _NamaNakes(
-                              namaNakes: state.user?.fullName ?? '',
+                              state.user?.fullName ?? '',
                             ),
-                            Text(
-                              state.user?.profession ?? '',
-                            ),
-                            if (state.user?.birthDate != null) ...[
+                            if (state.user?.profession != null) ...[
                               Text(
-                                DateFormat('dd MMMM yyyy')
-                                    .format(state.user!.birthDate!),
+                                'Profesi: ${state.user?.profession}',
                               ),
                             ],
-                            state.user?.phone != null && state.user?.phone != ''
-                                ? _KontakCardNakes(
-                                    nomorTelepon: state.user?.phone,
-                                  )
-                                : const SizedBox()
+                            if (state.user?.birthDate != null) ...[
+                              Text(
+                                'Tanggal Lahir: ${DateFormat('dd MMMM yyyy').format(state.user!.birthDate!)}',
+                              ),
+                            ],
+                            if (state.user?.phone != null &&
+                                state.user?.phone != '') ...[
+                              _KontakCardNakes(
+                                nomorTelepon: state.user?.phone,
+                              )
+                            ],
                           ],
                         ),
                       ),
@@ -92,29 +94,39 @@ class ProfileNakesScreen extends StatelessWidget {
 
 class _NamaNakes extends StatelessWidget {
   final String? namaNakes;
-  const _NamaNakes({required this.namaNakes});
+  const _NamaNakes(this.namaNakes);
 
   @override
   Widget build(BuildContext context) {
     return Align(
-        alignment: Alignment.centerLeft,
-        child: Text(namaNakes ?? '',
-            style: const TextStyle(fontWeight: FontWeight.bold)));
+      alignment: Alignment.centerLeft,
+      child: Text(
+        namaNakes ?? '',
+        style: const TextStyle(fontWeight: FontWeight.bold),
+      ),
+    );
   }
 }
 
 class _GambarNakes extends StatelessWidget {
-  final List<String>? gambarNakesUrl;
+  final String? gambarNakesUrl;
   const _GambarNakes({required this.gambarNakesUrl});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: CachedNetworkImage(
-        fit: BoxFit.cover,
-        imageUrl: gambarNakesUrl?.last ??
-            'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png',
+    if (gambarNakesUrl == null) {
+      return CircleAvatar(
+        radius: 50,
+        child: const Icon(
+          FontAwesomeIcons.userNurse,
+          size: 50,
+        ),
+      );
+    }
+    return CircleAvatar(
+      radius: 50,
+      backgroundImage: CachedNetworkImageProvider(
+        gambarNakesUrl!,
       ),
     );
   }

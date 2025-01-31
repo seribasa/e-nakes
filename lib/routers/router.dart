@@ -1,9 +1,11 @@
 import 'package:eimunisasi_nakes/core/widgets/error.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
+import 'package:eimunisasi_nakes/features/profile/presentation/screens/detail_profile_screen.dart';
 import 'package:eimunisasi_nakes/routers/appointment_router.dart';
 import 'package:eimunisasi_nakes/routers/calendar_router.dart';
 import 'package:eimunisasi_nakes/routers/clinic_router.dart';
 import 'package:eimunisasi_nakes/routers/medical_record_router.dart';
+import 'package:eimunisasi_nakes/routers/profile_router.dart';
 import 'package:eimunisasi_nakes/routers/route_paths/auth_route_paths.dart';
 import 'package:eimunisasi_nakes/routers/route_paths/root_route_paths.dart';
 import 'package:flutter/material.dart';
@@ -98,15 +100,24 @@ final router = GoRouter(
       },
     ),
     GoRoute(
-        name: RootRoutePaths.dashboard.name,
-        path: RootRoutePaths.dashboard.path,
-        builder: (_, __) => BottomNavbarWrapper(),
-        routes: [
-          ...AppointmentRouter.routes,
-          ...CalendarRouter.routes,
-          ...ClinicRouter.routes,
-          ...MedicalRecordRouter.routes,
-        ]),
+      name: RootRoutePaths.dashboard.name,
+      path: RootRoutePaths.dashboard.path,
+      builder: (_, __) => BottomNavbarWrapper(),
+      routes: [
+        ...AppointmentRouter.routes,
+        ...CalendarRouter.routes,
+        ...ClinicRouter.routes,
+        ...MedicalRecordRouter.routes,
+      ],
+    ),
+    GoRoute(
+      path: RootRoutePaths.profile.path,
+      name: RootRoutePaths.profile.name,
+      builder: (context, state) {
+        return DetailProfileScreen();
+      },
+      routes: ProfileRouter.routes,
+    ),
     GoRoute(
       name: RootRoutePaths.error.name,
       path: RootRoutePaths.error.path,
