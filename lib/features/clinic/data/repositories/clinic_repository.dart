@@ -17,7 +17,7 @@ class ClinicRepository {
       return _supabaseClient
           .from(ClinicModel.tableName)
           .select(
-            '*, clinic_schedules(*, days(*))',
+            '*, schedules:clinic_schedules(*, days(*))',
           )
           .eq('id', id!)
           .single()

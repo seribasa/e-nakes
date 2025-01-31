@@ -31,7 +31,7 @@ void main() {
         'motto': 'Test Motto',
         'phone_number': '1234567890',
         'photos': ['photo1.jpg', 'photo2.jpg'],
-        'clinic_schedules': []
+        'schedules': []
       };
 
       final result = ClinicModel.fromSeribase(json);

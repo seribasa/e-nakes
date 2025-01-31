@@ -50,7 +50,7 @@ class ClinicModel extends Equatable {
       schedules: () {
         try {
           return List<Schedule>.from(
-            data['clinic_schedules'].map((x) => Schedule.fromSeribase(x)),
+            data['schedules']?.map((x) => Schedule.fromSeribase(x)),
           );
         } catch (e) {
           return <Schedule>[];
