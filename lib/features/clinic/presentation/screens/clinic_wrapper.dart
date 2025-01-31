@@ -52,10 +52,12 @@ class _KlinikProfileButton extends StatelessWidget {
               ),
             ),
             onPressed: () {
-              context.pushNamed(ClinicRouter.clinicProfileRoute.name,
-                  pathParameters: {
-                    if (user?.clinic?.id != null) 'id': user!.clinic!.id!,
-                  });
+              context.pushNamed(
+                ClinicRouter.clinicProfileRoute.name,
+                pathParameters: {
+                  if (user?.clinic?.id != null) 'id': user!.clinic!.id!,
+                },
+              );
             },
             child: Row(
               children: const [

@@ -16,7 +16,9 @@ class ClinicRepository {
       assert(id != null, 'id clinic tidak boleh kosong');
       return _supabaseClient
           .from(ClinicModel.tableName)
-          .select()
+          .select(
+            '*, clinic_schedules(*, days(*))',
+          )
           .eq('id', id!)
           .single()
           .withConverter(
@@ -37,7 +39,7 @@ class ClinicRepository {
           .select(
             '''
               *,
-              clinic:clinic_id ( * )
+              clinic:clinics ( * )
             ''',
           )
           .eq('clinic_id', id!)

@@ -95,19 +95,22 @@ class UserRepository {
   }
 
   Future<ProfileModel?> getUser() async {
-    final user = _supabaseClient.auth.currentUser;
-    final userExpand =
-        await _supabaseClient.from(ProfileModel.tableName).select().eq(
-              'user_id',
-              user!.id,
-            );
-    if (userExpand.isNotEmpty) {
-      final userResult = ProfileModel.fromSeribase(userExpand.first);
-      return userResult.copyWith(
-        email: user.email,
-      );
-    } else {
-      return null;
+    try {
+      final user = _supabaseClient.auth.currentUser;
+      final userExpand = await _supabaseClient
+          .from(ProfileModel.tableName)
+          .select(
+            '*, clinic:clinics(*, schedules:clinic_schedules(*, days(*)))',
+          )
+          .eq(
+            'user_id',
+            user!.id,
+          )
+          .single();
+      return ProfileModel.fromSeribase(userExpand);
+    } catch (e) {
+      log(e.toString());
+      rethrow;
     }
   }
 

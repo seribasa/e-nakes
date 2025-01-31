@@ -160,7 +160,7 @@ class Schedule extends Equatable {
 
   factory Schedule.fromSeribase(Map<String, dynamic> data) {
     return Schedule(
-      day: Day.fromSeribase(data['day']),
+      day: Day.fromSeribase(data['days']),
       startTime: data['start_time'],
       endTime: data['end_time'],
     );

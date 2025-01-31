@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eimunisasi_nakes/core/extension/context_ext.dart';
 import 'package:eimunisasi_nakes/features/clinic/logic/bloc/clinic_bloc/clinic_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -108,13 +110,38 @@ class _GambarKlinik extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (gambarKlinikUrl == null || gambarKlinikUrl!.isEmpty) {
+      return const SizedBox();
+    }
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(
-        width: double.infinity,
-        child: CachedNetworkImage(
-            imageUrl: gambarKlinikUrl?.last ??
-                'https://cdn0-production-images-kly.akamaized.net/WzN7WyLJIUKB0rcUbnpm1MlKKzI=/640x360/smart/filters:quality(75):strip_icc():format(jpeg)/kly-media-production/medias/2368558/original/008993600_1538023053-Klinik_Mediska_CIkampek.jpg'),
+        height: 200,
+        child: PageView.builder(
+          itemCount: gambarKlinikUrl!.length,
+          itemBuilder: (context, index) {
+            return CachedNetworkImage(
+              imageUrl: gambarKlinikUrl![index],
+              fit: BoxFit.cover,
+              progressIndicatorBuilder: (context, url, progress) => Center(
+                child: CircularProgressIndicator(
+                  value: progress.progress,
+                ),
+              ),
+              errorWidget: (context, url, error) => Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error,
+                    size: 50,
+                    color: context.theme.colorScheme.error,
+                  ),
+                  const Text('Gagal memuat gambar'),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -124,18 +151,54 @@ class _KontakCardKlinik extends StatelessWidget {
   final String? nomorTelepon;
   final String? alamat;
   final String? namaKlinik;
-  const _KontakCardKlinik(
-      {required this.nomorTelepon, required this.namaKlinik, this.alamat});
+  const _KontakCardKlinik({
+    required this.nomorTelepon,
+    required this.namaKlinik,
+    this.alamat,
+  });
 
   @override
   Widget build(BuildContext context) {
+    void onCopyAddress() {
+      if (alamat != null) {
+        Clipboard.setData(ClipboardData(text: alamat!));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Alamat berhasil disalin'),
+          ),
+        );
+      }
+    }
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(alamat ?? ''),
+          Text(
+            'Alamat',
+            style: context.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          InkWell(
+            onTap: onCopyAddress,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(alamat ?? ''),
+                const Icon(Icons.copy),
+              ],
+            ),
+          ),
           const SizedBox(
             height: 20,
+          ),
+          Text(
+            'Kontak',
+            style: context.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -216,16 +279,20 @@ class _JadwalKlinik extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Align(
+          Align(
             alignment: Alignment.centerLeft,
-            child: Text('Jadwal',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+            child: Text(
+              'Jadwal',
+              style: context.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
           const SizedBox(
             height: 20,
           ),
           () {
-            if (jadwal == null) {
+            if (jadwal == null || jadwal!.isEmpty) {
               return const Center(child: Text('Tidak ada jadwal'));
             }
             final length = jadwal?.length ?? 0;
