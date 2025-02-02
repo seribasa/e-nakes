@@ -2,7 +2,6 @@ import 'package:eimunisasi_nakes/core/widgets/custom_text_field.dart';
 import 'package:eimunisasi_nakes/features/authentication/data/models/user.dart';
 import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:eimunisasi_nakes/features/profile/presentation/logic/profile_bloc/profile_bloc.dart';
-import 'package:eimunisasi_nakes/features/profile/presentation/screens/form_ganti_pin_screen.dart';
 import 'package:eimunisasi_nakes/routers/profile_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -447,60 +446,6 @@ class _NomorHPForm extends StatelessWidget {
           keyboardType: TextInputType.number,
         ),
       ],
-    );
-  }
-}
-
-class _GantiPasscodeButton extends StatelessWidget {
-  const _GantiPasscodeButton();
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      width: double.infinity,
-      child: ElevatedButton(
-        key: const Key('my_profile_raisedButton'),
-        style: ElevatedButton.styleFrom(
-          alignment: Alignment.centerLeft,
-        ),
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return const GantiPINScreen();
-          }));
-        },
-        child: Row(
-          children: const [
-            FaIcon(FontAwesomeIcons.lock),
-            SizedBox(width: 10),
-            Text(
-              'Ganti PIN',
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _SaveButton extends StatelessWidget {
-  const _SaveButton();
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 50,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            shape:
-                const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
-        child: const Text("Simpan"),
-        onPressed: () {
-          // Navigator.push(context, MaterialPageRoute(builder: (context) {
-          //   return GrafikPemeriksaanScreen();
-          // }));
-        },
-      ),
     );
   }
 }

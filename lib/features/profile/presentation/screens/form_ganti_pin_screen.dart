@@ -91,14 +91,12 @@ class _SaveButton extends StatelessWidget {
       height: 50,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            shape:
-                const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero,
+          ),
+        ),
         child: const Text("Simpan"),
-        onPressed: () {
-          // Navigator.push(context, MaterialPageRoute(builder: (context) {
-          //   return GrafikPemeriksaanScreen();
-          // }));
-        },
+        onPressed: () {},
       ),
     );
   }

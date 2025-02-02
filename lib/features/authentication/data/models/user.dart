@@ -1,4 +1,4 @@
-import 'package:eimunisasi_nakes/features/klinik/data/models/klinik.dart';
+import 'package:eimunisasi_nakes/features/clinic/data/models/clinic_model.dart';
 import 'package:equatable/equatable.dart';
 
 class ProfileModel extends Equatable {
@@ -17,12 +17,20 @@ class ProfileModel extends Equatable {
     this.schedulesImunisasi,
     this.clinic,
   });
-  final String? id, email, phone,fullName, photo, birthPlace, kartuKeluarga, nik, profession;
+  final String? id,
+      email,
+      phone,
+      fullName,
+      photo,
+      birthPlace,
+      kartuKeluarga,
+      nik,
+      profession;
   final DateTime? birthDate;
   final ClinicModel? clinic;
   final List<Schedule>? schedules, schedulesImunisasi;
 
-  static const String table = 'profiles';
+  static const String tableName = 'profiles';
 
   static const empty = ProfileModel();
 
@@ -152,7 +160,7 @@ class Schedule extends Equatable {
 
   factory Schedule.fromSeribase(Map<String, dynamic> data) {
     return Schedule(
-      day: Day.fromSeribase(data['day']),
+      day: Day.fromSeribase(data['days']),
       startTime: data['start_time'],
       endTime: data['end_time'],
     );

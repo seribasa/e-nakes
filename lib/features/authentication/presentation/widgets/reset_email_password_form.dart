@@ -1,3 +1,5 @@
+import 'package:go_router/go_router.dart';
+
 import '../../logic/cubit/reset_password_cubit/reset_password_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +21,7 @@ class ResetEmailPasswordForm extends StatelessWidget {
               ),
             );
         } else if (state.status.isSuccess) {
-          Navigator.of(context).pop();
+          context.pop();
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(

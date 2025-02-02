@@ -15,9 +15,6 @@ dependencies:
 
   # packages
   flutter_bloc: ^8.0.1
-  firebase_core: ^3.8.0
-  firebase_auth: ^5.3.3
-  cloud_firestore: ^5.5.0
   equatable: ^2.0.3
   formz: ^0.8.0
   keyboard_dismisser: ^3.0.0
@@ -25,7 +22,6 @@ dependencies:
   shared_preferences: ^2.0.13
   font_awesome_flutter: ^10.1.0
   cached_network_image: ^3.2.0
-  firebase_app_check: ^0.3.1+6
   qr_code_scanner: ^1.0.1
   fl_chart: ^0.69.2
   math_expressions: ^2.3.0
@@ -33,12 +29,12 @@ dependencies:
   date_time_picker: ^2.1.0
   url_launcher: ^6.1.5
   image_picker: ^1.1.2
-  firebase_storage: any
   go_router: ^14.2.7
   # SUPABASE
   supabase_flutter: ^2.8.0
   injectable: ^2.4.4
   get_it: ^7.7.0
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

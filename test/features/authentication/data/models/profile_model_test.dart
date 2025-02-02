@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:eimunisasi_nakes/features/authentication/data/models/user.dart';
-import 'package:eimunisasi_nakes/features/klinik/data/models/klinik.dart';
+import 'package:eimunisasi_nakes/features/clinic/data/models/clinic_model.dart';
 
 void main() {
   group('ProfileModel', () {
@@ -52,19 +52,29 @@ void main() {
         'profession': 'Doctor',
         'schedules': [
           {
-            'day': {'id': 1, 'name': 'Monday'},
+            'days': {'id': 1, 'name': 'Monday'},
             'start_time': '09:00',
             'end_time': '17:00'
           }
         ],
         'practice_schedules': [
           {
-            'day': {'id': 2, 'name': 'Tuesday'},
+            'days': {'id': 2, 'name': 'Tuesday'},
             'start_time': '10:00',
             'end_time': '12:00'
           }
         ],
-        'clinic': {'id': '1', 'name': 'Test Clinic'}
+        'clinic': {
+          'id': '1',
+          'name': 'Test Clinic',
+          'schedules': [
+            {
+              'days': {'id': 1, 'name': 'Monday'},
+              'start_time': '09:00',
+              'end_time': '17:00'
+            }
+          ],
+        }
       };
       final profileFromMap = ProfileModel.fromSeribase(map);
       expect(profileFromMap.email, 'test@example.com');
@@ -138,7 +148,7 @@ void main() {
 
     test('fromSeribase creates a valid Schedule', () {
       final map = {
-        'day': {'id': 1, 'name': 'Monday'},
+        'days': {'id': 1, 'name': 'Monday'},
         'start_time': '09:00',
         'end_time': '17:00'
       };

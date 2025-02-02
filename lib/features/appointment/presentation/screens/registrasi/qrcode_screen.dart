@@ -5,7 +5,10 @@ import 'package:eimunisasi_nakes/features/appointment/data/repositories/appointm
 import 'package:eimunisasi_nakes/features/medical_record/presentation/screens/checkup/patient_verification_screen.dart';
 import 'package:eimunisasi_nakes/injection.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+
+import '../../../../../routers/medical_record_router.dart';
 
 class QrRegistrasiPemeriksaan extends StatefulWidget {
   const QrRegistrasiPemeriksaan({super.key});
@@ -143,15 +146,15 @@ class _QrRegistrasiPemeriksaanState extends State<QrRegistrasiPemeriksaan> {
         result = scanData;
       });
       jadwalRepository.getAppointment(id: scanData.code).then((value) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PatientVerificationScreen(
+        if (context.mounted) {
+          context.pushNamed(
+            MedicalRecordRouter.checkupVerificationRoute.name,
+            extra: PatientVerificationScreenExtra(
               appointment: value,
               patient: value?.child,
             ),
-          ),
-        );
+          );
+        }
         controller.dispose();
       }).catchError((e) {
         log(e.toString());

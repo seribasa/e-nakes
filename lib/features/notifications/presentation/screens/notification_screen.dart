@@ -28,7 +28,6 @@ class NotificationScreen extends StatelessWidget {
   }
 }
 
-// ignore: unused_element
 class _ListPesan extends StatelessWidget {
   const _ListPesan();
 
@@ -46,12 +45,7 @@ class _ListPesan extends StatelessWidget {
             ),
             subtitle: Text(
                 'NIK $index${index + 1}${index + 2}${index + 3}${index + 4}'),
-            onTap: () {
-              // Navigator.of(context).push(
-              //   MaterialPageRoute(
-              //       builder: (context) => const RekamMedisPasienScreen()),
-              // );
-            },
+            onTap: () {},
           );
         }),
       ),

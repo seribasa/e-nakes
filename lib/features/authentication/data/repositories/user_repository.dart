@@ -61,7 +61,7 @@ class UserRepository {
       final userResult = user.toSeribaseMap();
       final userId = _supabaseClient.auth.currentUser!.id;
       return await _supabaseClient
-          .from(ProfileModel.table)
+          .from(ProfileModel.tableName)
           .update(
             userResult,
           )
@@ -95,18 +95,22 @@ class UserRepository {
   }
 
   Future<ProfileModel?> getUser() async {
-    final user = _supabaseClient.auth.currentUser;
-    final userExpand = await _supabaseClient.from(ProfileModel.table).select().eq(
-          'user_id',
-          user!.id,
-        );
-    if (userExpand.isNotEmpty) {
-      final userResult = ProfileModel.fromSeribase(userExpand.first);
-      return userResult.copyWith(
-        email: user.email,
-      );
-    } else {
-      return null;
+    try {
+      final user = _supabaseClient.auth.currentUser;
+      final userExpand = await _supabaseClient
+          .from(ProfileModel.tableName)
+          .select(
+            '*, clinic:clinics(*, schedules:clinic_schedules(*, days(*)))',
+          )
+          .eq(
+            'user_id',
+            user!.id,
+          )
+          .single();
+      return ProfileModel.fromSeribase(userExpand);
+    } catch (e) {
+      log(e.toString());
+      rethrow;
     }
   }
 
@@ -115,7 +119,9 @@ class UserRepository {
       if (_supabaseClient.auth.currentUser == null) {
         throw Exception('User not found');
       }
-      await _supabaseClient.from(ProfileModel.table).update({'avatar_url': url}).eq(
+      await _supabaseClient
+          .from(ProfileModel.tableName)
+          .update({'avatar_url': url}).eq(
         'user_id',
         _supabaseClient.auth.currentUser!.id,
       );

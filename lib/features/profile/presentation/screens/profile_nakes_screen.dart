@@ -4,8 +4,8 @@ import 'package:eimunisasi_nakes/features/authentication/logic/bloc/authenticati
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileNakesScreen extends StatelessWidget {
   const ProfileNakesScreen({super.key});
@@ -48,7 +48,7 @@ class ProfileNakesScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             _NamaNakes(
-                              'Nama: ${state.user?.fullName}',
+                              state.user?.fullName ?? '',
                             ),
                             if (state.user?.profession != null) ...[
                               Text(

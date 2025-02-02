@@ -1,5 +1,6 @@
-import 'package:eimunisasi_nakes/app.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../routers/route_paths/root_route_paths.dart';
 import '../../logic/bloc/authentication_bloc/authentication_bloc.dart';
 import '../screens/auth/reset_email_password.dart';
 
@@ -26,8 +27,7 @@ class LoginEmailForm extends StatelessWidget {
             );
         } else if (state.status.isSuccess) {
           context.read<AuthenticationBloc>().add(LoggedIn());
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const AppView()));
+          context.goNamed(RootRoutePaths.root.name);
         }
       },
       child: Align(

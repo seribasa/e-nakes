@@ -17,6 +17,8 @@ class ClinicModel extends Equatable {
     this.schedules = const [],
   });
 
+  static const tableName = 'clinics';
+
   @override
   List<Object?> get props => [
     id,
@@ -48,7 +50,7 @@ class ClinicModel extends Equatable {
       schedules: () {
         try {
           return List<Schedule>.from(
-            data['clinic_schedules'].map((x) => Schedule.fromSeribase(x)),
+            data['schedules']?.map((x) => Schedule.fromSeribase(x)),
           );
         } catch (e) {
           return <Schedule>[];
