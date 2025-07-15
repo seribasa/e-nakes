@@ -35,6 +35,42 @@ class ProfileScreen extends StatelessWidget {
 }
 
 class _LogoutButton extends StatelessWidget {
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Keluar'),
+          content: const Text('Apakah Anda yakin ingin keluar?'),
+          actions: [
+            ElevatedButton(
+                key: const Key('logout_cancel_raisedButton'),
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  backgroundColor: context.theme.colorScheme.primary,
+                ),
+                onPressed: () => context.pop(),
+                child: const Text('Batal')),
+            SizedBox(
+              width: double.infinity,
+              child: TextButton(
+                key: const Key('logout_confirm_textButton'),
+                onPressed: () {
+                  context.pop();
+                  context.read<AuthenticationBloc>().add(LoggedOut());
+                },
+                child: Text(
+                  'Ya, Keluar',
+                  style: TextStyle(color: Colors.pink[400]),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
@@ -48,13 +84,12 @@ class _LogoutButton extends StatelessWidget {
             height: 50,
             width: double.infinity,
             child: ElevatedButton(
-              key: const Key('logout_continue_raisedButton'),
+              key: const Key('logout_raisedButton'),
               style: ElevatedButton.styleFrom(
                 elevation: 0,
                 backgroundColor: context.theme.colorScheme.error,
               ),
-              onPressed: () =>
-                  context.read<AuthenticationBloc>().add(LoggedOut()),
+              onPressed: () => _showLogoutDialog(context),
               child: const Row(
                 children: [
                   FaIcon(FontAwesomeIcons.arrowRightFromBracket),
