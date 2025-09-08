@@ -2,7 +2,13 @@ appId: com.peltops.eimunisasi_nakes.debug
 ---
 - launchApp:
     clearState: true
+- clearState: com.android.chrome
 - tapOn: Masuk dengan Seribase
+- tapOn:
+    id: signin_fre_dismiss_button
+- tapOn:
+    id: ack_button
+
 - tapOn: Register
 - extendedWaitUntil:
     visible:
@@ -16,11 +22,15 @@ appId: com.peltops.eimunisasi_nakes.debug
     text: Password
     index: 1
 - back
-- inputText: Test123#
+- inputText: 'Test123#'
 - tapOn:
     text: Confirm password
     index: 1
-- inputText: Test123#
+- inputText: 'Test123#'
+- scrollUntilVisible:
+    element:
+      text: First name
+      index: 1
 - tapOn:
     text: First name
     index: 1
