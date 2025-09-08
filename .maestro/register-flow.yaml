@@ -1,0 +1,39 @@
+appId: com.peltops.eimunisasi_nakes.debug
+---
+- launchApp:
+    clearState: true
+- tapOn: Masuk dengan Seribase
+- tapOn: Register
+- extendedWaitUntil:
+    visible:
+      id: kc-page-title
+    timeout: 5000
+- tapOn:
+    text: Email
+    index: 1
+- inputRandomEmail
+- tapOn:
+    text: Password
+    index: 1
+- back
+- inputText: Test123#
+- tapOn:
+    text: Confirm password
+    index: 1
+- inputText: Test123#
+- tapOn:
+    text: First name
+    index: 1
+- inputRandomPersonName
+- tapOn:
+    text: Last name
+    index: 1
+- inputRandomPersonName
+- scrollUntilVisible:
+    element:
+      text: Register
+      index: 1
+- tapOn:
+    text: Register
+    index: 1
+- assertVisible: Email verification
