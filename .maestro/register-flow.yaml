@@ -6,6 +6,11 @@ appId: com.peltops.eimunisasi_nakes.debug
 - tapOn: Masuk dengan Seribase
 - tapOn:
     id: signin_fre_dismiss_button
+- waitForAnimationToEnd:
+    timeout: 10000
+- scrollUntilVisible:
+    element:
+      id: ack_button
 - runFlow:
     when:
       visible:
