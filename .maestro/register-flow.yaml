@@ -57,3 +57,6 @@ appId: com.peltops.eimunisasi_nakes.debug
     text: Register
     index: 1
 - assertVisible: Email verification
+- tapOn:
+    id: close_button
+- assertVisible: Masuk dengan Seribase
