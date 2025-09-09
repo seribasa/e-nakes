@@ -8,14 +8,13 @@ appId: com.peltops.eimunisasi_nakes.debug
     id: signin_fre_dismiss_button
 - waitForAnimationToEnd:
     timeout: 10000
-- scrollUntilVisible:
-    element:
-      id: ack_button
 - runFlow:
     when:
-      visible:
-        id: ack_button
+      visible: Enhanced ad privacy in Chrome
     commands:
+      - scrollUntilVisible:
+          element:
+            id: ack_button
       - tapOn:
           id: ack_button
 
