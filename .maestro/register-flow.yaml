@@ -43,6 +43,10 @@ appId: com.peltops.eimunisasi_nakes.debug
     text: First name
     index: 1
 - inputRandomPersonName
+- scrollUntilVisible:
+    element:
+      text: Last name
+      index: 1
 - tapOn:
     text: Last name
     index: 1
