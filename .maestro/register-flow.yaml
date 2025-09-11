@@ -4,10 +4,18 @@ appId: com.peltops.eimunisasi_nakes.debug
     clearState: true
 - clearState: com.android.chrome
 - tapOn: Masuk dengan Seribase
-- tapOn:
-    id: signin_fre_dismiss_button
+
+- runFlow:
+    when:
+      visible:
+        id: signin_fre_dismiss_button
+    commands:
+      - tapOn:
+          id: signin_fre_dismiss_button
+
 - waitForAnimationToEnd:
     timeout: 10000
+
 - runFlow:
     when:
       visible: Enhanced ad privacy in Chrome
