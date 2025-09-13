@@ -19,6 +19,12 @@ appId: com.peltops.eimunisasi_nakes.debug
     commands:
       - tapOn: Accept & continue
 
+- runFlow:
+    when:
+      visible: No thanks
+    commands:
+      - tapOn: No thanks
+
 - waitForAnimationToEnd:
     timeout: 10000
 
